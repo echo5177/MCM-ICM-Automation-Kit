@@ -1,0 +1,50 @@
+{
+    "project_pipeline_command": [
+        "python",
+        "scripts/run_all.py"
+    ],
+    "raw_data_files": [],
+    "data_source_manifest": "reports/data_source_manifest.csv",
+    "external_data_needs": "reports/external_data_needs.md",
+    "external_data_dir": "data/raw/external",
+    "external_data_required": false,
+    "source_manifest_required": false,
+    "paper_tex": "paper/main.tex",
+    "paper_pdf": "paper/main.pdf",
+    "latex_log": "paper/main.log",
+    "key_results": "reports/key_results.csv",
+    "figure_manifest": "reports/figure_manifest.csv",
+    "figures_dirs": [
+        "figures/concept",
+        "figures/generated"
+    ],
+    "tables_dir": "tables",
+    "workflow_reports_dir": "reports/workflow",
+    "page_target": 25,
+    "page_hard_limit": 25,
+    "contest_page_limit": 25,
+    "min_page_target": 20,
+    "min_serious_pages": 22,
+    "ai_report_pages": 1,
+    "placeholder_patterns": [
+        "TODO",
+        "TBD",
+        "placeholder",
+        "need calculate"
+    ],
+    "team_control_number_placeholders": [
+        "1111111"
+    ],
+    "diagram_sources": [],
+    "release_artifacts": [
+        "paper/main.tex",
+        "paper/main.pdf",
+        "reports",
+        "figures",
+        "tables",
+        "data/raw",
+        "data/processed",
+        "environment.yml",
+        "requirements-lock.txt"
+    ]
+}

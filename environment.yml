@@ -1,0 +1,20 @@
+name: mcm
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - numpy
+  - pandas
+  - scipy
+  - matplotlib
+  - networkx
+  - openpyxl
+  - pillow
+  - pip
+  - pip:
+      - cvxpy
+      - lifelines
+      - pytest
+      - scikit-learn
+      - seaborn
+      - statsmodels

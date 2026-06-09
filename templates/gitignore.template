@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+venv/
+env/
+.pytest_cache/
+*.egg-info/
+
+# Environment
+.env
+.env.*
+
+# Notebooks
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Generated outputs
+outputs/
+results/
+release/
+MCM_Workflow_Automation_Kit/runs/
+*.log
+
+# LaTeX build artifacts
+*.aux
+*.fls
+*.fdb_latexmk
+*.out
+*.toc
+*.synctex.gz
+*.bbl
+*.blg
+
+# Large extracted data (regenerate from committed source zips/scripts)
+data/raw/external/**/*.zip

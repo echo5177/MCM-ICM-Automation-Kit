@@ -1,0 +1,202 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+import json
+from pathlib import Path
+from typing import Any
+
+import pandas as pd
+
+from .config import WorkflowConfig, resolve_project_path
+from .reporting import write_markdown_report
+
+
+GROUP_COLUMN_CANDIDATES = {"season", "week"}
+
+
+@dataclass(frozen=True)
+class DataAuditResult:
+    files: list[dict[str, Any]]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {"files": self.files}
+
+
+def _json_value(value: Any) -> Any:
+    if pd.isna(value):
+        return None
+    if hasattr(value, "item"):
+        return value.item()
+    return value
+
+
+def _numeric_summary(series: pd.Series) -> dict[str, Any]:
+    clean = pd.to_numeric(series, errors="coerce").dropna()
+    if clean.empty:
+        return {
+            "count": 0,
+            "mean": None,
+            "std": None,
+            "min": None,
+            "q1": None,
+            "median": None,
+            "q3": None,
+            "max": None,
+            "iqr_outliers": 0,
+        }
+
+    q1 = clean.quantile(0.25)
+    q3 = clean.quantile(0.75)
+    iqr = q3 - q1
+    lower = q1 - 1.5 * iqr
+    upper = q3 + 1.5 * iqr
+    outlier_count = int(((clean < lower) | (clean > upper)).sum())
+
+    return {
+        "count": int(clean.count()),
+        "mean": _json_value(clean.mean()),
+        "std": _json_value(clean.std()),
+        "min": _json_value(clean.min()),
+        "q1": _json_value(q1),
+        "median": _json_value(clean.median()),
+        "q3": _json_value(q3),
+        "max": _json_value(clean.max()),
+        "iqr_outliers": outlier_count,
+    }
+
+
+def _group_counts(df: pd.DataFrame) -> dict[str, list[dict[str, Any]]]:
+    groups: dict[str, list[dict[str, Any]]] = {}
+    lower_to_original = {column.lower(): column for column in df.columns}
+    for candidate in GROUP_COLUMN_CANDIDATES:
+        if candidate not in lower_to_original:
+            continue
+        column = lower_to_original[candidate]
+        counts = (
+            df.groupby(column, dropna=False)
+            .size()
+            .reset_index(name="rows")
+            .sort_values(column)
+        )
+        groups[column] = [
+            {column: _json_value(row[column]), "rows": int(row["rows"])}
+            for _, row in counts.iterrows()
+        ]
+
+    if {"season", "week"}.issubset(lower_to_original):
+        season_col = lower_to_original["season"]
+        week_col = lower_to_original["week"]
+        counts = (
+            df.groupby([season_col, week_col], dropna=False)
+            .size()
+            .reset_index(name="rows")
+            .sort_values([season_col, week_col])
+        )
+        groups[f"{season_col}/{week_col}"] = [
+            {
+                season_col: _json_value(row[season_col]),
+                week_col: _json_value(row[week_col]),
+                "rows": int(row["rows"]),
+            }
+            for _, row in counts.iterrows()
+        ]
+
+    return groups
+
+
+def audit_csv_file(path: str | Path, display_path: str | None = None) -> dict[str, Any]:
+    csv_path = Path(path)
+    df = pd.read_csv(csv_path)
+    numeric_columns = [
+        column for column in df.columns if pd.api.types.is_numeric_dtype(df[column])
+    ]
+
+    return {
+        "path": display_path or str(csv_path),
+        "rows": int(len(df)),
+        "columns": int(len(df.columns)),
+        "column_names": list(df.columns),
+        "dtypes": {column: str(dtype) for column, dtype in df.dtypes.items()},
+        "missing_values": int(df.isna().sum().sum()),
+        "missing_by_column": {
+            column: int(count) for column, count in df.isna().sum().items()
+        },
+        "duplicate_rows": int(df.duplicated().sum()),
+        "numeric_summary": {
+            column: _numeric_summary(df[column]) for column in numeric_columns
+        },
+        "group_counts": _group_counts(df),
+    }
+
+
+def build_data_audit(
+    project_root: str | Path,
+    raw_data_files: list[str],
+) -> DataAuditResult:
+    files = []
+    for relative_path in raw_data_files:
+        path = resolve_project_path(project_root, relative_path)
+        files.append(audit_csv_file(path, display_path=relative_path))
+    return DataAuditResult(files=files)
+
+
+def write_data_audit_outputs(
+    project_root: str | Path,
+    config: WorkflowConfig,
+) -> DataAuditResult:
+    result = build_data_audit(project_root, config.raw_data_files)
+    reports_dir = resolve_project_path(project_root, config.workflow_reports_dir)
+    reports_dir.mkdir(parents=True, exist_ok=True)
+
+    json_path = reports_dir / "data_audit.json"
+    json_path.write_text(
+        json.dumps(result.to_dict(), indent=2, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    write_markdown_report(
+        reports_dir / "data_audit_report.md",
+        "Workflow Data Audit Report",
+        render_data_audit_markdown(result),
+    )
+    return result
+
+
+def render_data_audit_markdown(result: DataAuditResult) -> list[str]:
+    lines = [
+        "This report is generated by the reusable workflow kit.",
+        "",
+    ]
+    for file_audit in result.files:
+        lines.extend(
+            [
+                f"## {file_audit['path']}",
+                "",
+                f"- Rows: {file_audit['rows']}",
+                f"- Columns: {file_audit['columns']}",
+                f"- Missing values: {file_audit['missing_values']}",
+                f"- Duplicate rows: {file_audit['duplicate_rows']}",
+                "",
+                "### Missing Values By Column",
+                "",
+                "```text",
+            ]
+        )
+        missing = file_audit["missing_by_column"]
+        if missing:
+            lines.extend(f"{column}: {count}" for column, count in missing.items())
+        else:
+            lines.append("No columns found.")
+        lines.extend(["```", ""])
+
+        group_counts = file_audit["group_counts"]
+        if group_counts:
+            lines.extend(["### Group Counts", ""])
+            for group_name, rows in group_counts.items():
+                lines.extend([f"#### {group_name}", "", "```text"])
+                for row in rows[:50]:
+                    rendered = ", ".join(f"{key}={value}" for key, value in row.items())
+                    lines.append(rendered)
+                if len(rows) > 50:
+                    lines.append(f"... {len(rows) - 50} additional rows omitted")
+                lines.extend(["```", ""])
+    return lines

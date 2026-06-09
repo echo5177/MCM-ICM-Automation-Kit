@@ -1,0 +1,146 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% MCM/ICM paper starter — built on the official COMAP MCM-ICM_Summary.tex.
+%% This skeleton already encodes the layout lessons the Kit enforces:
+%%   * official 3-column Summary Sheet header (Problem / Summary Sheet / Team)
+%%   * title-first Summary (title, then a centered "Summary" heading, then body)
+%%   * hyperref with hidelinks (no colored link boxes)
+%%   * captions BELOW floats, small font, bold label, width-limited
+%%   * float parameters tuned so figures land on text pages, not sparse float pages
+%%   * an AI Use Report AFTER references (excluded from the 25-page count)
+%% Replace the bracketed guidance with real content. Aim to FILL ~20-25 pages
+%% of solution with substance the problem rewards (never filler).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt]{article}
+\usepackage{geometry}
+\geometry{left=1in,right=0.75in,top=1in,bottom=1in}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Replace ABCDEF with your chosen problem and 1111111 with your Team Control Number.
+\newcommand{\Problem}{ABCDEF}
+\newcommand{\Team}{1111111}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{newtxtext}
+\usepackage{amsmath,amsthm}   % load amsmath BEFORE newtxmath; do NOT load amssymb (\Bbbk clash)
+\usepackage{newtxmath}        % must come after amsmath
+\usepackage[pdftex]{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage[hidelinks]{hyperref}   % hidelinks => no colored link boxes in the PDF
+
+% Captions: below floats, small font, bold label, width-limited (not full text width).
+\captionsetup{font=small,labelfont=bf,width=0.86\textwidth}
+
+% Float parameters: force floats onto text pages and prevent near-empty float-only pages.
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.06}
+\renewcommand{\floatpagefraction}{0.88}
+\setcounter{totalnumber}{4}
+
+\lhead{Team \Team}
+\rhead{}
+\cfoot{}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+
+\begin{document}
+\graphicspath{{../figures/generated/}{../figures/concept/}{./}}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+
+%%%%%%%%%%% Summary Sheet header (official) %%%%%%%%%%%
+\thispagestyle{empty}
+\vspace*{-16ex}
+\centerline{\begin{tabular}{*3{c}}
+    \parbox[t]{0.3\linewidth}{\begin{center}\textbf{Problem Chosen}\\ \Large \textcolor{red}{\Problem}\end{center}}
+    & \parbox[t]{0.3\linewidth}{\begin{center}\textbf{2026\\ MCM/ICM\\ Summary Sheet}\end{center}}
+    & \parbox[t]{0.3\linewidth}{\begin{center}\textbf{Team Control Number}\\ \Large \textcolor{red}{\Team}\end{center}} \\
+    \hline
+\end{tabular}}
+
+%%%%%%%%%%% Title-first Summary (title, THEN "Summary" heading, THEN body) %%%%%%%%%%%
+\begin{center}
+    {\Large\bfseries [Paper Title: a specific, results-forward title]}\\[2ex]
+    \textbf{Summary}
+\end{center}
+
+% One page. Topic sentences and numbers, not generic prose. A judge should grasp the
+% value of the solution from this page alone: problem -> model family & why -> data/params
+% -> headline quantitative results -> decisions/recommendations -> key limitations.
+[Summary body. Lead with the problem in one sentence. Name the model family and why it
+fits. State the data/parameters. Give the headline numbers. State the recommendation.
+Close with the main limitation. Fill the page.]
+
+\vspace{1ex}
+\noindent\textbf{Keywords:} [keyword; keyword; keyword]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\pagestyle{fancy}
+\tableofcontents
+\newpage
+\setcounter{page}{1}
+\rhead{Page \thepage\ }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction}
+\subsection{Problem Background and Restatement}
+[Restate the problem tied to the specific tasks the contest asks for.]
+
+\subsection{Our Approach}
+[One paragraph overview + the concept/workflow figure below.]
+
+% Concept figure: register it in figures/concept_src/<name>.json and add the file to
+% diagram_sources in workflow_config.json so the diagram-quality gate inspects it.
+% \begin{figure}[htbp]
+%   \centering
+%   \includegraphics[width=0.86\textwidth]{model_flow.png}
+%   \caption{Solution workflow: data inputs, parameter estimation, model, solver,
+%            validation, and outputs, with the feedback loop used to calibrate.}
+%   \label{fig:workflow}
+% \end{figure}
+
+\section{Assumptions and Justifications}
+[Assumptions with consequences, not boilerplate. Each: assumption -> why -> effect.]
+
+\section{Notation}
+[A notation table only if it saves the reader time.]
+
+\section{Model Development}
+\subsection{Data and Parameter Provenance}
+[Where each number comes from: cited source or data-derived. Be honest.]
+
+\subsection{Derivation}
+[Governing equations with every symbol defined; the solution method; algorithm.]
+
+\section{Results}
+[Headline numbers prominent and traceable to key\_results.csv. Figures/tables carry
+the argument. Each figure earns its place.]
+
+\section{Validation and Sensitivity}
+[Validation or sanity checks against data or a baseline; sensitivity + uncertainty with
+consequences. Report honest residuals.]
+
+\section{Discussion}
+\subsection{Strengths and Weaknesses}
+\subsection{Recommendations}
+
+\section{Conclusion}
+[Tie results back to the tasks.]
+
+% References auto-generate the section; make it show in the ToC.
+\addcontentsline{toc}{section}{References}
+\begin{thebibliography}{99}
+\bibitem{ref1} [Author, \emph{Title}, Source, Year.]
+\end{thebibliography}
+
+% ---- AI Use Report: AFTER references; does NOT count toward the 25-page limit. ----
+\clearpage
+\addcontentsline{toc}{section}{Report on the Use of AI}
+\section*{Report on the Use of AI}
+[Disclose AI tools and how they were used, per the current COMAP rules.]
+
+\end{document}

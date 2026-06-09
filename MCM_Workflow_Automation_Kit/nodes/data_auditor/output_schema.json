@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "required": ["files"],
+  "properties": {
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "rows", "columns", "missing_values"],
+        "properties": {
+          "path": { "type": "string" },
+          "rows": { "type": "integer" },
+          "columns": { "type": "integer" },
+          "missing_values": { "type": "integer" }
+        }
+      }
+    }
+  }
+}
