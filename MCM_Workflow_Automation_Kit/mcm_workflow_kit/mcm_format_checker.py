@@ -150,6 +150,95 @@ def check_layout(tex_text: str) -> list[CheckMessage]:
     return messages
 
 
+SECTION_TITLE_RE = re.compile(r"\\section\{([^}]*)\}")
+SECTION_ANY_RE = re.compile(r"\\section\*?\{")
+LIST_RE = re.compile(r"\\begin\{(?:itemize|enumerate)\}")
+FLOAT_BEGIN_RE = re.compile(r"\\begin\{(?:figure|table)\}")
+FLOAT_END_RE = re.compile(r"\\end\{(?:figure|table)\}")
+SECTIONING_RE = re.compile(r"\\(?:sub)*section\b")
+
+
+def _float_spans(tex_text: str) -> list[tuple[int, int]]:
+    """(start, end) of each figure/table environment, in document order.
+
+    Floats are not nested in practice, so the i-th begin pairs with the i-th end.
+    """
+    begins = [m.start() for m in FLOAT_BEGIN_RE.finditer(tex_text)]
+    ends = [m.end() for m in FLOAT_END_RE.finditer(tex_text)]
+    if len(begins) != len(ends):
+        return []  # unbalanced; let the LaTeX compiler report it
+    return list(zip(begins, ends))
+
+
+def check_prose_structure(tex_text: str, config: WorkflowConfig) -> list[CheckMessage]:
+    """Catch paper-as-slide-deck patterns: duplicate titles, list/figure dumps, thin sections.
+
+    Adapted from MathModelAgent's writing_check for our single-file main.tex layout.
+    """
+    messages: list[CheckMessage] = []
+
+    titles = [m.group(1).strip() for m in SECTION_TITLE_RE.finditer(tex_text)]
+    seen: set[str] = set()
+    dups: list[str] = []
+    for title in titles:
+        if title in seen and title not in dups:
+            dups.append(title)
+        seen.add(title)
+    if dups:
+        messages.append(
+            CheckMessage("fail", "Duplicate \\section{} titles: " + ", ".join(dups))
+        )
+
+    n_lists = len(LIST_RE.findall(tex_text))
+    if n_lists > config.max_list_blocks:
+        messages.append(
+            CheckMessage(
+                "warn",
+                f"{n_lists} itemize/enumerate blocks (> {config.max_list_blocks}); a paper that "
+                f"leans this hard on lists reads like slides. Convert some to prose.",
+            )
+        )
+
+    spans = _float_spans(tex_text)
+    stacked = 0
+    for (_, end_i), (start_j, _) in zip(spans, spans[1:]):
+        between = tex_text[end_i:start_j]
+        if SECTIONING_RE.search(between):
+            continue  # a heading between floats is fine, not an image dump
+        if len(re.sub(r"%.*", "", between).strip()) < config.stacked_float_gap_chars:
+            stacked += 1
+    if stacked:
+        messages.append(
+            CheckMessage(
+                "warn",
+                f"{stacked} place(s) stack figures/tables with little explanatory text between "
+                f"them; lead into and interpret each float instead of dumping them in a row.",
+            )
+        )
+
+    boundaries = [m.start() for m in SECTION_ANY_RE.finditer(tex_text)]
+    end_doc = tex_text.find(r"\end{document}")
+    if end_doc == -1:
+        end_doc = len(tex_text)
+    short_sections: list[str] = []
+    for m in SECTION_TITLE_RE.finditer(tex_text):
+        nexts = [b for b in boundaries if b > m.start()] + [end_doc]
+        body = tex_text[m.end():min(nexts)]
+        if len(re.sub(r"\s+", "", body)) < config.min_section_chars:
+            short_sections.append(m.group(1).strip())
+    if short_sections:
+        messages.append(
+            CheckMessage(
+                "warn",
+                f"Thin section(s) under {config.min_section_chars} chars: "
+                + ", ".join(short_sections)
+                + ". Develop them or merge into a neighbor.",
+            )
+        )
+
+    return messages
+
+
 def run_mcm_format_checks(
     project_root: str | Path,
     config: WorkflowConfig,
@@ -171,6 +260,7 @@ def run_mcm_format_checks(
         messages.extend(check_hyperref(tex_text))
         messages.extend(check_structure(tex_text))
         messages.extend(check_layout(tex_text))
+        messages.extend(check_prose_structure(tex_text, config))
 
     if not pdf_path.exists():
         messages.append(

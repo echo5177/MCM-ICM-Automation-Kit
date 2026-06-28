@@ -24,6 +24,7 @@ from mcm_workflow_kit.v1_gate import run_v1_gate
 from mcm_workflow_kit.mcm_format_checker import (
     check_gate_config,
     check_hyperref,
+    check_prose_structure,
     check_structure,
 )
 from mcm_workflow_kit.source_role_checker import classify_artifact, evaluate_rows
@@ -497,6 +498,55 @@ def test_format_structure_requires_summary_toc_refs():
     assert _levels(bad).count("fail") >= 3
     good = check_structure(r"Summary \tableofcontents References AI Use Report")
     assert "fail" not in _levels(good)
+
+
+# ---- check_prose_structure (adapted from MathModelAgent writing_check) ----
+
+_BODY = "x" * 600  # enough prose to clear the thin-section floor
+
+
+def test_prose_structure_clean_paper_is_silent():
+    tex = (
+        r"\section{Intro}" + _BODY
+        + r"\section{Model}" + _BODY
+        + r"\end{document}"
+    )
+    assert check_prose_structure(tex, make_config()) == []
+
+
+def test_prose_structure_flags_duplicate_section_titles():
+    tex = (
+        r"\section{Results}" + _BODY
+        + r"\section{Results}" + _BODY
+        + r"\end{document}"
+    )
+    messages = check_prose_structure(tex, make_config())
+    assert "fail" in _levels(messages)
+    assert "Results" in " ".join(m.message for m in messages)
+
+
+def test_prose_structure_warns_on_list_overuse():
+    tex = r"\section{Intro}" + _BODY + (r"\begin{itemize}\item a\end{itemize}" * 13)
+    messages = check_prose_structure(tex, make_config(max_list_blocks=12))
+    assert "warn" in _levels(messages)
+
+
+def test_prose_structure_warns_on_stacked_floats():
+    tex = (
+        r"\section{Results}" + _BODY
+        + r"\begin{figure}\includegraphics{a}\caption{A}\end{figure}"
+        + r"\begin{figure}\includegraphics{b}\caption{B}\end{figure}"
+        + _BODY
+        + r"\end{document}"
+    )
+    messages = check_prose_structure(tex, make_config())
+    assert any("stack" in m.message for m in messages if m.level == "warn")
+
+
+def test_prose_structure_warns_on_thin_section():
+    tex = r"\section{Intro}" + _BODY + r"\section{Stub}tiny\section{Big}" + _BODY + r"\end{document}"
+    messages = check_prose_structure(tex, make_config())
+    assert any("Stub" in m.message for m in messages if m.level == "warn")
 
 
 # ---- source_role_checker ----

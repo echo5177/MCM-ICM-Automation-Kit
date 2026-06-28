@@ -47,6 +47,10 @@ class WorkflowConfig:
     diagram_min_categories: int = 4
     visual_qa_dir: str = "reports/workflow/visual_qa"
     visual_qa_pages: int = 4
+    # --- prose-structure checks (adapted from MathModelAgent writing_check) ---
+    max_list_blocks: int = 12
+    min_section_chars: int = 400
+    stacked_float_gap_chars: int = 200
 
     @classmethod
     def from_mapping(cls, data: dict[str, Any]) -> "WorkflowConfig":
@@ -99,6 +103,9 @@ class WorkflowConfig:
             diagram_min_categories=int(data.get("diagram_min_categories", 4)),
             visual_qa_dir=str(data.get("visual_qa_dir", "reports/workflow/visual_qa")),
             visual_qa_pages=int(data.get("visual_qa_pages", 4)),
+            max_list_blocks=int(data.get("max_list_blocks", 12)),
+            min_section_chars=int(data.get("min_section_chars", 400)),
+            stacked_float_gap_chars=int(data.get("stacked_float_gap_chars", 200)),
         )
 
 
