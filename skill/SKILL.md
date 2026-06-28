@@ -70,6 +70,16 @@ Read `references/data_standards.md` when the problem uses external data or publi
 
 Never treat documentation pages or local source cards as datasets. If no true dataset is used, say so plainly and strengthen the parameter justification. A source manifest can prove provenance, but it cannot prove modeling adequacy.
 
+## Modeling Methods And Anti-Error
+
+Read `references/modeling_methods.md` while building or reviewing the model. It is an
+anti-error reference, not a model-selection mandate: decide the mathematical model from
+the problem, then use this to avoid known traps (objective-sign and constraint-direction
+bugs, data leakage, integer feasibility, conserved quantities, double-counting in
+evaluation models, etc.), to remember that sensitivity analysis is mandatory, and to
+match MCM/ICM 2026 norms (25-page rule excluding the AI report, scoring dimensions,
+visualization expectations).
+
 ## Quality Gates
 
 Use the local Kit if present, but remember what it can and cannot prove. Deterministic checks prove artifact existence, traceability, hashes, compile success, and some consistency. They do not prove contest quality.
