@@ -39,6 +39,7 @@ class WorkflowConfig:
     min_serious_pages: int = 15
     ai_report_pages: int = 0  # pages of AI Use Report, excluded from the contest page count
     judge_review_file: str = "reports/workflow/judge_review.md"
+    judge_history_file: str = "reports/workflow/judge_review_history.jsonl"
     judge_min_score: int = 4
     judge_required_categories: int = 6
     diagram_min_nodes: int = 8
@@ -92,6 +93,12 @@ class WorkflowConfig:
             ai_report_pages=int(data.get("ai_report_pages", 0)),
             judge_review_file=str(
                 data.get("judge_review_file", "reports/workflow/judge_review.md")
+            ),
+            judge_history_file=str(
+                data.get(
+                    "judge_history_file",
+                    "reports/workflow/judge_review_history.jsonl",
+                )
             ),
             judge_min_score=int(data.get("judge_min_score", 4)),
             judge_required_categories=int(data.get("judge_required_categories", 6)),

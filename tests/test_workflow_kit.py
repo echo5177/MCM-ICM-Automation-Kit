@@ -30,6 +30,12 @@ from mcm_workflow_kit.mcm_format_checker import (
 from mcm_workflow_kit.source_role_checker import classify_artifact, evaluate_rows
 from mcm_workflow_kit.diagram_quality_checker import evaluate_diagram_json
 from mcm_workflow_kit.judge_review_gate import run_judge_review_gate
+from mcm_workflow_kit.review_rounds import (
+    analyze_trajectory,
+    load_rounds,
+    record_review_round,
+    write_review_trajectory_report,
+)
 from mcm_workflow_kit.v2_gate import run_v2_gate
 
 
@@ -674,6 +680,77 @@ def test_judge_review_low_score_fails(tmp_path):
 def test_judge_review_blocked_fails(tmp_path):
     _write_review(tmp_path, GOOD_REVIEW.replace("RELEASE: APPROVED", "RELEASE: BLOCKED"))
     assert run_judge_review_gate(tmp_path, make_config()).status == "fail"
+
+
+# ---- review_rounds (trajectory ledger) ----
+
+_JUDGE_CATS = [
+    "format_presentation",
+    "problem_fit",
+    "modeling_quality",
+    "data_evidence",
+    "results_interpretation",
+    "originality_insight",
+]
+
+
+def _review_body(score: int, release: str = "APPROVED") -> str:
+    lines = ["# Judge-Style Review", f"RELEASE: {release}"]
+    lines += [f"SCORE {cat}: {score}" for cat in _JUDGE_CATS]
+    return "\n".join(lines) + "\n"
+
+
+def test_review_round_records_and_dedups(tmp_path):
+    config = make_config()
+    _write_review(tmp_path, _review_body(4))
+    first = record_review_round(tmp_path, config)
+    assert first is not None and first["round"] == 1 and first["mean"] == 4.0
+    # Re-running on the unchanged review must not inflate the ledger.
+    assert record_review_round(tmp_path, config) is None
+    assert len(load_rounds(tmp_path, config)) == 1
+
+
+def test_review_round_appends_on_change(tmp_path):
+    config = make_config()
+    _write_review(tmp_path, _review_body(3))
+    record_review_round(tmp_path, config)
+    _write_review(tmp_path, _review_body(4))
+    second = record_review_round(tmp_path, config)
+    assert second["round"] == 2
+    rounds = load_rounds(tmp_path, config)
+    assert [r["round"] for r in rounds] == [1, 2]
+    assert [r["mean"] for r in rounds] == [3.0, 4.0]
+
+
+def test_trajectory_flags_regression_as_warn(tmp_path):
+    config = make_config()
+    _write_review(tmp_path, _review_body(4))
+    record_review_round(tmp_path, config)
+    _write_review(tmp_path, _review_body(3))  # a revision that lowered scores
+    record_review_round(tmp_path, config)
+    result = analyze_trajectory(load_rounds(tmp_path, config), config)
+    assert result.status == "warn"
+    assert any("regress" in m.message.lower() for m in result.messages)
+
+
+def test_trajectory_no_warn_on_improvement(tmp_path):
+    config = make_config()
+    _write_review(tmp_path, _review_body(3))
+    record_review_round(tmp_path, config)
+    _write_review(tmp_path, _review_body(5))
+    record_review_round(tmp_path, config)
+    result = analyze_trajectory(load_rounds(tmp_path, config), config)
+    assert result.status == "pass"
+    assert not any(m.level == "warn" for m in result.messages)
+
+
+def test_trajectory_missing_review_is_graceful(tmp_path):
+    config = make_config()
+    assert record_review_round(tmp_path, config) is None
+    result = write_review_trajectory_report(tmp_path, config)
+    assert result.status == "pass"
+    assert result.rounds == []
+    assert (tmp_path / "reports" / "workflow" / "review_trajectory_report.md").exists()
 
 
 # ---- v2_gate ----

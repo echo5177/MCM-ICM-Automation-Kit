@@ -20,6 +20,8 @@
     ],
     "tables_dir": "tables",
     "workflow_reports_dir": "reports/workflow",
+    "judge_review_file": "reports/workflow/judge_review.md",
+    "judge_history_file": "reports/workflow/judge_review_history.jsonl",
     "page_target": 25,
     "page_hard_limit": 25,
     "contest_page_limit": 25,

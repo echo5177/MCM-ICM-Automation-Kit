@@ -18,6 +18,7 @@ from .mcm_format_checker import write_mcm_format_report
 from .paper_qa import write_paper_qa_report
 from .reporting import write_markdown_report
 from .result_checker import write_result_check_report
+from .review_rounds import write_review_trajectory_report
 from .source_checker import write_source_vetting_report
 from .source_role_checker import write_source_role_report
 from .v1_gate import write_v1_gate_report
@@ -260,6 +261,16 @@ def run_workflow(
         run_callable_node(
             "v2_gate",
             lambda: write_v2_gate_report(root, config, list(nodes)),
+            run_dir,
+        )
+    )
+    # Observability only: records the judge-review round and reports the score
+    # trajectory. Appended after the gates so it can never change a verdict; it
+    # never emits `fail`.
+    nodes.append(
+        run_callable_node(
+            "review_trajectory",
+            lambda: write_review_trajectory_report(root, config),
             run_dir,
         )
     )
