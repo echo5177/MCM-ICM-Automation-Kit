@@ -29,8 +29,8 @@ When asked to run an MCM/ICM project end-to-end, follow this order unless the us
 6. Generate planned figures, tables, key results, manifests, and visual source files.
 7. Render and visually inspect the first pages of the PDF and every critical figure.
 8. Run deterministic workflow checks.
-9. Run a judge-style review using the rubric in `references/judge_rubric.md`.
-10. Revise until both deterministic checks and judge-style review are acceptable.
+9. Run a multi-role judge-style review using the rubric in `references/judge_rubric.md`: at minimum a **verifier** pass that re-derives the key numbers and applies the `references/modeling_methods.md` anti-error checklist (see `nodes/paper_reviewer/prompt_verifier.md`), plus a harsh-judge pass on the modeling story. Write the scores to `reports/workflow/judge_review.md`.
+10. Revise until both deterministic checks and judge-style review are acceptable. When review finds a missing analysis (thin sensitivity, no out-of-sample validation, a missing baseline/ablation), **generate that analysis and fold it in — do not merely flag it**. Treat review as a loop: re-score after each revision; the Kit's `review_trajectory` node records the round history and warns if a revision lowered the average score. Iterate until scores clear the minimum and stop improving.
 11. Only then create a release packet or final commit.
 
 ## Non-Negotiable Stop Conditions
@@ -88,7 +88,7 @@ Before finalizing, explicitly report:
 
 - deterministic checks run and results;
 - visual QA performed, including rendered PDF pages and critical figures inspected;
-- judge-style review outcome;
+- judge-style review outcome, including the verifier's re-derivations and the score trajectory across review rounds (`reports/workflow/review_trajectory_report.md`);
 - remaining risks, especially data limitations and model assumptions.
 
 ## Commit Discipline

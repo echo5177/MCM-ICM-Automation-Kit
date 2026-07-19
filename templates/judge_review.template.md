@@ -2,8 +2,10 @@
 
 Reviewer perspective: MCM triage + final judge. Apply skill/references/judge_rubric.md
 AFTER the deterministic checks pass and AFTER visually inspecting the rendered pages
-(use the visual_qa_packet output and a page-by-page contact sheet). Scores 0-5; release
-requires every category >= 4 and no critical defect.
+(use the visual_qa_packet output and a page-by-page contact sheet). Run the verifier pass
+first (re-derive the key numbers; apply modeling_methods.md) before scoring modeling/data/
+results. Scores 0-5; release requires every category >= 4 and no critical defect. Overwrite
+this file each review round — the review_trajectory node records the score history.
 
 The Kit's `judge_review_gate` parses the two machine-readable blocks below. It does NOT
 verify that the scores are honest — that is on the reviewer (agent + human). Do not
