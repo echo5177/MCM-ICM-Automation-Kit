@@ -239,6 +239,100 @@ def check_prose_structure(tex_text: str, config: WorkflowConfig) -> list[CheckMe
     return messages
 
 
+ANY_SECTION_TITLE_RE = re.compile(r"\\(?:sub)*section\*?\{([^}]*)\}")
+KEYWORDS_RE = re.compile(r"keywords?\s*[:\\]", re.IGNORECASE)
+
+# The section skeleton shared by every O-award paper we sampled (see
+# skill/references/award_patterns.md). `fail` items were present in 6/6 papers and
+# are already mandatory in our doctrine; the rest were 5/6 and vary in wording.
+AWARD_SECTIONS: list[tuple[str, str, str, str]] = [
+    (
+        "Assumptions",
+        r"assumption",
+        "fail",
+        "Every sampled O paper has an 'Assumptions and Justification' section.",
+    ),
+    (
+        "Sensitivity Analysis",
+        r"sensitiv",
+        "fail",
+        "Every sampled O paper has a dedicated Sensitivity Analysis section; it is "
+        "mandatory in a contest paper.",
+    ),
+    (
+        "Notation",
+        r"notation|symbol",
+        "warn",
+        "5 of 6 O papers give Notation its own section with a symbol table.",
+    ),
+    (
+        "Restatement of the Problem",
+        r"restat",
+        "warn",
+        "A named restatement is where problem-fit credit is won; 5 of 6 O papers have one.",
+    ),
+    (
+        "Strengths and Weaknesses",
+        r"strength|weakness|limitation|model evaluation",
+        "warn",
+        "Every sampled O paper closes with a Strengths/Weaknesses (Model Evaluation) section.",
+    ),
+    (
+        "Our Work / contributions",
+        r"our work|our approach|contribution",
+        "warn",
+        "5 of 6 O papers summarise contributions up front, usually beside a global flowchart.",
+    ),
+]
+
+
+def check_award_skeleton(tex_text: str) -> list[CheckMessage]:
+    """Check the paper carries the O-award section skeleton."""
+    messages: list[CheckMessage] = []
+    titles = " | ".join(
+        m.group(1) for m in ANY_SECTION_TITLE_RE.finditer(tex_text)
+    ).lower()
+
+    for label, pattern, level, rationale in AWARD_SECTIONS:
+        if not re.search(pattern, titles):
+            messages.append(
+                CheckMessage(level, f"No '{label}' section found. {rationale}")
+            )
+
+    if not KEYWORDS_RE.search(tex_text):
+        messages.append(
+            CheckMessage(
+                "warn",
+                "No Keywords line found; O-paper Summary Sheets end with one.",
+            )
+        )
+    return messages
+
+
+def check_figure_density(
+    tex_text: str,
+    pages: int,
+    config: WorkflowConfig,
+) -> list[CheckMessage]:
+    """Warn when the paper is visually thinner than O-award papers."""
+    counted = pages - config.ai_report_pages
+    if counted <= 0:
+        return []
+    figures = len(re.findall(r"\\begin\{figure", tex_text))
+    density = figures / counted
+    if density < config.min_figures_per_page:
+        return [
+            CheckMessage(
+                "warn",
+                f"Figure density {density:.2f}/page ({figures} figures over {counted} "
+                f"counted pages) is below {config.min_figures_per_page:.2f}. O papers run "
+                f"0.60-1.27 images per page with roughly half the pages visual; add "
+                f"evidence-carrying figures (not decoration).",
+            )
+        ]
+    return []
+
+
 def run_mcm_format_checks(
     project_root: str | Path,
     config: WorkflowConfig,
@@ -250,6 +344,7 @@ def run_mcm_format_checks(
 
     messages: list[CheckMessage] = []
     pages: int | None = None
+    tex_text: str | None = None
 
     messages.extend(check_gate_config(config))
 
@@ -261,6 +356,7 @@ def run_mcm_format_checks(
         messages.extend(check_structure(tex_text))
         messages.extend(check_layout(tex_text))
         messages.extend(check_prose_structure(tex_text, config))
+        messages.extend(check_award_skeleton(tex_text))
 
     if not pdf_path.exists():
         messages.append(
@@ -297,6 +393,9 @@ def run_mcm_format_checks(
                         f"{config.page_target}; use more of the {limit}-page allowance.",
                     )
                 )
+
+    if tex_text is not None and pages is not None:
+        messages.extend(check_figure_density(tex_text, pages, config))
 
     if not messages:
         messages.append(CheckMessage("pass", "MCM format checks passed."))

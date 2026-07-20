@@ -22,6 +22,8 @@ from mcm_workflow_kit.release_packet import create_release_packet
 from mcm_workflow_kit.source_checker import calculate_sha256, run_source_checks
 from mcm_workflow_kit.v1_gate import run_v1_gate
 from mcm_workflow_kit.mcm_format_checker import (
+    check_award_skeleton,
+    check_figure_density,
     check_gate_config,
     check_hyperref,
     check_prose_structure,
@@ -553,6 +555,62 @@ def test_prose_structure_warns_on_thin_section():
     tex = r"\section{Intro}" + _BODY + r"\section{Stub}tiny\section{Big}" + _BODY + r"\end{document}"
     messages = check_prose_structure(tex, make_config())
     assert any("Stub" in m.message for m in messages if m.level == "warn")
+
+
+# ---- award skeleton + figure density (from award_patterns.md evidence) ----
+
+_AWARD_TEX = (
+    r"\section{Introduction}"
+    r"\subsection{Restatement of the Problem}"
+    r"\subsection{Our Work}"
+    r"\section{Assumptions and Justification}"
+    r"\section{Notation}"
+    r"\section{Sensitivity Analysis}"
+    r"\section{Strengths and Weaknesses}"
+    " Keywords: battery; sensitivity."
+)
+
+
+def test_award_skeleton_complete_paper_is_silent():
+    assert check_award_skeleton(_AWARD_TEX) == []
+
+
+def test_award_skeleton_missing_sensitivity_fails():
+    tex = _AWARD_TEX.replace(r"\section{Sensitivity Analysis}", "")
+    messages = check_award_skeleton(tex)
+    assert "fail" in _levels(messages)
+    assert any("Sensitivity" in m.message for m in messages)
+
+
+def test_award_skeleton_missing_assumptions_fails():
+    tex = _AWARD_TEX.replace(r"\section{Assumptions and Justification}", "")
+    assert "fail" in _levels(check_award_skeleton(tex))
+
+
+def test_award_skeleton_missing_notation_only_warns():
+    tex = _AWARD_TEX.replace(r"\section{Notation}", "")
+    messages = check_award_skeleton(tex)
+    assert "warn" in _levels(messages)
+    assert "fail" not in _levels(messages)
+
+
+def test_award_skeleton_missing_keywords_warns():
+    tex = _AWARD_TEX.replace(" Keywords: battery; sensitivity.", "")
+    messages = check_award_skeleton(tex)
+    assert any("Keywords" in m.message for m in messages if m.level == "warn")
+
+
+def test_figure_density_ok_at_o_paper_level():
+    # ProbA-like: 14 figures over 25 counted pages = 0.56/page
+    tex = r"\begin{figure}x\end{figure}" * 14
+    assert check_figure_density(tex, 26, make_config(ai_report_pages=1)) == []
+
+
+def test_figure_density_warns_when_visually_thin():
+    tex = r"\begin{figure}x\end{figure}" * 5  # 5/25 = 0.20/page
+    messages = check_figure_density(tex, 26, make_config(ai_report_pages=1))
+    assert "warn" in _levels(messages)
+    assert "0.20/page" in messages[0].message
 
 
 # ---- source_role_checker ----

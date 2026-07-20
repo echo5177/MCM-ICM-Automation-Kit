@@ -52,6 +52,8 @@ class WorkflowConfig:
     max_list_blocks: int = 12
     min_section_chars: int = 400
     stacked_float_gap_chars: int = 200
+    # --- award patterns (measured from O-award papers; see award_patterns.md) ---
+    min_figures_per_page: float = 0.45
 
     @classmethod
     def from_mapping(cls, data: dict[str, Any]) -> "WorkflowConfig":
@@ -113,6 +115,7 @@ class WorkflowConfig:
             max_list_blocks=int(data.get("max_list_blocks", 12)),
             min_section_chars=int(data.get("min_section_chars", 400)),
             stacked_float_gap_chars=int(data.get("stacked_float_gap_chars", 200)),
+            min_figures_per_page=float(data.get("min_figures_per_page", 0.45)),
         )
 
 
