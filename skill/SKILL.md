@@ -46,6 +46,16 @@ Pause, report the issue, and do not claim final success when any of these occur:
 - The PDF has not been visually inspected after rendering.
 - The paper has not been reviewed from a judge perspective.
 
+## Award Patterns
+
+Read `references/award_patterns.md` before planning the paper outline. It records what
+recent Outstanding papers actually do, measured rather than assumed: the invariant section
+skeleton (Restatement, Our Work, Assumptions and Justification, Notation, reasons for model
+selection, a dedicated Sensitivity Analysis, Strengths and Weaknesses, and the
+letter/memorandum when the problem asks for one), the observed figure density
+(0.60-1.27 images per page), and the Summary Sheet anatomy. Plan the outline against that
+skeleton instead of inventing one.
+
 ## Paper Standards
 
 Read `references/paper_standards.md` when drafting or reviewing a paper. In short:

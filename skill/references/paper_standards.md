@@ -24,7 +24,12 @@ Minimum checks:
   roughly 20-25 pages of solution. A 12-15 page paper is a red flag of under-development,
   not concision. Do NOT treat a "below target pages" warning as acceptable; deepen the
   paper with real substance (derivations, data treatment, validation, discussion, a
-  quality-control/reproducibility section, a memo or letter) until it is genuinely full.
+  quality-control/reproducibility section) until it is genuinely full.
+- If the problem asks for a letter, memorandum, one-page article, or similar artifact,
+  it is a **graded deliverable, not page filler**. Write it as its own clearly labelled
+  section, addressed to the stated audience, carrying the model's actual numbers. O papers
+  end with exactly this section when the problem requests it (2023 C "Letter", 2025 C
+  "Memorandum"). Omitting it forfeits problem-fit credit no matter how good the model is.
 - Reach the page count with substance the problem rewards, never with filler.
 
 ## Layout, floats, and captions (mandatory)
@@ -65,18 +70,33 @@ The Summary Sheet should answer, in one page:
 
 Avoid generic prose. Use topic sentences and numbers. A judge should be able to understand the solution's value from this page alone.
 
+O-paper conventions worth copying (see `award_patterns.md`):
+
+- Give the approach a **name** (e.g. "Olympic Multi-dimensional Predictive Integrator") and
+  put it above the Summary heading. It signals a designed system, not a pile of methods.
+- Structure the summary as a narrative through the sub-problems ("First ... Subsequently ...
+  Finally ..."), each step naming its method **and its numeric result**.
+- Put hard numbers in the summary itself, not just method names.
+- State one honest limitation.
+- End with a **Keywords** line.
+
 ## Content Depth
 
-A strong paper usually contains:
+Follow the O-paper section skeleton in `award_patterns.md`, which is invariant across the
+recent Outstanding papers we sampled. A strong paper contains:
 
-- problem restatement tied to tasks;
-- assumptions with consequences, not boilerplate;
-- notation table only when it saves reading time;
+- a named **Restatement of the Problem** subsection tied to every task;
+- an **Our Work** subsection: bulleted contributions plus a global flowchart of the solution path;
+- **Assumptions and Justification** — each assumption with its justification, not boilerplate;
+- a **Notation** section with a symbol table (expected, not optional — 5 of 6 O papers make it its own section);
 - data and parameter provenance;
+- **reasons for model selection** before each model, not only the derivation;
 - model derivation and algorithm;
 - validation or sanity checks;
-- sensitivity and uncertainty analysis;
-- interpretation of results;
+- a dedicated **Sensitivity Analysis** section that ends in a consequence or limitation;
+- uncertainty analysis and interpretation of results;
+- a dedicated **Strengths and Weaknesses** (or Model Evaluation) section;
+- the **letter / memorandum / one-page article** whenever the problem requests one;
 - limitations and extensions.
 
 Equations alone are not depth. They need parameter definitions, solution method, and evidence that they answer the problem.

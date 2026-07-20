@@ -88,6 +88,10 @@ match contest conventions — read the relevant block when building or reviewing
   and report curve drift.
 - If a small perturbation causes a large change, the model is sensitive to that parameter
   — say so explicitly rather than hiding it.
+- Every sensitivity subsection must **end in a consequence or limitation**, not in "the
+  model is robust". Say why the response is small or large mechanistically, and what a
+  practitioner should therefore watch or what the model still cannot do. This is how the
+  O papers write it (see `award_patterns.md`); a section that stops at "robust" is unfinished.
 
 ## Writing anti-error checklist
 

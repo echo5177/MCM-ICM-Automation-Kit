@@ -13,8 +13,16 @@ Run this as a multi-role loop, not a single read. Before scoring `Modeling Quali
 ## Problem Fit
 
 - Does the paper answer every task in the problem statement?
+- Is there a **Restatement of the Problem** that shows each task was understood?
+- If the problem requested a letter, memorandum, or one-page article, is it present as its own labelled section, addressed to the stated audience, carrying real numbers?
 - Are assumptions justified and connected to the problem?
-- Is the model appropriate for the requested type of solution?
+- Is the model appropriate for the requested type of solution, and is the **reason for choosing it** stated?
+
+## Award Skeleton (see `award_patterns.md`)
+
+- Does the paper carry the skeleton every sampled O paper had: Restatement, Our Work/contributions, Assumptions and Justification, Notation, a dedicated Sensitivity Analysis, and Strengths and Weaknesses?
+- Is figure density in the O-paper band (roughly 0.6-1.3 per page; below ~0.45 is visually thin)?
+- Does the Summary Sheet name the approach, carry hard numbers, admit one limitation, and end with Keywords?
 
 ## Modeling Quality
 

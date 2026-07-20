@@ -1,5 +1,16 @@
 # Figure Standards
 
+## How Many Figures
+
+Measured across six recent O-award papers (see `award_patterns.md`): **0.60-1.27 images per
+page**, with **48-68% of pages carrying at least one figure**. Half to two-thirds of pages
+are visual.
+
+Plan for roughly one figure per one to two pages, and treat below ~0.45 figures per page as
+visually thin. Close the gap with figures that carry evidence — derivations made visible,
+validation residuals, sensitivity responses, scenario comparisons — never decoration to hit
+a number. The Kit warns when density falls below the configured floor.
+
 ## First Workflow/Model Figure
 
 The first conceptual figure is a scoring-critical artifact. It should be information-dense and elegant. Do not create a simple chain of boxes unless the problem is genuinely simple.
