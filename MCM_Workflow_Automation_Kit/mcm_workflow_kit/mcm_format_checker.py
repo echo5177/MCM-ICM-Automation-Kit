@@ -260,6 +260,13 @@ AWARD_SECTIONS: list[tuple[str, str, str, str]] = [
         "mandatory in a contest paper.",
     ),
     (
+        "Strengths and Weaknesses",
+        r"strength|weakness|limitation|model evaluation",
+        "fail",
+        "Every sampled O paper closes with a Strengths/Weaknesses (Model Evaluation) "
+        "section; a paper that never states its own limits reads as overclaiming.",
+    ),
+    (
         "Notation",
         r"notation|symbol",
         "warn",
@@ -270,12 +277,6 @@ AWARD_SECTIONS: list[tuple[str, str, str, str]] = [
         r"restat",
         "warn",
         "A named restatement is where problem-fit credit is won; 5 of 6 O papers have one.",
-    ),
-    (
-        "Strengths and Weaknesses",
-        r"strength|weakness|limitation|model evaluation",
-        "warn",
-        "Every sampled O paper closes with a Strengths/Weaknesses (Model Evaluation) section.",
     ),
     (
         "Our Work / contributions",
@@ -314,7 +315,12 @@ def check_figure_density(
     pages: int,
     config: WorkflowConfig,
 ) -> list[CheckMessage]:
-    """Warn when the paper is visually thinner than O-award papers."""
+    """Warn when the paper is visually thinner than O-award papers.
+
+    Counts figure *environments* in the source, while the O-paper band was measured
+    from rendered *images*. A float holding subfigures counts once here, so this
+    slightly under-counts relative to the band; treat the floor as a lower bound.
+    """
     counted = pages - config.ai_report_pages
     if counted <= 0:
         return []
@@ -325,8 +331,9 @@ def check_figure_density(
             CheckMessage(
                 "warn",
                 f"Figure density {density:.2f}/page ({figures} figures over {counted} "
-                f"counted pages) is below {config.min_figures_per_page:.2f}. O papers run "
-                f"0.60-1.27 images per page with roughly half the pages visual; add "
+                f"counted pages) is below the O-paper floor "
+                f"{config.min_figures_per_page:.2f}. Every sampled O paper ran "
+                f"0.60-1.27 images per page with 48-68% of pages visual; add "
                 f"evidence-carrying figures (not decoration).",
             )
         ]

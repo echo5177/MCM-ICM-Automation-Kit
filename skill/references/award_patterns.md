@@ -49,9 +49,13 @@ Wording varies; the *function* does not. In order:
 ## Figure density
 
 O papers run **0.60–1.27 images per page**, with **48–68% of pages carrying at least one
-figure**. Roughly half to two-thirds of pages are visual. A paper below ~0.45 figures per
-page is visually thin by O-paper standards and should add evidence-carrying figures
-(not decoration).
+figure**. Roughly half to two-thirds of pages are visual.
+
+The Kit enforces **0.60 figures per page** as a floor — the observed minimum, not a soft
+target. A paper below it is visually thinner than every O paper we measured and should add
+evidence-carrying figures (not decoration). Counting caveat: the Kit counts figure
+*environments* in the source while the band above was measured from rendered *images*, so a
+float holding subfigures counts once; treat the floor as a lower bound.
 
 ## Summary Sheet anatomy
 

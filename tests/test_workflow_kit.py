@@ -600,10 +600,26 @@ def test_award_skeleton_missing_keywords_warns():
     assert any("Keywords" in m.message for m in messages if m.level == "warn")
 
 
+def test_award_skeleton_missing_strengths_fails():
+    tex = _AWARD_TEX.replace(r"\section{Strengths and Weaknesses}", "")
+    messages = check_award_skeleton(tex)
+    assert "fail" in _levels(messages)
+    assert any("Strengths" in m.message for m in messages)
+
+
 def test_figure_density_ok_at_o_paper_level():
-    # ProbA-like: 14 figures over 25 counted pages = 0.56/page
-    tex = r"\begin{figure}x\end{figure}" * 14
+    # 16 figures over 25 counted pages = 0.64/page, inside the O band.
+    tex = r"\begin{figure}x\end{figure}" * 16
     assert check_figure_density(tex, 26, make_config(ai_report_pages=1)) == []
+
+
+def test_figure_density_warns_just_below_o_floor():
+    # 14 figures over 25 counted pages = 0.56/page: passable, but thinner than
+    # every O paper measured. The floor is deliberately set to catch this.
+    tex = r"\begin{figure}x\end{figure}" * 14
+    messages = check_figure_density(tex, 26, make_config(ai_report_pages=1))
+    assert "warn" in _levels(messages)
+    assert "0.56/page" in messages[0].message
 
 
 def test_figure_density_warns_when_visually_thin():

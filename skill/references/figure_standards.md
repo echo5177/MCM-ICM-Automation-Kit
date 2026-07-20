@@ -6,10 +6,15 @@ Measured across six recent O-award papers (see `award_patterns.md`): **0.60-1.27
 page**, with **48-68% of pages carrying at least one figure**. Half to two-thirds of pages
 are visual.
 
-Plan for roughly one figure per one to two pages, and treat below ~0.45 figures per page as
-visually thin. Close the gap with figures that carry evidence — derivations made visible,
-validation residuals, sensitivity responses, scenario comparisons — never decoration to hit
-a number. The Kit warns when density falls below the configured floor.
+Plan for roughly one figure per one to two pages. The Kit's floor is **0.60 figures per
+page** — the observed floor across the sampled O papers, not a soft target: below it, the
+paper is visually thinner than every O paper measured. Close the gap with figures that
+carry evidence — derivations made visible, validation residuals, sensitivity responses,
+scenario comparisons — never decoration to hit a number.
+
+Note the counting unit: the Kit counts figure *environments* in the source, while the band
+was measured from rendered *images*. A float holding subfigures counts once, so the check
+slightly under-counts; treat 0.60 as a lower bound rather than a goal.
 
 ## First Workflow/Model Figure
 

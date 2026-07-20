@@ -36,7 +36,7 @@ class WorkflowConfig:
     # --- v2 gate: contest-quality thresholds ---
     contest_page_limit: int = 25
     min_page_target: int = 20
-    min_serious_pages: int = 15
+    min_serious_pages: int = 20  # every sampled O paper used the full page allowance
     ai_report_pages: int = 0  # pages of AI Use Report, excluded from the contest page count
     judge_review_file: str = "reports/workflow/judge_review.md"
     judge_history_file: str = "reports/workflow/judge_review_history.jsonl"
@@ -53,7 +53,9 @@ class WorkflowConfig:
     min_section_chars: int = 400
     stacked_float_gap_chars: int = 200
     # --- award patterns (measured from O-award papers; see award_patterns.md) ---
-    min_figures_per_page: float = 0.45
+    # 0.60 is the *observed floor* across the sampled O papers, not a soft target:
+    # a paper below it is visually thinner than every O paper we measured.
+    min_figures_per_page: float = 0.60
 
     @classmethod
     def from_mapping(cls, data: dict[str, Any]) -> "WorkflowConfig":
@@ -91,7 +93,7 @@ class WorkflowConfig:
             source_manifest_required=bool(data.get("source_manifest_required", False)),
             contest_page_limit=int(data.get("contest_page_limit", 25)),
             min_page_target=int(data.get("min_page_target", 20)),
-            min_serious_pages=int(data.get("min_serious_pages", 15)),
+            min_serious_pages=int(data.get("min_serious_pages", 20)),
             ai_report_pages=int(data.get("ai_report_pages", 0)),
             judge_review_file=str(
                 data.get("judge_review_file", "reports/workflow/judge_review.md")
@@ -115,7 +117,7 @@ class WorkflowConfig:
             max_list_blocks=int(data.get("max_list_blocks", 12)),
             min_section_chars=int(data.get("min_section_chars", 400)),
             stacked_float_gap_chars=int(data.get("stacked_float_gap_chars", 200)),
-            min_figures_per_page=float(data.get("min_figures_per_page", 0.45)),
+            min_figures_per_page=float(data.get("min_figures_per_page", 0.60)),
         )
 
 
