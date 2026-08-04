@@ -52,6 +52,14 @@ class WorkflowConfig:
     max_list_blocks: int = 12
     min_section_chars: int = 400
     stacked_float_gap_chars: int = 200
+    # --- experiment integrity audit ---
+    code_globs: list[str] = field(
+        default_factory=lambda: ["scripts/**/*.py", "src/**/*.py"]
+    )
+    figure_source_globs: list[str] = field(
+        default_factory=lambda: ["figures/**/*.svg", "figures/**/*.json"]
+    )
+    template_pollution_terms: list[str] = field(default_factory=list)
     # --- award patterns (measured from O-award papers; see award_patterns.md) ---
     # 0.60 is the *observed floor* across the sampled O papers, not a soft target:
     # a paper below it is visually thinner than every O paper we measured.
@@ -117,6 +125,16 @@ class WorkflowConfig:
             max_list_blocks=int(data.get("max_list_blocks", 12)),
             min_section_chars=int(data.get("min_section_chars", 400)),
             stacked_float_gap_chars=int(data.get("stacked_float_gap_chars", 200)),
+            code_globs=list(
+                data.get("code_globs", ["scripts/**/*.py", "src/**/*.py"])
+            ),
+            figure_source_globs=list(
+                data.get(
+                    "figure_source_globs",
+                    ["figures/**/*.svg", "figures/**/*.json"],
+                )
+            ),
+            template_pollution_terms=list(data.get("template_pollution_terms", [])),
             min_figures_per_page=float(data.get("min_figures_per_page", 0.60)),
         )
 

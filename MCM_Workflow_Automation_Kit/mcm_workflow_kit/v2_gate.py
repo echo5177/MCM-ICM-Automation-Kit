@@ -24,6 +24,7 @@ QUALITY_NODES = (
     "mcm_format_checker",
     "source_role_checker",
     "diagram_quality_checker",
+    "experiment_audit",
     "visual_qa_packet",
     "judge_review_gate",
 )

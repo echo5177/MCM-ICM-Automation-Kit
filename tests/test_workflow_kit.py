@@ -31,6 +31,13 @@ from mcm_workflow_kit.mcm_format_checker import (
 )
 from mcm_workflow_kit.source_role_checker import classify_artifact, evaluate_rows
 from mcm_workflow_kit.diagram_quality_checker import evaluate_diagram_json
+from mcm_workflow_kit.experiment_audit import (
+    DEFAULT_POLLUTION_TERMS,
+    audit_figure_text,
+    audit_parameter_sweeps,
+    audit_random_seeds,
+    run_experiment_audit,
+)
 from mcm_workflow_kit.judge_review_gate import run_judge_review_gate
 from mcm_workflow_kit.review_rounds import (
     analyze_trajectory,
@@ -714,6 +721,116 @@ def test_diagram_quality_passes_dense():
     assert summary["content_fraction"] >= 0.6
 
 
+# ---- experiment_audit ----
+
+# The real defect from the award paper this check exists for (2023 MCM Problem B,
+# team 2316192): `i` is never used and the body uses the range bound `a_j`, so the
+# "sweep of alpha over (0, 90)" is 89 runs at a fixed 90 degrees.
+_REAL_SWEEP_BUG = """
+import math
+a_j = 90
+res_lst = []
+for i in range(1, a_j):
+    a = a_j * math.pi / 180
+    res_lst.append(math.sin(a))
+"""
+
+_FIXED_SWEEP = """
+import math
+a_j = 90
+res_lst = []
+for i in range(1, a_j):
+    a = i * math.pi / 180
+    res_lst.append(math.sin(a))
+"""
+
+
+def test_sweep_audit_catches_the_real_award_paper_bug():
+    messages = audit_parameter_sweeps(_REAL_SWEEP_BUG, "test-data.py")
+    assert "fail" in _levels(messages)
+    text = " ".join(m.message for m in messages)
+    assert "a_j" in text and "not sweeping" in text
+
+
+def test_sweep_audit_silent_when_loop_variable_is_used():
+    assert audit_parameter_sweeps(_FIXED_SWEEP, "test-data.py") == []
+
+
+def test_sweep_audit_allows_underscore_repetition_loop():
+    src = "total = 0\nfor _ in range(100):\n    total += 1\n"
+    assert audit_parameter_sweeps(src, "mc.py") == []
+
+
+def test_sweep_audit_warns_but_does_not_fail_on_plain_unused_index():
+    # A Monte Carlo repetition loop written with `i`: worth a nudge, not a failure.
+    src = "total = 0\nfor i in range(100):\n    total += 1\n"
+    messages = audit_parameter_sweeps(src, "mc.py")
+    assert _levels(messages) == ["warn"]
+
+
+def test_sweep_audit_survives_unparseable_file():
+    messages = audit_parameter_sweeps("def broken(:\n", "bad.py")
+    assert _levels(messages) == ["warn"]
+
+
+def test_seed_audit_flags_unseeded_randomness():
+    src = "import numpy as np\nx = np.random.normal(0, 1, 100)\n"
+    assert "warn" in _levels(audit_random_seeds(src, "sim.py"))
+
+
+def test_seed_audit_accepts_seeded_variants():
+    for src in (
+        "import numpy as np\nnp.random.seed(7)\nx = np.random.normal(0, 1)\n",
+        "import numpy as np\nrng = np.random.default_rng(20260204)\nx = rng.normal()\n",
+        "import random\nrandom.seed(1)\ny = random.random()\n",
+    ):
+        assert audit_random_seeds(src, "sim.py") == []
+
+
+def test_seed_audit_ignores_deterministic_code():
+    assert audit_random_seeds("x = 1 + 1\n", "calc.py") == []
+
+
+def test_figure_text_audit_catches_template_pollution():
+    # The real case: a wildlife-conservation workflow figure still carrying
+    # neural-architecture-search labels.
+    svg = "<svg><text>Super-net w/o pretrained initialization</text>" \
+          "<text>Kernel-level</text></svg>"
+    messages = audit_figure_text(svg, "figures/concept_src/flow.svg", DEFAULT_POLLUTION_TERMS)
+    assert "fail" in _levels(messages)
+    assert "super-net" in messages[0].message
+
+
+def test_figure_text_audit_silent_on_clean_figure():
+    svg = "<svg><text>State of charge</text><text>Validation</text></svg>"
+    assert audit_figure_text(svg, "figures/f.svg", DEFAULT_POLLUTION_TERMS) == []
+
+
+def test_experiment_audit_end_to_end(tmp_path):
+    (tmp_path / "scripts").mkdir()
+    (tmp_path / "scripts" / "sweep.py").write_text(_REAL_SWEEP_BUG, encoding="utf-8")
+    (tmp_path / "figures").mkdir()
+    (tmp_path / "figures" / "flow.svg").write_text(
+        "<svg><text>Backbone Kernel-level</text></svg>", encoding="utf-8"
+    )
+
+    result = run_experiment_audit(tmp_path, make_config())
+
+    assert result.status == "fail"
+    assert result.scanned_scripts == 1
+    assert result.scanned_figures == 1
+    assert len(result.findings) == 2
+
+
+def test_experiment_audit_passes_on_clean_project(tmp_path):
+    (tmp_path / "scripts").mkdir()
+    (tmp_path / "scripts" / "model.py").write_text(_FIXED_SWEEP, encoding="utf-8")
+
+    result = run_experiment_audit(tmp_path, make_config())
+
+    assert result.status == "pass"
+
+
 # ---- judge_review_gate ----
 
 GOOD_REVIEW = """# Judge-Style Review
@@ -843,6 +960,7 @@ def _all_nodes(status_map):
         "source_role_checker",
         "data_auditor",
         "result_checker",
+        "experiment_audit",
         "diagram_checker",
         "diagram_quality_checker",
         "paper_qa",
