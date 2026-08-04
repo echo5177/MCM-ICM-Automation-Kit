@@ -53,6 +53,15 @@ Pause, report the issue, and do not claim final success when any of these occur:
 - The PDF has not been visually inspected after rendering.
 - The paper has not been reviewed from a judge perspective.
 
+## Competition Operations
+
+Read `references/competition_operations.md` when running an actual contest rather than
+repairing an existing paper. It covers the three work lanes and why the writing lane must
+start before the modeling lane finishes, the handoff contract that keeps a number from
+being mis-stated (units, provenance, draft/final status, uncertainty), contest-clock
+milestones expressed as fractions of the real contest window, and freeze discipline. A
+correct model that reaches the writer too late still produces a thin paper.
+
 ## Award Patterns
 
 Read `references/award_patterns.md` before planning the paper outline. It records what
