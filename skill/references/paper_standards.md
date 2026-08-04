@@ -30,6 +30,14 @@ Minimum checks:
   section, addressed to the stated audience, carrying the model's actual numbers. O papers
   end with exactly this section when the problem requests it (2023 C "Letter", 2025 C
   "Memorandum"). Omitting it forfeits problem-fit credit no matter how good the model is.
+- **Recommendations must be decisions, not topics.** "Strengthen reserve management",
+  "optimize transport", and "plan tourist routes" are subject headings, not advice — a
+  decision-maker cannot act on them, and award papers lose points here. Every recommendation
+  needs: the specific action; the model threshold that triggers it; its priority order; who
+  owns it; the time horizon; the quantified expected effect on the model's own headline
+  metric; the resources it costs; the conditions under which the recommendation fails; and
+  what to monitor afterwards. If a recommendation cannot be tied back to a number the model
+  produced, it is an opinion and does not belong in a modeling paper.
 - Reach the page count with substance the problem rewards, never with filler.
 
 ## Layout, floats, and captions (mandatory)

@@ -2,7 +2,12 @@
 
 Use this rubric after the deterministic workflow passes. Score each item from 0 to 5, then revise any item below 4 before final release unless the user explicitly accepts a draft.
 
-Run this as a multi-role loop, not a single read. Before scoring `Modeling Quality`, `Data And Evidence`, and `Results And Interpretation`, run a **verifier pass** (`nodes/paper_reviewer/prompt_verifier.md`): re-derive the headline numbers and apply the `modeling_methods.md` anti-error checklist. An unresolved BLOCKING verifier finding (a wrong number, a sign/constraint/feasibility bug, data leakage, or a claimed-but-absent analysis) caps those categories below 4.
+Run this as a multi-role loop, not a single read. Before scoring `Modeling Quality`, `Data And Evidence`, and `Results And Interpretation`, run two passes:
+
+- a **verifier pass** (`nodes/paper_reviewer/prompt_verifier.md`): re-derive the headline numbers and apply the `modeling_methods.md` anti-error checklist. An unresolved BLOCKING finding (a wrong number, a sign/constraint/feasibility bug, data leakage, or a claimed-but-absent analysis) caps those categories below 4.
+- a **construct-validity pass** (`nodes/paper_reviewer/prompt_construct_validity.md`, applying `model_semantic_audit.md`): does each index, weight, and score actually measure what it claims? An unresolved INVALID finding that a conclusion depends on also caps those categories below 4.
+
+The two catch different failures. Correct arithmetic on an invalid construct passes the verifier and still deserves to lose points.
 
 ## Format And Presentation
 
@@ -42,10 +47,17 @@ Run this as a multi-role loop, not a single read. Before scoring `Modeling Quali
 - Do figures and tables support the argument?
 - Are uncertainty and sensitivity analyzed with consequences?
 
+## Construct Validity
+
+- Does every index, weight, score, and composite measure what its name claims?
+- Are proxies supported by evidence, or at least labelled as assumptions with a sensitivity test?
+- Are functional forms and thresholds justified rather than convenient?
+- Is any correlation being used as if it were a cause?
+
 ## Originality And Insight
 
 - Is there a clear idea that distinguishes the solution?
-- Are recommendations actionable and tied to model outputs?
+- Are recommendations **decisions** — action, trigger threshold, owner, horizon, quantified effect, cost, failure conditions, monitoring — rather than topic headings?
 - Are limitations honest without undermining the paper?
 
 ## Release Decision

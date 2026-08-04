@@ -21,6 +21,13 @@ Use this skill to make Codex behave like a disciplined MCM/ICM paper builder, no
 
 When asked to run an MCM/ICM project end-to-end, follow this order unless the user explicitly asks for a narrower task.
 
+0. **Official rules preflight.** Confirm the *current* contest rules from the official COMAP
+   instructions rather than from memory or from this Skill's snapshot: contest year and
+   window, page limit and exactly what it counts, minimum font size, per-page team-number
+   and page-number requirements, anonymity, AI disclosure and where the AI report goes, file
+   naming and size. Record them in `reports/rules_snapshot.md` with source URL and access
+   date. Rules change between cycles; a hardcoded snapshot is a submission risk, and the
+   official rules always win over `references/modeling_methods.md`.
 1. Inspect the repository, problem statement, available data, prior notes, and workflow config.
 2. Produce or update a pre-execution plan with modeling route, data route, figure/table route, paper route, validation route, and commit batches.
 3. Build a data-needs document before acquiring external data.
@@ -29,7 +36,7 @@ When asked to run an MCM/ICM project end-to-end, follow this order unless the us
 6. Generate planned figures, tables, key results, manifests, and visual source files.
 7. Render and visually inspect the first pages of the PDF and every critical figure.
 8. Run deterministic workflow checks.
-9. Run a multi-role judge-style review using the rubric in `references/judge_rubric.md`: at minimum a **verifier** pass that re-derives the key numbers and applies the `references/modeling_methods.md` anti-error checklist (see `nodes/paper_reviewer/prompt_verifier.md`), plus a harsh-judge pass on the modeling story. Write the scores to `reports/workflow/judge_review.md`.
+9. Run a multi-role judge-style review using the rubric in `references/judge_rubric.md`: at minimum a **verifier** pass that re-derives the key numbers and applies the `references/modeling_methods.md` anti-error checklist (see `nodes/paper_reviewer/prompt_verifier.md`), a **construct-validity** pass that checks each quantity actually measures what it claims (`references/model_semantic_audit.md`, `nodes/paper_reviewer/prompt_construct_validity.md`), plus a harsh-judge pass on the modeling story. Write the scores to `reports/workflow/judge_review.md`.
 10. Revise until both deterministic checks and judge-style review are acceptable. When review finds a missing analysis (thin sensitivity, no out-of-sample validation, a missing baseline/ablation), **generate that analysis and fold it in — do not merely flag it**. Treat review as a loop: re-score after each revision; the Kit's `review_trajectory` node records the round history and warns if a revision lowered the average score. Iterate until scores clear the minimum and stop improving.
 11. Only then create a release packet or final commit.
 
@@ -79,6 +86,16 @@ The first figure should be designed before rendering. It should include enough i
 Read `references/data_standards.md` when the problem uses external data or public parameters.
 
 Never treat documentation pages or local source cards as datasets. If no true dataset is used, say so plainly and strengthen the parameter justification. A source manifest can prove provenance, but it cannot prove modeling adequacy.
+
+## Model Semantics
+
+Read `references/model_semantic_audit.md` whenever the model introduces an index, weight,
+score, utility, or any quantity standing in for a real-world concept. `modeling_methods.md`
+catches math that is computed wrongly; this catches math that is computed correctly and
+measures the wrong thing — invalid proxies, unjustified functional forms, arbitrary
+thresholds, correlation used as cause. A published award paper set its AHP criteria weights
+from Google Scholar hit counts; the arithmetic was correct and the construct was not, and it
+still won. Do not assume this class of defect gets caught for you.
 
 ## Modeling Methods And Anti-Error
 

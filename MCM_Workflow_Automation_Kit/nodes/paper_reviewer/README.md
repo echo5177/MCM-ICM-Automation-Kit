@@ -14,6 +14,11 @@ perspective so a single reviewer's blind spot does not pass:
   errors using `skill/references/modeling_methods.md`. This is the numerical
   verification role; it specifies the exact missing analysis rather than only
   flagging it.
+- `prompt_construct_validity.md` — asks whether each quantity **means** what it
+  claims (`skill/references/model_semantic_audit.md`): invalid proxies,
+  unjustified functional forms, arbitrary thresholds, correlation as cause. The
+  verifier and this role catch different failures — correct arithmetic on an
+  invalid construct passes the verifier.
 
 Run the verifier and harsh judge together, fold their findings into the scores in
 `skill/references/judge_rubric.md`, write `reports/workflow/judge_review.md`, and

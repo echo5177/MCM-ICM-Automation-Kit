@@ -105,7 +105,18 @@ match contest conventions — read the relevant block when building or reviewing
 - An assumption not referenced where it is used reads as filler. Tie each one to the model.
 - References must be real and verifiable. Never fabricate a citation to look academic.
 
-## MCM/ICM (2026) specifics
+## MCM/ICM contest norms — VERIFY BEFORE RELYING ON THIS
+
+> **This block is a snapshot, not authority.** It reflects the 2026 cycle as understood when
+> written. COMAP changes rules between cycles (page counting, AI disclosure, formatting,
+> submission mechanics). Before drafting, confirm the current rules against the official
+> COMAP contest instructions and record what you found — year, page limit, what the limit
+> counts, minimum font size, per-page team-number/page-number requirements, anonymity rules,
+> AI disclosure and where the AI report goes, file naming and size — into
+> `reports/rules_snapshot.md` with the source URL and the date you checked.
+>
+> If the official rules and this block disagree, **the official rules win** and this file
+> should be updated. Never let a contest submission rest on a hardcoded snapshot.
 
 - **Page limit: 25 pages** counting the Summary Sheet, table of contents, solution, and
   references — but **NOT** the AI Use Report appendix. LLM/generative-AI use is allowed and
