@@ -143,3 +143,11 @@ def test_emptying_the_placeholder_list_does_not_silence_the_check(tmp_path: Path
     setup(tmp_path, monkeypatch, pages(summary="1111111", header="1111111"))
     result = run_submission_checks(tmp_path, config(team_control_number_placeholders=[]))
     assert result.status == "fail" and "placeholder" in texts(result, "fail")
+
+
+def test_upload_name_hint_never_suggests_the_placeholder(tmp_path: Path, monkeypatch) -> None:
+    # A fresh scaffold at release_stage final was told to name its upload 1111111.pdf.
+    setup(tmp_path, monkeypatch, pages(summary="1111111", header="1111111"))
+    assert "named <control number>.pdf" in texts(run_submission_checks(tmp_path, config()), "warn")
+    setup(tmp_path, monkeypatch, pages())
+    assert f"named {NUM}.pdf" in texts(run_submission_checks(tmp_path, config()), "warn")

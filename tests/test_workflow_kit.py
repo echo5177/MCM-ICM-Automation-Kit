@@ -206,6 +206,19 @@ def test_key_result_checker_matches_numeric_variants(tmp_path):
     assert [row["status"] for row in result] == ["found", "found"]
 
 
+def test_result_checker_reports_missing_key_results_instead_of_crashing(tmp_path):
+    # A fresh scaffold (scripts/new_problem.py) has a paper but no key_results.csv yet;
+    # the node used to raise FileNotFoundError and the gate only said "raised an exception".
+    from mcm_workflow_kit.result_checker import run_result_checks
+
+    (tmp_path / "paper").mkdir()
+    (tmp_path / "paper" / "main.tex").write_text("\\section{Introduction}\n", encoding="utf-8")
+    result = run_result_checks(tmp_path, WorkflowConfig.from_mapping({}))
+    fails = [m.message for m in result.messages if m.level == "fail"]
+    assert any(m.startswith("Key results file missing") for m in fails)
+    assert result.key_result_checks == []
+
+
 def test_table_number_checker_finds_gaps(tmp_path):
     (tmp_path / "table_1_data.tex").write_text("", encoding="utf-8")
     (tmp_path / "table_3_results.tex").write_text("", encoding="utf-8")

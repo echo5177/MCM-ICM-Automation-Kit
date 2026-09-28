@@ -52,7 +52,7 @@ MCM-ICM-Automation-Kit/
 
 ```bash
 python scripts/new_problem.py --name ProbB --problem-letter B
-cd ../Simulation_2026MCM-ICM_ProbB
+cd ../Simulation_2027MCM-ICM_ProbB         # prefix = the next contest's year (--year overrides)
 conda env create -f environment.yml        # or reuse the shared 'mcm' env
 # then follow NEW_PROBLEM_CHECKLIST.md
 python MCM_Workflow_Automation_Kit/run_workflow.py --project-root . --mode check

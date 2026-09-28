@@ -168,7 +168,14 @@ def run_result_checks(
                 )
             )
 
-    key_result_checks = check_key_results_in_text(key_results_path, paper_text)
+    # A fresh scaffold has no key_results.csv yet: say so instead of crashing the node.
+    if key_results_path.is_file():
+        key_result_checks = check_key_results_in_text(key_results_path, paper_text)
+    else:
+        messages.append(CheckMessage(
+            "fail", f"Key results file missing: {config.key_results} (the pipeline writes it; "
+                    f"every headline number in the paper should come from it)."))
+        key_result_checks = []
     missing_metrics = [
         check["metric"]
         for check in key_result_checks

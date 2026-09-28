@@ -9,11 +9,14 @@ the real work (no paper / no judge review yet) -- that is the point.
 Usage:
     python scripts/new_problem.py --name ProbB
     python scripts/new_problem.py --name ProbB --problem-letter B
-    python scripts/new_problem.py --name ProbB --dir "D:/documents/MCM&ICM/2026/MCM_Automation"
+    python scripts/new_problem.py --name ProbB --year 2027 --dir "D:/documents/MCM&ICM/2027/MCM_Automation"
+
+The repo is named Simulation_<year>MCM-ICM_<name>; <year> defaults to the next contest.
 """
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import shutil
 from pathlib import Path
 
@@ -40,12 +43,19 @@ def _ignore(_dir: str, names: list[str]) -> set[str]:
     return {n for n in names if n == "__pycache__" or n == "runs" or n.endswith(".pyc")}
 
 
+def next_contest_year(today: dt.date | None = None) -> int:
+    """MCM/ICM runs in late January or early February; from March on, the next one is next year's."""
+    today = today or dt.date.today()
+    return today.year + 1 if today.month >= 3 else today.year
+
+
 def _write(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text, encoding="utf-8")
 
 
-def scaffold(target: Path, problem_letter: str | None, force: bool) -> int:
+def scaffold(target: Path, problem_letter: str | None, force: bool, year: int | None = None) -> int:
+    year = year or next_contest_year()
     if target.exists():
         if not force or not target.is_dir():
             raise SystemExit(f"Target already exists: {target} (use --force to add into it)")
@@ -101,7 +111,7 @@ def scaffold(target: Path, problem_letter: str | None, force: bool) -> int:
     letter = (problem_letter or "X").upper()
     _write(
         target / "README.md",
-        f"""# {name} — 2026 MCM/ICM Problem {letter}
+        f"""# {name} — {year} MCM/ICM Problem {letter}
 
 Scaffolded from the MCM-ICM Automation Kit. The deterministic v2-gate Kit lives in
 `{KIT_NAME}/`. Follow `NEW_PROBLEM_CHECKLIST.md`.
@@ -129,7 +139,13 @@ until the paper, results, figures, and an honest judge review all exist.
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--name", required=True, help="Repo name, e.g. ProbB or Simulation_2026MCM-ICM_ProbB.")
+    parser.add_argument("--name", required=True, help="Repo name, e.g. ProbB or Simulation_2027MCM-ICM_ProbB.")
+    parser.add_argument(
+        "--year",
+        type=int,
+        default=None,
+        help="Contest year for the repo prefix and README (default: the next contest).",
+    )
     parser.add_argument(
         "--dir",
         default=str(TEMPLATE_ROOT.parent),
@@ -137,18 +153,21 @@ def main() -> int:
     )
     parser.add_argument(
         "--prefix",
-        default="Simulation_2026MCM-ICM_",
-        help="Prefix applied to --name unless --name already starts with it.",
+        default=None,
+        help="Prefix applied to --name unless --name already starts with it "
+             "(default: Simulation_<year>MCM-ICM_; pass '' for none).",
     )
     parser.add_argument("--problem-letter", default=None, help="Contest problem letter, e.g. A..F.")
     parser.add_argument("--force", action="store_true", help="Scaffold into an existing directory.")
     args = parser.parse_args()
 
+    year = args.year or next_contest_year()
+    prefix = f"Simulation_{year}MCM-ICM_" if args.prefix is None else args.prefix
     name = args.name
-    if args.prefix and not name.startswith(args.prefix):
-        name = args.prefix + name
+    if prefix and not name.startswith(prefix):
+        name = prefix + name
     target = (Path(args.dir).resolve()) / name
-    return scaffold(target, args.problem_letter, args.force)
+    return scaffold(target, args.problem_letter, args.force, year)
 
 
 if __name__ == "__main__":

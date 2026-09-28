@@ -273,9 +273,12 @@ def check_file(pdf: Path, summary: str, config: WorkflowConfig, root: Path) -> l
         elif upload.read_bytes() != pdf.read_bytes():
             messages.append(CheckMessage(
                 "fail", f"{config.submission_pdf} is not the current {config.paper_pdf}; rebuild the upload."))
-    elif config.is_final and summary:
+    elif config.is_final:
+        placeholder = not summary or summary in OFFICIAL_PLACEHOLDERS \
+            or summary in config.team_control_number_placeholders
+        name = "<control number>.pdf" if placeholder else f"{summary}.pdf"
         messages.append(CheckMessage(
-            "warn", f"Set submission_pdf to the file you will upload; COMAP wants it named {summary}.pdf."))
+            "warn", f"Set submission_pdf to the file you will upload; COMAP wants it named {name}."))
     return messages
 
 
