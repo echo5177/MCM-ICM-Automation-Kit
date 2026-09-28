@@ -37,6 +37,11 @@
     "team_control_number_placeholders": [
         "1111111"
     ],
+    "_submission_comment": "Submission integrity (submission_checker). team_control_number: the number COMAP assigned; the Summary Sheet and every page header must carry it (the template's 1111111 fails at final). anonymity_terms: student, advisor and school names; none may appear in the PDF or its properties. submission_pdf: the file you upload, named <control number>.pdf, under max_pdf_mb (COMAP: 25 MB).",
+    "team_control_number": "",
+    "anonymity_terms": [],
+    "submission_pdf": "",
+    "max_pdf_mb": 25.0,
     "diagram_sources": [],
     "release_artifacts": [
         "paper/main.tex",

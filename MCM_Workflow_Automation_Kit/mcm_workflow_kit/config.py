@@ -26,7 +26,10 @@ class WorkflowConfig:
     page_hard_limit: int
     placeholder_patterns: list[str]
     release_artifacts: list[str]
-    team_control_number_placeholders: list[str] = field(default_factory=list)
+    # The official template ships 1111111; COMAP's file-name example is 0000000.pdf.
+    team_control_number_placeholders: list[str] = field(
+        default_factory=lambda: ["1111111", "0000000"]
+    )
     diagram_sources: list[dict[str, Any]] = field(default_factory=list)
     data_source_manifest: str = "reports/data_source_manifest.csv"
     external_data_needs: str = "reports/external_data_needs.md"
@@ -72,6 +75,15 @@ class WorkflowConfig:
     # contest-ready verdict. `final`: all of it is enforced. Anything other than "draft"
     # counts as final, and the default is final so an old config stays strict.
     release_stage: str = "final"
+    # --- submission integrity (submission_checker) ---
+    # The real control number; empty until registration assigns it. The Summary Sheet and
+    # every page header must carry it.
+    team_control_number: str = ""
+    # Student, advisor and school names. None may appear anywhere in the PDF or its properties.
+    anonymity_terms: list[str] = field(default_factory=list)
+    # The file you will upload, named <control number>.pdf. COMAP: under 25 MB.
+    submission_pdf: str = ""
+    max_pdf_mb: float = 25.0
 
     @property
     def is_final(self) -> bool:
@@ -99,7 +111,7 @@ class WorkflowConfig:
             placeholder_patterns=list(data.get("placeholder_patterns", [])),
             release_artifacts=list(data.get("release_artifacts", [])),
             team_control_number_placeholders=list(
-                data.get("team_control_number_placeholders", [])
+                data.get("team_control_number_placeholders", ["1111111", "0000000"])
             ),
             diagram_sources=list(data.get("diagram_sources", [])),
             data_source_manifest=str(
@@ -149,6 +161,10 @@ class WorkflowConfig:
             template_pollution_terms=list(data.get("template_pollution_terms", [])),
             min_figures_per_page=float(data.get("min_figures_per_page", 0.60)),
             release_stage=str(data.get("release_stage", "final")).strip().lower(),
+            team_control_number=str(data.get("team_control_number", "")).strip(),
+            anonymity_terms=list(data.get("anonymity_terms", [])),
+            submission_pdf=str(data.get("submission_pdf", "")),
+            max_pdf_mb=float(data.get("max_pdf_mb", 25.0)),
         )
 
 

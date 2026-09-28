@@ -70,7 +70,7 @@ python scripts/sync_kit.py --target ../Simulation_2026MCM-ICM_ProbA --dry-run
 python scripts/sync_kit.py --target ../Simulation_2026MCM-ICM_ProbA
 ```
 
-## The v2 gate (12 nodes)
+## The v2 gate (15 nodes)
 
 `run_workflow.py` runs these in order; any `fail` fails the run. `--mode full` runs your
 `scripts/run_all.py` first.
@@ -80,21 +80,32 @@ python scripts/sync_kit.py --target ../Simulation_2026MCM-ICM_ProbA
    (`.md`) rather than real data.
 3. **data_auditor** — profiles the raw CSVs (rows, missing, duplicates, summaries).
 4. **result_checker** — every number the paper cites must trace to `key_results.csv`;
-   figures/tables in the manifest must exist; no placeholder strings.
-5. **diagram_checker** — concept figure's PNG/SVG/JSON exist and are large enough.
-6. **diagram_quality_checker** — inspects the figure's structured JSON *content* so a
+   figures/tables in the manifest must exist; no placeholder strings. Reads the paper with
+   its `\input` files expanded.
+5. **experiment_audit** — parameter sweeps, random seeds, and template text left in figures.
+6. **diagram_checker** — concept figure's PNG/SVG/JSON exist and are large enough.
+7. **diagram_quality_checker** — inspects the figure's structured JSON *content* so a
    sparse boxes-and-arrows diagram cannot pass (>= 8 nodes, >= 3 stages, >= 60% content).
-7. **paper_qa** — LaTeX/PDF QA; page count is computed as `pages - ai_report_pages` and
+8. **paper_qa** — LaTeX/PDF QA; page count is computed as `pages - ai_report_pages` and
    compared to the contest limit and the serious-length floor (a thin paper FAILS).
-8. **mcm_format_checker** — official-template structure (Summary / ToC / References / AI
+9. **mcm_format_checker** — official-template structure (Summary / ToC / References / AI
    Use Report), `hyperref` must use `hidelinks`, layout checks (`[H]` overuse, missing
    width-limited captions), and **gate-lowering detection** (a config that lowers the
    page target below the floor FAILS).
-9. **visual_qa_packet** — renders PDF pages so they can be eyeballed.
-10. **judge_review_gate** — parses `reports/workflow/judge_review.md`; needs every
-    category score >= 4 and `RELEASE: APPROVED`.
-11. **v1_gate** — node-status roll-up + known-warning classification.
-12. **v2_gate** — explicit contest-readiness verdict over the quality nodes.
+10. **submission_checker** — what COMAP checks before a judge reads a word: the Summary
+    Sheet's control number equals the one in every page header (and is not the template's
+    1111111 at final); no names, school or e-mail; font at least 12pt; the Report on Use of
+    AI after the references, with its real page count; the upload named `<control>.pdf`,
+    under 25 MB.
+11. **visual_qa_packet** — renders PDF pages so they can be eyeballed.
+12. **judge_review_gate** — parses `reports/workflow/judge_review.md`; needs every
+    category score >= 4, `RELEASE: APPROVED`, and `PAPER_SHA256` equal to the current PDF
+    (at `release_stage: final`; a draft only warns).
+13. **v1_gate** — node-status roll-up + known-warning classification.
+14. **v2_gate** — explicit contest-readiness verdict over the quality nodes (a draft gets
+    the list of blockers, not a verdict).
+15. **review_trajectory** — records each judge-review round and warns if a revision lowered
+    the average score; never changes a verdict.
 
 ## Hard-won rules this template encodes
 

@@ -22,6 +22,7 @@ from .result_checker import write_result_check_report
 from .review_rounds import write_review_trajectory_report
 from .source_checker import write_source_vetting_report
 from .source_role_checker import write_source_role_report
+from .submission_checker import write_submission_report
 from .v1_gate import write_v1_gate_report
 from .v2_gate import write_v2_gate_report
 from .visual_qa_packet import write_visual_qa_report
@@ -241,6 +242,13 @@ def run_workflow(
         run_callable_node(
             "mcm_format_checker",
             lambda: write_mcm_format_report(root, config),
+            run_dir,
+        )
+    )
+    nodes.append(
+        run_callable_node(
+            "submission_checker",
+            lambda: write_submission_report(root, config),
             run_dir,
         )
     )

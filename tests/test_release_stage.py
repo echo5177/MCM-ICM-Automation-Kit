@@ -89,7 +89,8 @@ class _Node:
 
 NODES = ["source_checker", "source_role_checker", "data_auditor", "result_checker",
          "experiment_audit", "diagram_checker", "diagram_quality_checker", "paper_qa",
-         "mcm_format_checker", "visual_qa_packet", "judge_review_gate", "v1_gate"]
+         "mcm_format_checker", "submission_checker", "visual_qa_packet", "judge_review_gate",
+         "v1_gate"]
 
 
 def test_draft_v2_gate_lists_blockers_but_never_reports_ready(tmp_path: Path) -> None:
