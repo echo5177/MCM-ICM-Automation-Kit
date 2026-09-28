@@ -33,7 +33,10 @@ When asked to run an MCM/ICM project end-to-end, follow this order unless the us
 3. Build a data-needs document before acquiring external data.
 4. Acquire or create accepted data/parameter sources with roles clearly separated: official problem data, true dataset, documentation source, parameter source, validation source, and scenario assumption.
 5. Implement model code and focused tests before writing the paper.
-6. Generate planned figures, tables, key results, manifests, and visual source files.
+6. Generate planned figures, tables, key results, manifests, and visual source files. When a
+   teammate hands over a flowchart they drew (expect it; ask early), import it with
+   `import_flowchart.py` and place it as an ordinary portrait figure, never on a landscape page
+   (`references/figure_standards.md`, "A flowchart a teammate drew").
 7. Render and visually inspect the first pages of the PDF and every critical figure.
 8. Run deterministic workflow checks. Keep `release_stage: draft` in `workflow_config.json` while
    drafting: the judge review is bound to the PDF's SHA-256 and every rebuild voids it, so a

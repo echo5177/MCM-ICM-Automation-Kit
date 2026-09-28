@@ -25,6 +25,7 @@ MCM-ICM-Automation-Kit/
 ├── environment.yml                     # the 'mcm' conda env
 ├── MCM_Workflow_Automation_Kit/        # the canonical Kit (deterministic v2 gate)
 │   ├── run_workflow.py                 #   entry point: --mode check | full
+│   ├── import_flowchart.py             #   import a teammate's PPTX/PDF/SVG flowchart as a cropped vector PDF
 │   ├── workflow_config.json            #   GENERIC starter config (per-problem copy)
 │   ├── mcm_workflow_kit/               #   the 12 nodes + orchestrator
 │   ├── nodes/  docs/  scripts/         #   node docs + create_release_packet.py

@@ -3,10 +3,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 import csv
+import json
 import struct
 from typing import Any
 
 from .config import WorkflowConfig, resolve_project_path
+from .flowchart_import import receipt_path_for, sha256_file
 from .reporting import CheckMessage, status_from_messages, write_markdown_report
 
 
@@ -50,6 +52,54 @@ def _check_file(path: Path, label: str, messages: list[CheckMessage]) -> bool:
     return True
 
 
+def is_user_diagram(source: dict[str, Any]) -> bool:
+    """A flowchart a teammate drew and imported with import_flowchart.py (no Kit JSON)."""
+    return str(source.get("origin", "")).strip().lower() == "user"
+
+
+def user_receipt_path(root: Path, source: dict[str, Any]) -> Path | None:
+    explicit = str(source.get("receipt", "")).strip()
+    if explicit:
+        return resolve_project_path(root, explicit)
+    pdf = str(source.get("pdf", "")).strip()
+    return receipt_path_for(resolve_project_path(root, pdf)) if pdf else None
+
+
+def check_user_diagram(root: Path, source: dict[str, Any],
+                       manifest: dict[str, dict[str, str]]) -> list[CheckMessage]:
+    figure_id = str(source.get("figure_id", ""))
+    src_rel, pdf_rel = str(source.get("source", "")).strip(), str(source.get("pdf", "")).strip()
+    if not src_rel or not pdf_rel:
+        return [CheckMessage("fail", f"{figure_id}: a user diagram needs 'source' (the original) and 'pdf' (the import).")]
+    messages: list[CheckMessage] = []
+    _check_file(resolve_project_path(root, src_rel), "User diagram source", messages)
+    _check_file(resolve_project_path(root, pdf_rel), "User diagram PDF", messages)
+    row = manifest.get(figure_id)
+    if row is None:
+        messages.append(CheckMessage("fail", f"Diagram figure not in manifest: {figure_id}"))
+    elif row.get("path", "") != pdf_rel:
+        messages.append(CheckMessage(
+            "fail", f"Manifest path mismatch for {figure_id}: {row.get('path', '')} != {pdf_rel}."))
+    receipt_path = user_receipt_path(root, source)
+    if receipt_path is None or not receipt_path.is_file():
+        messages.append(CheckMessage(
+            "warn", f"{figure_id}: no import receipt. Import it with "
+                    f"MCM_Workflow_Automation_Kit/import_flowchart.py so the gate can tell when the "
+                    f"source changes and how small the text gets."))
+        return messages
+    try:
+        receipt = json.loads(receipt_path.read_text(encoding="utf-8-sig"))
+    except (json.JSONDecodeError, UnicodeDecodeError, OSError):
+        messages.append(CheckMessage("fail", f"{figure_id}: unreadable import receipt {receipt_path.name}."))
+        return messages
+    src = resolve_project_path(root, src_rel)
+    if src.is_file() and receipt.get("source_sha256") != sha256_file(src):
+        messages.append(CheckMessage(
+            "fail", f"{figure_id}: {src.name} changed after it was imported; the paper shows an older "
+                    f"flowchart. Re-run import_flowchart.py."))
+    return messages
+
+
 def run_diagram_checks(
     project_root: str | Path,
     config: WorkflowConfig,
@@ -64,6 +114,11 @@ def run_diagram_checks(
 
     for source in config.diagram_sources:
         figure_id = str(source.get("figure_id", ""))
+        if is_user_diagram(source):
+            messages.extend(check_user_diagram(root, source, manifest))
+            checks.append({"figure_id": figure_id, "png": "-", "svg": "-",
+                           "json": "-", "dimensions": "user PDF", "manifest_source": str(source.get("source", ""))})
+            continue
         png_rel = str(source.get("png", ""))
         svg_rel = str(source.get("svg", ""))
         json_rel = str(source.get("json", ""))

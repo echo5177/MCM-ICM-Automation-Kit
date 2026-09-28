@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Any
 
 from .config import WorkflowConfig, resolve_project_path
+from .diagram_checker import is_user_diagram, user_receipt_path
 from .reporting import CheckMessage, status_from_messages, write_markdown_report
 
 
@@ -156,6 +157,22 @@ def evaluate_diagram_json(
     return messages, summary
 
 
+def evaluate_user_diagram(root: Path, figure_id: str, source: dict[str, Any]) -> tuple[list[CheckMessage], dict[str, Any]]:
+    """A teammate's flowchart: the node/band/content checks target the Kit's JSON and do not
+    apply. Surface what the import measured (text size after scaling, height, aspect, rasters)
+    as warnings; it is the team's drawing, so the team decides."""
+    summary = {"figure_id": figure_id, "nodes": "-", "bands": "-", "content_fraction": 0.0,
+               "categories": "user-supplied", "edges": "-"}
+    receipt_path = user_receipt_path(root, source)
+    if receipt_path is None or not receipt_path.is_file():
+        return [], summary        # diagram_checker already reported the missing receipt
+    try:
+        receipt = json.loads(receipt_path.read_text(encoding="utf-8-sig"))
+    except (json.JSONDecodeError, UnicodeDecodeError, OSError):
+        return [], summary
+    return [CheckMessage("warn", f"{figure_id}: {w}") for w in receipt.get("warnings", []) if isinstance(w, str)], summary
+
+
 def run_diagram_quality_checks(
     project_root: str | Path,
     config: WorkflowConfig,
@@ -170,6 +187,11 @@ def run_diagram_quality_checks(
 
     for source in config.diagram_sources:
         figure_id = str(source.get("figure_id", "(unnamed)"))
+        if is_user_diagram(source):
+            figure_messages, summary = evaluate_user_diagram(root, figure_id, source)
+            messages.extend(figure_messages)
+            figures.append(summary)
+            continue
         json_rel = str(source.get("json", ""))
         if not json_rel:
             messages.append(

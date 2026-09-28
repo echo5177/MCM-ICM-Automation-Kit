@@ -49,6 +49,7 @@
     "hedge_warn_per_10k": 3.0,
     "title_max_words": 20,
     "max_words_per_page": 490,
+    "_diagram_user_comment": "A flowchart a teammate drew (PPTX/PDF/SVG): import it with import_flowchart.py and register {\"figure_id\": \"fig:workflow\", \"origin\": \"user\", \"source\": \"flowchart.pptx\", \"pdf\": \"figures/concept/workflow.pdf\"}. The gates then check the import receipt instead of the Kit's JSON: the source changed after import fails; text under 7 pt, too tall, too wide or raster images warn.",
     "diagram_sources": [],
     "release_artifacts": [
         "paper/main.tex",

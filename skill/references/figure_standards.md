@@ -40,6 +40,32 @@ Design expectations:
 - Make the figure legible at the final paper width.
 - Store editable source such as JSON/SVG/PPTX/diagram code alongside PNG/PDF.
 
+### A flowchart a teammate drew
+
+Expect this: late in the contest a teammate often hands over a flowchart drawn in PowerPoint,
+draw.io or Visio and asks for it to replace the generated one. Ask for it early, then bring it
+in the same way every time:
+
+1. **Get the vector source**: `.pptx`, or a PDF/SVG export. Refuse screenshots and PNGs; they
+   blur when scaled.
+2. **Import it**: `python MCM_Workflow_Automation_Kit/import_flowchart.py flowchart.pptx --out
+   figures/concept/workflow.pdf`. It exports, crops to the drawn content, clears the PDF
+   properties (PowerPoint writes the account name into Author, and COMAP allows no identifying
+   details), measures the text size at the paper's width, writes an import receipt, and prints
+   the figure block plus the `diagram_sources` entry (`"origin": "user"`). If PowerPoint stalls it
+   retries once, then tells you to save the slide as PDF by hand.
+3. **Place it as an ordinary figure on a portrait page** at `\textwidth` (narrower if it is
+   tall). **Never rotate the page to landscape**: the CUMCM 2026 team rejected exactly that on
+   sight, and no O paper in the corpus has a landscape page (`paper_hygiene_checker` warns).
+4. **Text size**: the letter template's text width is 17.1 cm. A 16:9 slide (33.9 cm wide)
+   scaled to it keeps about half its size, so 8 pt text prints at about 4 pt. If you can, ask
+   for the slide to be set up about 17 cm wide with text of at least 8 pt. The receipt warns
+   below 7 pt; it is the team's drawing, so the team decides.
+5. **Re-import after every edit.** The receipt stores the source's hash, and
+   `diagram_checker` fails when the source changed after the import.
+
+Edit the source and re-import; never patch the exported PDF.
+
 ## Figure Planning
 
 Before rendering, write a figure plan:
