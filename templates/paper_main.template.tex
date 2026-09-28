@@ -16,6 +16,9 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Replace ABCDEF with your chosen problem and 1111111 with your Team Control Number.
+% Set the number here and nowhere else: the Summary Sheet and every page header read \Team.
+% The 2026 A entry's Summary Sheet and page headers carried two different numbers
+% (submission_checker fails on that, and on 1111111 left in a final build).
 \newcommand{\Problem}{ABCDEF}
 \newcommand{\Team}{1111111}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -101,8 +104,8 @@ Close with the main limitation. Fill the page.]
 % \begin{figure}[htbp]
 %   \centering
 %   \includegraphics[width=0.86\textwidth]{model_flow.png}
-%   \caption{Solution workflow: data inputs, parameter estimation, model, solver,
-%            validation, and outputs, with the feedback loop used to calibrate.}
+%   \caption{Solution workflow}   % name the figure (O papers: median 7 words);
+%                                   % say what it shows in the text that leads into it
 %   \label{fig:workflow}
 % \end{figure}
 

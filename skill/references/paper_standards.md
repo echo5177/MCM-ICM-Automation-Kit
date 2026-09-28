@@ -10,7 +10,9 @@ Minimum checks:
 - The first page is not a generic title page.
 - Hyperlinks do not show colored boxes in the PDF.
 - Section titles are compact and professional.
-- Captions explain the point of the figure/table, not only its contents.
+- Captions name the figure or table. O papers: median 7 words; 15% add a second sentence
+  and 13% run past 40 words, so a one-line takeaway is acceptable, but the interpretation
+  belongs in the text that leads into the figure.
 - Tables fit the page and avoid excessive empty space.
 - References and AI-use disclosure are present when required.
 
@@ -65,6 +67,27 @@ Minimum checks:
 - Treat a near-full page with figures placed at top/bottom as the target; treat large vertical
   gaps as something to fix before release, even if no automated check flags them.
 
+## What O papers measure like (147 papers, 2018+)
+
+`scripts/measure_award_corpus.py` measured the local O-award corpus; the report is
+`reports/award_corpus_measurements.md`. Use these as the reference, not taste:
+
+| Feature | O papers | What it means |
+| --- | --- | --- |
+| Title | median 8 words, P90 13; 35 of 94 use a colon; 1 of 94 has a dash, and it is an epigraph | name method and object; no dashed double titles |
+| Summary Sheet | median 475 words, 14 numbers (only 4/147 under 3); keywords line in 80% | numbers on the page, not only methods |
+| Acronyms in the summary | median 3, a quarter at 0-1 | use a model's standard name and acronym where it helps; not required |
+| Words per body page | median 298; the densest paper 484 | let equations, figures and tables carry the argument |
+| Defensive disclaimers | 110/147 use none; max 6 per 10k words | state each limitation once, in the evaluation |
+| Control number on each page | median 100% of pages | a COMAP rule, checked by `submission_checker` |
+| Notes to the team, tool names | 0/147 | never; `paper_hygiene_checker` fails on them |
+
+Two rules follow. **Do not shrink fonts or spacing to fit 25 pages**: COMAP requires at
+least 12-point type (`submission_checker` fails a document class below 12pt and warns on a
+smaller `\fontsize`); cut repeated explanation instead. **No note to the team or program-log
+phrasing** in the body: "in this version we fixed..." fails `paper_hygiene_checker`; "the
+solver took 14 ms", `method="highs"` and script names warn.
+
 ## Summary Sheet
 
 The Summary Sheet should answer, in one page:
@@ -85,7 +108,7 @@ O-paper conventions worth copying (see `award_patterns.md`):
 - Structure the summary as a narrative through the sub-problems ("First ... Subsequently ...
   Finally ..."), each step naming its method **and its numeric result**.
 - Put hard numbers in the summary itself, not just method names.
-- State one honest limitation.
+- State at most one limitation, once. Disclaimers belong in the evaluation section.
 - End with a **Keywords** line.
 
 ## Content Depth

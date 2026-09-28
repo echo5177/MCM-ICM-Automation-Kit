@@ -79,6 +79,56 @@ match contest conventions — read the relevant block when building or reviewing
   Imbalanced data: report F1 / AUC, not accuracy. Time series CV uses TimeSeriesSplit, not
   random K-Fold. Prefer SHAP over tree `feature_importances_` (biased under correlation).
 
+## Audit actions that can overturn your own choice
+
+Lessons from the CUMCM Kit's 2026 post-mortem, where the official marking points were
+published after the contest and could be compared with every draft. Each item below is a
+check that is **allowed to overturn a choice already made**; a check that can only confirm
+the current plan is not a check.
+
+1. **Screen predictors for every quantity you forecast.** Correlate the target with every
+   variable known at decision time (other data files, day type, season, the previous
+   period), then compare the chosen model against two naive candidates out of sample: a
+   grouped mean and a simple regression. In CUMCM 2026 the electricity-price factor was
+   forecast with AR(1) (error 0.121, barely below the factor's own spread of 0.137); a
+   two-class grouped mean scored 0.078 and a regression on the forecast supply gap 0.037.
+   The diagnostic had already found a 0.983 correlation, used only to explain a result. The
+   official marking points asked for exactly those two things. Rule: a decision-relevant
+   variable with |r| > 0.8 in any diagnostic is re-evaluated for the model, even after freeze.
+2. **Find the structure the problem setter planted.** Contest data are curated, sometimes
+   generated: day-type classes, identities between files, one series driven by another. For
+   each data file ask how it relates to the others, whether it has classes or cycles, and
+   which quantity looks generated from which. When you find one, **name it in the paper**
+   ("Fridays and Saturdays form one class"); a judge will not infer it from "same-type days".
+3. **Values the problem states are the reference answer's baseline.** An initial state or a
+   parameter given in the statement is almost always the setting the reference solution
+   uses. Solve with it; put a "better" alternative in a comparison table. (CUMCM 2026 kept a
+   free initial state as the main answer for six drafts; the official result used the given
+   value.)
+4. **Implicit use of future data.** In any rolling or day-ahead decision, a statistic
+   computed over the whole evaluation period (an annual mean, a "typical day" built from the
+   full year, a parameter tuned on the evaluation window) is future information. Use only
+   history before each decision, or disclose the retrospective choice and validate it on a
+   held-out window. Official marking points name this: "including implicit use".
+5. **Asymmetric penalties become a quantile.** When shortfall and surplus cost differently,
+   the optimal plan sits at the newsvendor critical ratio `c_u / (c_u + c_o)` of the forecast
+   distribution, where `c_u` is the extra cost of a unit short and `c_o` the cost of a unit
+   over. In CUMCM 2026 the emergency price was five times the planned price, so a unit short
+   cost 4 extra against 1 for a unit over: plan to roughly the 80% quantile. A stochastic
+   program already does this implicitly; write it explicitly and report the realised
+   coverage.
+6. **Give the reliability of every strategy the problem names.** When the statement
+   contrasts two policies (plan vs adjust, fixed vs flexible), report each one's
+   distribution, not just totals: the share of bad days, the worst day, the spread across
+   random seeds, for every question including the last.
+7. **Check what each decision variable is allowed to do.** A model can be arithmetically
+   right and semantically wrong: CUMCM 2026 let an emergency purchase charge the battery,
+   which the statement never allowed (63% of the emergency volume in one question).
+8. **Sanity-check every headline table against a relation you know.** Recompute one
+   identity from the table itself (P = V·I, a mass balance, a total). The 2026 MCM A entry's
+   main results table printed average currents two to seven times smaller than its own power
+   column implies at a 3.7 V cell voltage, and judges catch this kind of error on sight.
+
 ## Validation and sensitivity (mandatory in a contest paper)
 
 - Sensitivity analysis is not optional. Perturb key parameters (+/-10%, +/-20%) and report
@@ -118,9 +168,20 @@ match contest conventions — read the relevant block when building or reviewing
 > If the official rules and this block disagree, **the official rules win** and this file
 > should be updated. Never let a contest submission rest on a hardcoded snapshot.
 
-- **Page limit: 25 pages** counting the Summary Sheet, table of contents, solution, and
-  references — but **NOT** the AI Use Report appendix. LLM/generative-AI use is allowed and
-  must be disclosed in that report; it does not count toward 25.
+- Checked 2026-09-28 against the instructions COMAP has posted for 2027
+  (https://www.contest.comap.com/undergraduate/contests/mcm/instructions.php):
+  - **25 pages** for the entire submission: Summary Sheet, table of contents, solution,
+    reference list, notes, appendices, **code**, and any problem-specific requirement
+    (a letter or memo the problem asks for). A team that used AI adds a section titled
+    **Report on Use of AI** after the end of the report; it has no page limit and does not
+    count.
+  - English, readable font of **at least 12-point** type.
+  - **Every page carries the team control number and the page number at the top.**
+  - No names of students, advisor or institution anywhere; the control number is the only
+    identifying information.
+  - One Adobe PDF, **named `<control number>.pdf`**, under **25 MB**. Do not send programs,
+    software, databases or other files; they are not used in judging.
+  - `submission_checker` enforces the mechanical parts of this list.
 - The **Summary Sheet** is a standalone page with very high judge weight: method
   highlights, key quantitative conclusions, and the modeling innovation — not a paste of
   the abstract.

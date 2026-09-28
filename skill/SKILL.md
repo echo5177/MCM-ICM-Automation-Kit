@@ -27,7 +27,8 @@ When asked to run an MCM/ICM project end-to-end, follow this order unless the us
    and page-number requirements, anonymity, AI disclosure and where the AI report goes, file
    naming and size. Record them in `reports/rules_snapshot.md` with source URL and access
    date. Rules change between cycles; a hardcoded snapshot is a submission risk, and the
-   official rules always win over `references/modeling_methods.md`.
+   official rules always win over `references/modeling_methods.md` (last checked there
+   2026-09-28 against the posted 2027 instructions).
 1. Inspect the repository, problem statement, available data, prior notes, and workflow config.
 2. Produce or update a pre-execution plan with modeling route, data route, figure/table route, paper route, validation route, and commit batches.
 3. Build a data-needs document before acquiring external data.
@@ -42,6 +43,11 @@ When asked to run an MCM/ICM project end-to-end, follow this order unless the us
    drafting: the judge review is bound to the PDF's SHA-256 and every rebuild voids it, so a
    draft only warns about a missing or stale review and v2 gives no contest-ready verdict.
 9. Run a multi-role judge-style review using the rubric in `references/judge_rubric.md`: at minimum a **verifier** pass that re-derives the key numbers and applies the `references/modeling_methods.md` anti-error checklist (see `nodes/paper_reviewer/prompt_verifier.md`), a **construct-validity** pass that checks each quantity actually measures what it claims (`references/model_semantic_audit.md`, `nodes/paper_reviewer/prompt_construct_validity.md`), plus a harsh-judge pass on the modeling story. Write the scores to `reports/workflow/judge_review.md`.
+   **From the first draft, also run an alignment review** (`references/judge_rubric.md`, "Two kinds of
+   review"): write a reference-solution hypothesis per question before reading the paper, then check the
+   paper against it. Error-finding reviews raise rigor but not agreement with the marking; in the CUMCM
+   2026 post-mortem four error-finding rounds moved the estimated marking score from about 68 to 79, and
+   one alignment review moved it to 88.
 10. Revise until both deterministic checks and judge-style review are acceptable. When review finds a missing analysis (thin sensitivity, no out-of-sample validation, a missing baseline/ablation), **generate that analysis and fold it in — do not merely flag it**. Treat review as a loop: re-score after each revision; the Kit's `review_trajectory` node records the round history and warns if a revision lowered the average score. Iterate until scores clear the minimum and stop improving.
 11. Only then set `release_stage: final`, run the judge review once on the final PDF (write its
     `PAPER_SHA256` into `reports/workflow/judge_review.md`), and create the release packet or

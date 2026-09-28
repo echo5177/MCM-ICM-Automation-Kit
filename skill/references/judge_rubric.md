@@ -9,11 +9,56 @@ Run this as a multi-role loop, not a single read. Before scoring `Modeling Quali
 
 The two catch different failures. Correct arithmetic on an invalid construct passes the verifier and still deserves to lose points.
 
+## Two kinds of review: error-finding and alignment
+
+**Error-finding** asks "is anything in the paper wrong?"; **alignment** asks "does what the
+problem setter expects appear where a judge will see it?". The first raises rigor, the
+second raises agreement with the marking. Neither replaces the other.
+
+The CUMCM Kit measured this in 2026 against the official marking points published after
+the contest: four formal error-finding rounds raised the internal score from 64 to 90 and
+fixed real losses (a truncated required table, a formula error, an over-claimed bound), yet
+the estimated marking-point score only rose from about 68 to about 79. One review that
+questioned the reading of the problem (use the stated initial value, what an emergency
+purchase may be used for) lifted it to about 88 in a single round. Four marking points were
+never raised by any review, because they were not errors: they were expected things that
+were absent.
+
+**Run an alignment review on the first draft**, and again after each revision. Before
+reading the paper, write a *reference-solution hypothesis* per question, then check the
+paper against it and note hit / partial / missing and the page:
+
+1. Are the values the problem states used as the baseline? (`modeling_methods.md`, audit 3)
+2. What structure did the setter plant in the data? (audit 2)
+3. How would the reference solution forecast each quantity? (audit 1)
+4. Which choices count as using future data, including implicitly? (audit 4)
+5. How should penalty ratios and similar parameters enter the model explicitly? (audit 5)
+6. What validation and reliability will a judge expect for each strategy? (audit 6)
+7. Does every question in the statement ("should ...", "determine ...") get a one-sentence
+   answer a judge can find?
+
+Calibration material for MCM: COMAP publishes **Judges' Commentaries** on each problem in
+The UMAP Journal. The corpus root that `scripts/measure_award_corpus.py` reads holds the
+2011-2017 issues under `原始文件/` (the 2014 and 2017 issues checked contain the
+commentaries). Read the one for a similar past problem before writing the hypothesis.
+
+Two disciplines: **page-cutting and polishing rounds may not delete evidence** (before
+removing a figure or section, ask whether it is the only evidence for something the Summary
+claims or a judge expects; the 2026 MCM A entry cut ten pages in the last half hour and its
+section 6 collapsed to a heading while the Summary still promised a Monte Carlo sensitivity
+study); and **a freeze does not freeze a strong signal** (see audit 1).
+
 ## Format And Presentation
 
 - Does the first page look like a credible MCM/ICM Summary Sheet?
 - Is the PDF visually clean, with no red link boxes, awkward whitespace, or broken layout?
 - Are figures and tables professional and readable?
+- Submission integrity: does the Summary Sheet's control number match every page header, with
+  no names, school or e-mail anywhere, and the AI report after the references?
+  (`submission_checker` reports these; any failure caps this category below 4.)
+- Any note to the team or tool name in the body ("in this version we fixed...")? One caps this
+  category below 4 (`paper_hygiene_checker` fails on it). Program-log phrasing ("took 14 ms",
+  a script name) reads like a lab notebook; the checker warns.
 
 ## Problem Fit
 

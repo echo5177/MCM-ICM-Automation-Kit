@@ -21,6 +21,15 @@ comparable figure density (0.60/page) but **lacks** the section skeleton below â
 Sensitivity Analysis, Notation, or Restatement section. Density alone does not make a
 paper competitive; the skeleton is what separated the confirmed O papers.
 
+### The wider corpus (147 papers)
+
+The six papers above were read page by page. The writing features in
+`paper_standards.md` ("What O papers measure like") were measured by script on all 147 local
+O papers from 2018 on that have a text layer (`reports/award_corpus_measurements.md`):
+counted pages median 23, words per body page median 298, Summary Sheet median 475 words with
+14 numbers, titles median 8 words. Rules in the Kit cite that report; re-run it before
+changing a threshold.
+
 ## The invariant section skeleton (present in all six)
 
 Wording varies; the *function* does not. In order:

@@ -55,7 +55,7 @@ window:
 | ~80% | validation, sensitivity, and uncertainty complete; results frozen |
 | ~90% | Summary Sheet and the stakeholder deliverable written against final numbers |
 | ~95% | **freeze** — no new modeling; only defect fixes, layout, and proofreading |
-| 100% | rules re-check, AI report, release packet |
+| 100% | rules re-check, AI report, `release_stage: final`, full gate (control numbers, page count, upload name), release packet |
 
 The baseline at ~35% matters more than it looks: it converts "we have a plan" into "we
 have a number", and a team that has never produced a number by the one-third mark is
@@ -72,6 +72,26 @@ After the freeze point, a new idea is a liability, not an improvement. Past free
 
 Anything else goes in Future Work. A model improvement landed in the last hours is
 unvalidated by definition, and it invalidates every number already written into the paper.
+
+### Page-cut triage
+
+Going over 25 pages late is common, and the cut is where papers break. The 2026 MCM A entry
+found itself ten pages over in the last half hour; its section 6 collapsed to a heading while
+the Summary still claimed a Latin-hypercube Monte Carlo sensitivity study. Cut in this order,
+and re-read the Summary against the body after every cut:
+
+1. repeated explanation and restated assumptions;
+2. thin subsections merged into their neighbours;
+3. figures resized or combined (never below legibility);
+4. only then results, and never a result the Summary cites or a judge expects.
+
+Do not buy pages with smaller fonts or tighter spacing: COMAP requires at least 12-point type.
+
+### Draft, then final
+
+Keep `release_stage: draft` in the config while drafting: the judge review is bound to the
+PDF's SHA-256 and every rebuild voids it, so a draft only warns. Switch to `final` once, for
+the submission build, then review that PDF, bind the review to it, and run the full gate.
 
 ## What to prepare before the contest opens
 
