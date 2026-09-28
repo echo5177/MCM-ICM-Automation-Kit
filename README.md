@@ -70,7 +70,7 @@ python scripts/sync_kit.py --target ../Simulation_2026MCM-ICM_ProbA --dry-run
 python scripts/sync_kit.py --target ../Simulation_2026MCM-ICM_ProbA
 ```
 
-## The v2 gate (15 nodes)
+## The v2 gate (16 nodes)
 
 `run_workflow.py` runs these in order; any `fail` fails the run. `--mode full` runs your
 `scripts/run_all.py` first.
@@ -92,19 +92,23 @@ python scripts/sync_kit.py --target ../Simulation_2026MCM-ICM_ProbA
    Use Report), `hyperref` must use `hidelinks`, layout checks (`[H]` overuse, missing
    width-limited captions), and **gate-lowering detection** (a config that lowers the
    page target below the floor FAILS).
-10. **submission_checker** — what COMAP checks before a judge reads a word: the Summary
+10. **paper_hygiene_checker** — writing problems a judge sees within pages: notes to the
+    team and tool traces left in the paper (FAIL), program-log phrases, defensive disclaimers,
+    a dashed or overlong title, a Summary Sheet without numbers, over-dense pages, landscape
+    pages. Every line is measured on 147 O papers (`scripts/measure_award_corpus.py`).
+11. **submission_checker** — what COMAP checks before a judge reads a word: the Summary
     Sheet's control number equals the one in every page header (and is not the template's
     1111111 at final); no names, school or e-mail; font at least 12pt; the Report on Use of
     AI after the references, with its real page count; the upload named `<control>.pdf`,
     under 25 MB.
-11. **visual_qa_packet** — renders PDF pages so they can be eyeballed.
-12. **judge_review_gate** — parses `reports/workflow/judge_review.md`; needs every
+12. **visual_qa_packet** — renders PDF pages so they can be eyeballed.
+13. **judge_review_gate** — parses `reports/workflow/judge_review.md`; needs every
     category score >= 4, `RELEASE: APPROVED`, and `PAPER_SHA256` equal to the current PDF
     (at `release_stage: final`; a draft only warns).
-13. **v1_gate** — node-status roll-up + known-warning classification.
-14. **v2_gate** — explicit contest-readiness verdict over the quality nodes (a draft gets
+14. **v1_gate** — node-status roll-up + known-warning classification.
+15. **v2_gate** — explicit contest-readiness verdict over the quality nodes (a draft gets
     the list of blockers, not a verdict).
-15. **review_trajectory** — records each judge-review round and warns if a revision lowered
+16. **review_trajectory** — records each judge-review round and warns if a revision lowered
     the average score; never changes a verdict.
 
 ## Hard-won rules this template encodes

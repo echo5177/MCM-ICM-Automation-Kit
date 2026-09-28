@@ -44,6 +44,11 @@
     "anonymity_terms": [],
     "submission_pdf": "",
     "max_pdf_mb": 25.0,
+    "_paper_hygiene_comment": "Paper hygiene (paper_hygiene_checker); lines from reports/award_corpus_measurements.md (147 O papers). Notes to teammates and tool traces fail (0/147). Warn: defensive disclaimers (at least hedge_min_count hits and more than hedge_warn_per_10k per 10k words; 0/147 O papers), title longer than title_max_words or with a dash, fewer than 3 numbers on the Summary Sheet, median words per body page above max_words_per_page (O max 484), landscape pages.",
+    "hedge_min_count": 5,
+    "hedge_warn_per_10k": 3.0,
+    "title_max_words": 20,
+    "max_words_per_page": 490,
     "diagram_sources": [],
     "release_artifacts": [
         "paper/main.tex",

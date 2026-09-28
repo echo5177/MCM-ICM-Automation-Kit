@@ -79,11 +79,25 @@ def header_control_number(pages: list[str]) -> str:
     return top.most_common(1)[0][0] if top else ""
 
 
+TOC_HEAD_RE = re.compile(r"(?m)^\s*(?:Table of )?Contents\s*$")
+DOT_LEADER_RE = re.compile(r"(?:\.\s){5,}")
+
+
+def is_toc_page(page: str) -> bool:
+    """A table-of-contents page: a Contents heading or a column of dot leaders.
+
+    The ToC lists "References" and "Report on Use of AI" on lines of their own. ProbA's ToC
+    runs onto page 3, and taking that line as the References heading cut the body off after
+    page 2.
+    """
+    return bool(TOC_HEAD_RE.search(page)) or len(DOT_LEADER_RE.findall(page)) >= 3
+
+
 def ai_report_start(pages: list[str]) -> int | None:
-    """1-based page where the Report on Use of AI begins (skipping a table of contents)."""
+    """1-based page where the Report on Use of AI begins (never the summary or the ToC)."""
     for index, page in enumerate(pages):
-        if index < 2:
-            continue                           # summary sheet and ToC list it by name
+        if index == 0 or is_toc_page(page):
+            continue
         head = "\n".join(page.splitlines()[:12])
         if AI_REPORT_RE.search(head):
             return index + 1
@@ -92,7 +106,9 @@ def ai_report_start(pages: list[str]) -> int | None:
 
 def references_start(pages: list[str]) -> int | None:
     for index, page in enumerate(pages):
-        if index >= 2 and REFERENCES_RE.search(page):
+        if index == 0 or is_toc_page(page):
+            continue
+        if REFERENCES_RE.search(page):
             return index + 1
     return None
 

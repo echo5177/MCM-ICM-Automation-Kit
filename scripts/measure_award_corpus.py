@@ -21,9 +21,21 @@ import re
 import statistics
 import subprocess
 from pathlib import Path
+import sys
 
 DEFAULT_ROOT = Path("D:/documents/MCM&ICM/历年美赛优秀论文")
 REPO = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO / "MCM_Workflow_Automation_Kit"))
+
+# The rules are imported from the Kit, never copied: a copied rule drifts, and a calibration
+# of a drifted copy is worse than none.
+from mcm_workflow_kit.paper_hygiene_checker import (  # noqa: E402
+    DASHES,
+    HEDGES,
+    MACHINE_PHRASES,
+    TEAM_FACING as KIT_TEAM_FACING,
+    title_of,
+)
 
 WORD_RE = re.compile(r"[A-Za-z][A-Za-z'-]*")
 ACRONYM_RE = re.compile(r"(?<![A-Za-z])[A-Z][A-Za-z0-9-]*[A-Z][A-Za-z0-9-]*(?![A-Za-z])")
@@ -31,28 +43,10 @@ NOT_METHOD_ACRONYMS = {
     "MCM", "ICM", "COMAP", "USA", "US", "UK", "UN", "EU", "GDP", "TEAM", "PAGE", "OF",
     "SUMMARY", "SHEET", "PROBLEM", "CHOSEN", "CONTROL", "NUMBER", "AI",
 }
-# Defensive disclaimers only. "Note that" and "not necessarily" are left out on purpose:
-# they are ordinary mathematical English ("note that x > 0", "not necessarily convex").
-HEDGES = re.compile(
-    r"\bit should be noted\b|\bit is worth noting\b|\bit must be noted\b"
-    r"|\bwe do not claim\b|\bdoes not imply\b|\bdo not imply\b"
-    r"|\bstrictly speaking\b|\bshould not be interpreted\b|\bcannot be interpreted\b"
-    r"|\bonly indicates?\b|\bis not equivalent to\b|\bwe acknowledge\b|\badmittedly\b"
-    r"|\bit is important to note\b",
-    re.I,
-)
-TEAM_FACING = re.compile(
-    r"\bin this version\b|\bprevious version of (?:the|this|our) paper\b|\bour previous draft\b"
-    r"|\bthis draft\b|\bearlier draft\b|\bv\d+ of the paper\b|(?<![A-Za-z])Kit(?![A-Za-z])"
-    r"|workflow_config|judge_review|\bTODO\b|\bFIXME\b"
-)
-MS_RUNTIME = re.compile(r"\b\d+(?:\.\d+)?\s*(?:ms|milliseconds?)\b")
-SCRIPT_NAME = re.compile(r"\b[\w-]{2,}\.(?:py|ipynb)\b")
-SNAKE = re.compile(r"(?<![A-Za-z0-9])[a-z][a-z0-9]*_[a-z0-9_]+(?![A-Za-z0-9])")
-SOLVER = re.compile(r"random_state|n_jobs|max_iter\s*=|method\s*=\s*['\"]")
 REPEAT = re.compile(r"\b([A-Za-z]{3,})\s+\1\b", re.I)
 CAPTION = re.compile(r"^\s*(Figure|Fig\.|Table)\s*(\d+)\s*[:.]\s*(.*)$")
-DASHES = re.compile(r"—|–|\s-\s|--")
+MS_RUNTIME, SOLVER, SCRIPT_NAME = (regex for _label, regex in MACHINE_PHRASES)
+SNAKE = re.compile(r"(?<![A-Za-z0-9])[a-z][a-z0-9]*_[a-z0-9_]+(?![A-Za-z0-9])")
 
 
 def run(args: list[str]) -> str:
@@ -72,19 +66,6 @@ def percentile(values: list[float], q: float) -> float:
     ordered = sorted(values)
     index = min(len(ordered) - 1, max(0, round(q * (len(ordered) - 1))))
     return ordered[index]
-
-
-def title_of(first_page: str) -> str:
-    lines = [ln.strip() for ln in first_page.splitlines() if ln.strip()]
-    for index, line in enumerate(lines):
-        if re.fullmatch(r"Summary|Abstract", line, re.I) and index > 0:
-            candidates = []
-            for back in lines[max(0, index - 4):index][::-1]:
-                if re.search(r"Summary Sheet|Team Control|Problem Chosen|\b\d{7}\b|^[A-F]$|MCM/ICM|^20\d\d$", back):
-                    break
-                candidates.insert(0, back)
-            return " ".join(candidates)
-    return ""
 
 
 def captions(pages: list[str]) -> list[str]:
@@ -171,7 +152,7 @@ def measure(pdf: Path) -> dict | None:
         "title_dash": bool(DASHES.search(title)),
         "hedges": len(HEDGES.findall(flat)),
         "hedge_rate": 1e4 * len(HEDGES.findall(flat)) / n_words,
-        "team_facing": TEAM_FACING.findall(flat),
+        "team_facing": [m.group(0) for _label, regex in KIT_TEAM_FACING for m in regex.finditer(flat)],
         "ms": len(MS_RUNTIME.findall(flat)),
         "scripts": SCRIPT_NAME.findall(flat)[:5],
         "snake": len(SNAKE.findall(flat)),

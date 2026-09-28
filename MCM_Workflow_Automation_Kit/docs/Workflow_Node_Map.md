@@ -39,6 +39,7 @@ runner. It passes only when no node fails and all warnings are classified.
 | `result_checker` | paper source, `key_results.csv`, `figure_manifest.csv`, tables | `result_consistency_report.md` | checks result traceability and figure/table consistency |
 | `diagram_checker` | structured diagram JSON/SVG/PNG and manifest row | `diagram_qa_report.md` | prevents high-information workflow figures from becoming untraceable AI bitmaps |
 | `paper_reviewer` | LaTeX source, PDF, LaTeX log | `paper_qa_report.md` | checks page target, hard limit, required sections, and LaTeX warnings |
+| `paper_hygiene_checker` | expanded LaTeX source (or the PDF text for a Word-built paper), compiled PDF | `paper_hygiene_report.md` | notes to the team and tool traces fail; program-log phrases, disclaimers, title, Summary numbers, page density and landscape pages warn, each line measured on 147 O papers |
 | `submission_checker` | compiled PDF (text layer, properties), LaTeX preamble, config | `submission_report.md` | Summary Sheet control number = every page header (not the template placeholder at final), no identifying names, font >= 12pt, AI report after references with its measured page count, upload named `<control>.pdf` under 25 MB |
 | `v1_gate` | prior node statuses and known warning rules | `v1_gate_report.md` | classifies remaining warnings and records v1.0 readiness |
 

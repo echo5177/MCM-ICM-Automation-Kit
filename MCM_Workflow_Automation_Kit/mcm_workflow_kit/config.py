@@ -84,6 +84,14 @@ class WorkflowConfig:
     # The file you will upload, named <control number>.pdf. COMAP: under 25 MB.
     submission_pdf: str = ""
     max_pdf_mb: float = 25.0
+    # --- paper hygiene (paper_hygiene_checker); lines from reports/award_corpus_measurements.md ---
+    # Defensive disclaimers: O papers 110/147 use none, max 6.1 per 10k words, 0/147 reach
+    # 5 hits at over 3 per 10k. Titles: median 8 words, P90 13. Words per body page (median
+    # per paper): corpus median 298, max 484.
+    hedge_min_count: int = 5
+    hedge_warn_per_10k: float = 3.0
+    title_max_words: int = 20
+    max_words_per_page: int = 490
 
     @property
     def is_final(self) -> bool:
@@ -165,6 +173,10 @@ class WorkflowConfig:
             anonymity_terms=list(data.get("anonymity_terms", [])),
             submission_pdf=str(data.get("submission_pdf", "")),
             max_pdf_mb=float(data.get("max_pdf_mb", 25.0)),
+            hedge_min_count=int(data.get("hedge_min_count", 5)),
+            hedge_warn_per_10k=float(data.get("hedge_warn_per_10k", 3.0)),
+            title_max_words=int(data.get("title_max_words", 20)),
+            max_words_per_page=int(data.get("max_words_per_page", 490)),
         )
 
 

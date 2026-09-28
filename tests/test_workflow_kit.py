@@ -972,6 +972,7 @@ def _all_nodes(status_map):
         "diagram_quality_checker",
         "paper_qa",
         "mcm_format_checker",
+        "paper_hygiene_checker",
         "submission_checker",
         "visual_qa_packet",
         "judge_review_gate",

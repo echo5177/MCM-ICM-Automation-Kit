@@ -23,6 +23,7 @@ from .reporting import CheckMessage, status_from_messages, write_markdown_report
 QUALITY_NODES = (
     "mcm_format_checker",
     "submission_checker",
+    "paper_hygiene_checker",
     "source_role_checker",
     "diagram_quality_checker",
     "experiment_audit",
