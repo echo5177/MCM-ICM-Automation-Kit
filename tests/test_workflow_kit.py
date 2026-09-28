@@ -857,7 +857,14 @@ def test_judge_review_missing_fails(tmp_path):
 
 
 def test_judge_review_pass(tmp_path):
-    _write_review(tmp_path, GOOD_REVIEW)
+    # An approval only counts for the PDF it judged: bind it by SHA-256.
+    import hashlib
+
+    pdf = tmp_path / "paper" / "main.pdf"
+    pdf.parent.mkdir(parents=True, exist_ok=True)
+    pdf.write_bytes(b"%PDF-1.4 reviewed")
+    digest = hashlib.sha256(pdf.read_bytes()).hexdigest()
+    _write_review(tmp_path, GOOD_REVIEW.replace("RELEASE:", f"PAPER_SHA256: {digest}\nRELEASE:", 1))
     result = run_judge_review_gate(tmp_path, make_config())
     assert result.status == "pass"
     assert result.release == "APPROVED"

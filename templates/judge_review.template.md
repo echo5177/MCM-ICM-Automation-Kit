@@ -7,10 +7,13 @@ first (re-derive the key numbers; apply modeling_methods.md) before scoring mode
 results. Scores 0-5; release requires every category >= 4 and no critical defect. Overwrite
 this file each review round — the review_trajectory node records the score history.
 
-The Kit's `judge_review_gate` parses the two machine-readable blocks below. It does NOT
+The Kit's `judge_review_gate` parses the machine-readable lines below. `PAPER_SHA256` binds the
+review to the PDF it judged: at `release_stage: final` a rebuilt PDF voids the approval, in
+`draft` it only warns. It does NOT
 verify that the scores are honest — that is on the reviewer (agent + human). Do not
 inflate scores to make the gate green; the gate is a floor, not a certificate.
 
+PAPER_SHA256: <sha256 of the paper PDF you reviewed; judge_review_gate_report.md prints it>
 RELEASE: BLOCKED
 
 SCORE format_presentation: 0

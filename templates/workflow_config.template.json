@@ -20,6 +20,8 @@
     ],
     "tables_dir": "tables",
     "workflow_reports_dir": "reports/workflow",
+    "_release_stage_comment": "draft or final. The judge review is bound to the SHA-256 of the compiled PDF, so every rebuild voids it. draft: a missing, stale or unapproved review only warns and v2 gives no contest-ready verdict. final: all of it is enforced. Switch to final once, for the submission build.",
+    "release_stage": "draft",
     "page_target": 25,
     "page_hard_limit": 25,
     "contest_page_limit": 25,

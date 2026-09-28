@@ -64,6 +64,18 @@ class WorkflowConfig:
     # 0.60 is the *observed floor* across the sampled O papers, not a soft target:
     # a paper below it is visually thinner than every O paper we measured.
     min_figures_per_page: float = 0.60
+    # --- draft vs final ---
+    # The judge review is bound to the SHA-256 of the compiled PDF, so every rebuild voids
+    # it. Most drafts never become the submission; redoing the review on each one buys
+    # nothing (the CUMCM 2026 run rebuilt eight versions and redid its sign-offs on all
+    # of them). `draft`: a missing, stale or unapproved review only warns and v2 gives no
+    # contest-ready verdict. `final`: all of it is enforced. Anything other than "draft"
+    # counts as final, and the default is final so an old config stays strict.
+    release_stage: str = "final"
+
+    @property
+    def is_final(self) -> bool:
+        return self.release_stage != "draft"
 
     @classmethod
     def from_mapping(cls, data: dict[str, Any]) -> "WorkflowConfig":
@@ -136,6 +148,7 @@ class WorkflowConfig:
             ),
             template_pollution_terms=list(data.get("template_pollution_terms", [])),
             min_figures_per_page=float(data.get("min_figures_per_page", 0.60)),
+            release_stage=str(data.get("release_stage", "final")).strip().lower(),
         )
 
 

@@ -35,6 +35,7 @@ class V2GateResult:
     messages: list[CheckMessage]
     node_rows: list[dict[str, Any]] = field(default_factory=list)
     contest_ready: bool = False
+    stage: str = "final"
 
     @property
     def status(self) -> str:
@@ -98,11 +99,26 @@ def run_v2_gate(
     if contest_ready and not any(m.level == "fail" for m in messages):
         messages.append(CheckMessage("pass", "Contest-readiness gate passed."))
 
+    if not config.is_final:
+        # A draft gets the list of what would block, never a verdict.
+        messages = [CheckMessage(
+            "warn",
+            "release_stage=draft: no contest-readiness verdict on a draft. Items below "
+            "marked (blocks at final) must be cleared after switching to final.",
+        )] + [
+            CheckMessage("warn", f"(blocks at final) {m.message}") if m.level == "fail" else m
+            for m in messages if m.level != "pass"
+        ]
+        return V2GateResult(messages=messages, node_rows=rows, contest_ready=False, stage="draft")
+
     return V2GateResult(messages=messages, node_rows=rows, contest_ready=contest_ready)
 
 
 def render_v2_gate_markdown(result: V2GateResult) -> list[str]:
-    verdict = "CONTEST-READY" if result.contest_ready else "NOT READY"
+    if result.stage == "draft":
+        verdict = "DRAFT (no contest-readiness verdict on a draft)"
+    else:
+        verdict = "CONTEST-READY" if result.contest_ready else "NOT READY"
     lines = [
         f"- Status: {result.status}",
         f"- Verdict: {verdict}",
