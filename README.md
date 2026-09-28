@@ -128,7 +128,7 @@ Per-problem thresholds (page targets, diagram minimums) live in each repo's
 ## Tests
 
 ```bash
-pytest tests/test_workflow_kit.py
+pytest tests/
 ```
 
 The tests are self-contained (synthetic fixtures, no project data) and cover the gate

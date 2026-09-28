@@ -16,6 +16,7 @@ import re
 from .config import WorkflowConfig, resolve_project_path
 from .paper_qa import run_pdfinfo
 from .reporting import CheckMessage, status_from_messages, write_markdown_report
+from .tex_source import read_tex_expanded
 
 
 # Matches an actual \usepackage[...]{...hyperref...} load, not the word in prose.
@@ -358,7 +359,7 @@ def run_mcm_format_checks(
     if not tex_path.exists():
         messages.append(CheckMessage("fail", f"LaTeX source missing: {config.paper_tex}"))
     else:
-        tex_text = tex_path.read_text(encoding="utf-8", errors="replace")
+        tex_text = read_tex_expanded(tex_path, root)
         messages.extend(check_hyperref(tex_text))
         messages.extend(check_structure(tex_text))
         messages.extend(check_layout(tex_text))

@@ -9,6 +9,7 @@ import pandas as pd
 
 from .config import WorkflowConfig, resolve_project_path
 from .reporting import CheckMessage, status_from_messages, write_markdown_report
+from .tex_source import read_tex_expanded
 
 
 INCLUDEGRAPHICS_RE = re.compile(
@@ -131,7 +132,11 @@ def run_result_checks(
     tables_dir = resolve_project_path(root, config.tables_dir)
 
     messages: list[CheckMessage] = []
-    paper_text = paper_path.read_text(encoding="utf-8")
+    if not paper_path.exists():
+        messages.append(CheckMessage("fail", f"LaTeX source missing: {config.paper_tex}"))
+    # Tables pulled in with \input and macro-defined numbers count as cited;
+    # numbers left only in comments do not.
+    paper_text = read_tex_expanded(paper_path, root)
     placeholder_hits = scan_placeholders(paper_text, config.placeholder_patterns)
     if placeholder_hits:
         messages.append(

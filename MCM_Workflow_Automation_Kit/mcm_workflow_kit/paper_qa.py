@@ -7,6 +7,7 @@ import subprocess
 
 from .config import WorkflowConfig, resolve_project_path
 from .reporting import CheckMessage, status_from_messages, write_markdown_report
+from .tex_source import read_tex_expanded
 
 
 PAGES_RE = re.compile(r"^Pages:\s+(?P<pages>\d+)\s*$", re.MULTILINE)
@@ -129,7 +130,7 @@ def run_paper_qa(
     if not tex_path.exists():
         messages.append(CheckMessage("fail", f"LaTeX source missing: {config.paper_tex}"))
     else:
-        tex_text = tex_path.read_text(encoding="utf-8")
+        tex_text = read_tex_expanded(tex_path, root)
         messages.extend(check_required_tex_sections(tex_text))
 
     if not log_path.exists():
