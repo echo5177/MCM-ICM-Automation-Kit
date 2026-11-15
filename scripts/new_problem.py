@@ -98,6 +98,12 @@ def scaffold(target: Path, problem_letter: str | None, force: bool, year: int | 
         target / "reports" / "workflow" / "judge_review.md",
     )
 
+    # 6b) Requirement table: one row per requirement of the problem statement.
+    shutil.copy2(
+        TEMPLATE_ROOT / "templates" / "requirements.template.csv",
+        target / "reports" / "requirements.csv",
+    )
+
     # 7) Standard .gitignore + environment.yml + checklist.
     shutil.copy2(TEMPLATE_ROOT / "templates" / "gitignore.template", target / ".gitignore")
     if (TEMPLATE_ROOT / "environment.yml").exists():

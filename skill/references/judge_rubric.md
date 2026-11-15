@@ -35,7 +35,15 @@ paper against it and note hit / partial / missing and the page:
 5. How should penalty ratios and similar parameters enter the model explicitly? (audit 5)
 6. What validation and reliability will a judge expect for each strategy? (audit 6)
 7. Does every question in the statement ("should ...", "determine ...") get a one-sentence
-   answer a judge can find?
+   answer a judge can find? (`requirement_checker` holds the table: requirement, what it
+   turns on, answer, section, whether the answer is on the Summary Sheet.)
+8. Does any diagnostic figure show a grouping or a trend the model does not use? A scatter
+   that falls into parallel bands with one regression line drawn through it tells a judge
+   the classes were never modeled (CUMCM 2026, figure 16: three bands, one line, r = 0.49).
+9. Does the weaknesses or future-work section name a relation the paper did not use? Before
+   it stays there, go back and decide whether it belongs in the model. CUMCM 2026 listed
+   "price forecasting that uses the correlation with net load" as future work; it was an
+   official marking point.
 
 Calibration material for MCM: COMAP publishes **Judges' Commentaries** on each problem in
 The UMAP Journal. The corpus root that `scripts/measure_award_corpus.py` reads holds the
@@ -111,6 +119,7 @@ study); and **a freeze does not freeze a strong signal** (see audit 1).
 Final release requires:
 
 - deterministic workflow pass;
+- every row of the requirement table answered, located and on the Summary Sheet;
 - visual QA pass;
 - a verifier pass with no unresolved BLOCKING finding;
 - judge-style scores mostly 4 or 5;

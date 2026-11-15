@@ -19,6 +19,7 @@ from .mcm_format_checker import write_mcm_format_report
 from .paper_hygiene_checker import write_paper_hygiene_report
 from .paper_qa import write_paper_qa_report
 from .reporting import write_markdown_report
+from .requirement_checker import write_requirement_report
 from .result_checker import write_result_check_report
 from .review_rounds import write_review_trajectory_report
 from .source_checker import write_source_vetting_report
@@ -243,6 +244,13 @@ def run_workflow(
         run_callable_node(
             "mcm_format_checker",
             lambda: write_mcm_format_report(root, config),
+            run_dir,
+        )
+    )
+    nodes.append(
+        run_callable_node(
+            "requirement_checker",
+            lambda: write_requirement_report(root, config),
             run_dir,
         )
     )

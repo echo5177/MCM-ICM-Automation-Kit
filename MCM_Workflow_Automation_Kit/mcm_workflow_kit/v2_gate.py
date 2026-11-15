@@ -28,6 +28,7 @@ from .reporting import CheckMessage, status_from_messages, write_markdown_report
 # Nodes whose failure blocks contest readiness.
 QUALITY_NODES = (
     "mcm_format_checker",
+    "requirement_checker",
     "submission_checker",
     "paper_hygiene_checker",
     "source_role_checker",

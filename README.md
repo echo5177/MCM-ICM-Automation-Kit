@@ -11,7 +11,7 @@ the conventions; it does not replace modeling judgment or a human's final eye.
 
 | Layer | What it is | What it guarantees |
 | --- | --- | --- |
-| **Kit** (`MCM_Workflow_Automation_Kit/`) | Deterministic v2-gate, 12 nodes | A floor: no *known* defect (thin paper, lowered thresholds, sparse diagram, fake data, missing sections, unrendered PDF, no judge sign-off) can pass quietly. |
+| **Kit** (`MCM_Workflow_Automation_Kit/`) | Deterministic v2-gate, 17 nodes | A floor: no *known* defect (thin paper, lowered thresholds, sparse diagram, fake data, missing sections, unrendered PDF, no judge sign-off) can pass quietly. |
 | **Skill** (`skill/`) | The `mcm-icm-competition-paper` Skill: paper/figure/data standards, judge rubric | The brain: conventions and judgment the agent follows while writing. |
 | **Agent visual QA + human eye** | Contact-sheet review + a real person | The ceiling: aesthetics, prose, and whether the modeling is actually right. |
 
@@ -27,7 +27,7 @@ MCM-ICM-Automation-Kit/
 │   ├── run_workflow.py                 #   entry point: --mode check | full
 │   ├── import_flowchart.py             #   import a teammate's PPTX/PDF/SVG flowchart as a cropped vector PDF
 │   ├── workflow_config.json            #   GENERIC starter config (per-problem copy)
-│   ├── mcm_workflow_kit/               #   the 12 nodes + orchestrator
+│   ├── mcm_workflow_kit/               #   the 17 nodes + orchestrator
 │   ├── nodes/  docs/  scripts/         #   node docs + create_release_packet.py
 ├── templates/
 │   ├── MCM-ICM_Summary.tex             # official COMAP summary template
@@ -71,7 +71,7 @@ python scripts/sync_kit.py --target ../Simulation_2026MCM-ICM_ProbA --dry-run
 python scripts/sync_kit.py --target ../Simulation_2026MCM-ICM_ProbA
 ```
 
-## The v2 gate (16 nodes)
+## The v2 gate (17 nodes)
 
 `run_workflow.py` runs these in order; any `fail` fails the run. `--mode full` runs your
 `scripts/run_all.py` first.
@@ -93,10 +93,19 @@ python scripts/sync_kit.py --target ../Simulation_2026MCM-ICM_ProbA
    Use Report), `hyperref` must use `hidelinks`, layout checks (`[H]` overuse, missing
    width-limited captions), and **gate-lowering detection** (a config that lowers the
    page target below the floor FAILS).
+    Also warns when the first model section starts after page 7.
+    **requirement_checker** (runs next) — reads `reports/requirements.csv`, one row per
+    requirement of the problem: what it turns on, the answer, the section that holds it, the
+    figures and tables behind it. At `final` an open requirement, an answer with no section,
+    or an evidence label that is no longer in the paper FAILS; an answer missing from the
+    Summary Sheet and body sections no requirement points to warn. COMAP defines Honorable
+    Mention by "addressing all problem requirements".
 10. **paper_hygiene_checker** — writing problems a judge sees within pages: notes to the
-    team and tool traces left in the paper (FAIL), program-log phrases, defensive disclaimers,
-    a dashed or overlong title, a Summary Sheet without numbers, over-dense pages, landscape
-    pages. Every line is measured on 147 O papers (`scripts/measure_award_corpus.py`).
+    team and tool traces left in the paper (FAIL), a heading with nothing under it (FAIL),
+    a Summary Sheet promising two or more analyses the body barely mentions (FAIL),
+    program-log phrases, defensive disclaimers, a dashed or overlong title, a Summary Sheet
+    without numbers, over-dense pages, landscape pages. Every line is measured on the O
+    corpus (`scripts/measure_award_corpus.py`).
 11. **submission_checker** — what COMAP checks before a judge reads a word: the Summary
     Sheet's control number equals the one in every page header (and is not the template's
     1111111 at final); no names, school or e-mail; font at least 12pt; the Report on Use of

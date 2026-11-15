@@ -89,6 +89,11 @@ class WorkflowConfig:
     # 25 MB; COMAP's "Procedures and Tips" (V20240912) says under 20 MB. Take the smaller.
     submission_pdf: str = ""
     max_pdf_mb: float = 20.0
+    # --- requirement table (requirement_checker) ---
+    # One row per requirement of the problem statement: what it turns on, the answer, the
+    # section that holds it. COMAP's award levels are defined by how completely and how
+    # clearly the requirements are addressed.
+    requirements_file: str = "reports/requirements.csv"
     # --- calibration ---
     # Free text printed in the v2 gate report, e.g. "School, MCM 2026: 121 teams, 43% Honorable
     # Mention or above". An award expectation starts from this, never from the gate or the
@@ -184,6 +189,7 @@ class WorkflowConfig:
             anonymity_terms=list(data.get("anonymity_terms", [])),
             submission_pdf=str(data.get("submission_pdf", "")),
             max_pdf_mb=float(data.get("max_pdf_mb", 20.0)),
+            requirements_file=str(data.get("requirements_file", "reports/requirements.csv")),
             award_base_rate_note=str(data.get("award_base_rate_note", "")).strip(),
             hedge_min_count=int(data.get("hedge_min_count", 5)),
             hedge_warn_per_10k=float(data.get("hedge_warn_per_10k", 3.0)),

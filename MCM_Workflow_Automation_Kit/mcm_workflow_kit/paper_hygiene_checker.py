@@ -25,6 +25,7 @@ import statistics
 import subprocess
 
 from .config import WorkflowConfig, resolve_project_path
+from .paper_structure import TocEntry, toc_entries
 from .pdf_text import page_texts
 from .reporting import CheckMessage, status_from_messages, write_markdown_report
 from .submission_checker import ai_report_start, references_start
@@ -64,6 +65,30 @@ HEDGES = re.compile(
 DASHES = re.compile(r"—|–|\s-\s|--")
 APPENDIX_RE = re.compile(r"\\appendix\b|\\section\*?\s*\{\s*Appendi", re.I)
 
+# --- the Summary promises an analysis the body does not show: fail ----------------------------
+# The 2026 MCM A entry cut ten pages in its last half hour. Its Summary still promised a
+# "global LHS-Monte Carlo sensitivity (Spearman indices)"; the body mentions Monte Carlo once.
+# Each term below names an analysis a judge will look for once the Summary has promised it.
+SUMMARY_CLAIMS: tuple[tuple[str, re.Pattern[str]], ...] = (
+    ("sensitivity analysis", re.compile(r"sensitiv", re.I)),
+    ("Monte Carlo", re.compile(r"monte[\s-]*carlo", re.I)),
+    ("Latin hypercube sampling", re.compile(r"(?i:latin\s+hypercube)|\bLHS\b")),
+    ("bootstrap", re.compile(r"bootstrap", re.I)),
+    ("cross-validation", re.compile(r"cross[\s-]*validat", re.I)),
+    ("Spearman correlation", re.compile(r"spearman", re.I)),
+    ("Sobol indices", re.compile(r"sobol", re.I)),
+    ("uncertainty analysis", re.compile(r"uncertainty\s+(?:quantification|analys[ie]s)|\bUQ\b", re.I)),
+    ("confidence or prediction interval", re.compile(r"(?:confidence|prediction)\s+intervals?", re.I)),
+    ("robustness analysis", re.compile(r"robustness\s+(?:analys[ie]s|tests?|checks?)", re.I)),
+    ("error analysis", re.compile(r"error\s+analys[ie]s", re.I)),
+)
+SUMMARY_CLAIM_MIN_BODY_MENTIONS = 2
+
+# A numbered top-level heading as pdftotext prints it: "6 Time-to-Empty Prediction".
+PDF_TOP_HEADING_RE = re.compile(r"^\s*(\d{1,2})\s+[A-Z][A-Za-z][A-Za-z ,:&/'()-]{2,80}$")
+TEX_HEADING_RE = re.compile(r"\\(?P<level>(?:sub){0,2})section\*?\s*\{(?P<title>[^{}]*(?:\{[^{}]*\}[^{}]*)*)\}")
+EMPTY_SECTION_MAX_CHARS = 10  # nothing at all; a thin section is mcm_format_checker's warning
+
 
 @dataclass(frozen=True)
 class PaperHygieneResult:
@@ -76,6 +101,7 @@ class PaperHygieneResult:
         return status_from_messages(self.messages)
 
 
+DOT_LEADERS_RE = re.compile(r"(?:\.\s?){8,}")
 HEADER_LINE_RE = re.compile(r"Summary Sheet|Team Control|Problem Chosen|\b\d{7}\b|^[A-F]$|MCM/ICM|^20\d\d$")
 
 
@@ -186,6 +212,100 @@ def check_summary_numbers(first_page: str) -> list[CheckMessage]:
     ]
 
 
+def unsupported_summary_claims(summary: str, body: str) -> list[tuple[str, int]]:
+    """Analyses the Summary names that the body mentions fewer than twice: (label, body count)."""
+    flat = re.sub(r"\s+", " ", re.sub(r"-\s*\n\s*", "", body))
+    missing = []
+    for label, regex in SUMMARY_CLAIMS:
+        if not regex.search(summary):
+            continue
+        count = len(regex.findall(flat))
+        if count < SUMMARY_CLAIM_MIN_BODY_MENTIONS:
+            missing.append((label, count))
+    return missing
+
+
+def check_summary_claims(pages: list[str], prose_end: int) -> list[CheckMessage]:
+    if len(pages) < 4:
+        return []
+    # The body starts after the Summary Sheet and the table of contents.
+    start = 2 if DOT_LEADERS_RE.search(pages[1]) else 1
+    missing = unsupported_summary_claims(pages[0], "\n".join(pages[start:prose_end]))
+    if not missing:
+        return []
+    listed = ", ".join(f"{label} ({count} mention{'s' if count != 1 else ''} in the body)"
+                       for label, count in missing)
+    # 139 O papers: 8 trip on a single term (a word used once more in the Summary than in the
+    # body), none on two. The 2026 MCM A entry trips on three.
+    level = "fail" if len(missing) >= 2 else "warn"
+    return [CheckMessage(
+        level,
+        f"The Summary Sheet promises an analysis the body barely mentions: {listed}. Either the "
+        f"section was cut and the Summary was not re-read, or the analysis was never run. "
+        f"Restore it with its figure or table, or take the claim out of the Summary. "
+        f"(O papers: 8 of 139 have one such term, none has two.)",
+    )]
+
+
+def empty_sections_in_tex(tex: str) -> list[str]:
+    """Titles of headings followed, almost at once, by a heading of the same or a higher level."""
+    headings = [(m.start(), m.end(), len(m.group("level")) // 3, m.group("title").strip())
+                for m in TEX_HEADING_RE.finditer(tex)]
+    end_doc = tex.find(r"\end{document}")
+    empty = []
+    for index, (_start, end, level, title) in enumerate(headings):
+        if index + 1 < len(headings):
+            next_start, _e, next_level, _t = headings[index + 1]
+        else:
+            next_start, next_level = (end_doc if end_doc != -1 else len(tex)), level
+        if next_level > level:
+            continue  # a section that opens straight into its first subsection is normal
+        between = re.sub(r"\\(?:label|newpage|clearpage|vspace\*?|noindent)\s*(?:\{[^{}]*\})?", "", tex[end:next_start])
+        if len(re.sub(r"\s+", "", between)) < EMPTY_SECTION_MAX_CHARS:
+            empty.append(title)
+    return empty
+
+
+def empty_sections_in_pdf(pages: list[str], toc: list[TocEntry]) -> list[str]:
+    """A top-level heading directly followed by the next one (for a Word-built paper).
+
+    Both lines must be top-level entries of the table of contents: "3 Europe" above
+    "4 Asia" is otherwise a table row (two of 139 O papers have such rows).
+    """
+    known = {entry.number: re.sub(r"\W+", "", entry.title).lower()[:20]
+             for entry in toc if entry.top_level}
+
+    def is_heading(match: re.Match[str] | None, line: str) -> bool:
+        if not match or match.group(1) not in known:
+            return False
+        title = re.sub(r"\W+", "", line.split(None, 1)[1]).lower()
+        return bool(title) and title.startswith(known[match.group(1)][:len(title)])
+
+    empty = []
+    for page in pages[1:]:
+        if DOT_LEADERS_RE.search(page):
+            continue  # the table of contents is nothing but consecutive headings
+        lines = [line.strip() for line in page.splitlines() if line.strip()]
+        for line, follow in zip(lines, lines[1:]):
+            first, second = PDF_TOP_HEADING_RE.match(line), PDF_TOP_HEADING_RE.match(follow)
+            if (is_heading(first, line) and is_heading(second, follow)
+                    and int(second.group(1)) == int(first.group(1)) + 1):
+                empty.append(line)
+    return empty
+
+
+def check_empty_sections(titles: list[str]) -> list[CheckMessage]:
+    if not titles:
+        return []
+    return [CheckMessage(
+        "fail",
+        f"{len(titles)} heading(s) with nothing under them: " + "; ".join(f"'{t}'" for t in titles[:6])
+        + ". A judge reads an empty section as an analysis that was planned and not done (the "
+          "2026 MCM A entry left 'Time-to-Empty Prediction and Uncertainty Analysis' as a bare "
+          "heading after a late page cut). Fill it, merge it into a neighbour, or delete the heading.",
+    )]
+
+
 def check_density(pages: list[str], counted: int, config: WorkflowConfig) -> tuple[list[CheckMessage], float | None]:
     body = pages[1:counted]
     per_page = [len(WORD_RE.findall(p)) for p in body]
@@ -238,11 +358,13 @@ def run_paper_hygiene_checks(project_root: str | Path, config: WorkflowConfig) -
         body_end = APPENDIX_RE.search(tex)
         messages += check_team_facing(tex)
         messages += check_machine_phrases(tex[: body_end.start()] if body_end else tex)
+        messages += check_empty_sections(empty_sections_in_tex(tex))
     elif pages:
         # A Word-built paper (the 2026 ProbA entry was one): read what the judges read.
         prose = "\n".join(pages[:prose_end])
         messages += check_team_facing(prose)
         messages += check_machine_phrases(prose)
+        messages += check_empty_sections(empty_sections_in_pdf(pages[:prose_end], toc_entries(pdf)))
     else:
         messages.append(CheckMessage("warn", f"LaTeX source missing: {config.paper_tex}"))
 
@@ -251,6 +373,7 @@ def run_paper_hygiene_checks(project_root: str | Path, config: WorkflowConfig) -
         title = title_of(pages[0])
         messages += check_title(title, config)
         messages += check_summary_numbers(pages[0])
+        messages += check_summary_claims(pages, prose_end)
         messages += check_hedges("\n".join(pages[:prose_end]), config)
         density, median = check_density(pages, prose_end, config)
         messages += density

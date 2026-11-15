@@ -29,8 +29,14 @@ agent follows the paper standards while writing.
       `MCM_Workflow_Automation_Kit/workflow_config.json`, then record every accepted source
       in `reports/data_source_manifest.csv` (one row per real dataset, with SHA-256). The
       Kit fails if an external "dataset" is actually a prose card (`.md`), not data.
-- [ ] **Modeling direction.** Pick the model family and the key assumptions. This is a
-      human/agent judgment call, not something the gate decides.
+- [ ] **Requirement table, before any model.** Fill `reports/requirements.csv`: one row per
+      requirement of the statement (and the letter or memo, if asked). Write `turns_on` (one
+      plain sentence: what the requirement turns on) and `expected` (what you expect the
+      answer to look like) yourself, before opening a modeling conversation with the agent.
+      The agent is told not to write these two columns.
+- [ ] **Modeling direction.** Ask for two or three routes that really differ, the simplest
+      among them. Choose after the baseline produces a number, not before. Before a model
+      goes into the paper, explain it without notes; if you cannot, use a simpler one.
 
 ## 2. Build (agent does most of this)
 

@@ -4,6 +4,46 @@ The rest of this Skill governs *what a good paper contains*. This file governs *
 work gets done under a deadline*, which is where most teams actually lose the award: a
 correct model that reaches the writer too late still produces a thin paper.
 
+## The first hour belongs to a person
+
+Before any model, a person reads the problem and fills two columns of
+`reports/requirements.csv` for every requirement:
+
+- `turns_on`: one plain sentence on what the requirement turns on. The trade-off, the
+  quantity that decides the answer, or the ratio or penalty the statement gives and how it
+  enters the decision. "How much to over-buy when a unit short costs five times a unit
+  over", not "a stochastic optimisation with asymmetric penalties".
+- `expected`: what the answer should look like, with a rough size or direction.
+
+The agent does not write these and does not propose a route until they exist. Three reasons,
+all from the CUMCM 2026 post-mortem:
+
+1. A framework chosen in the first ninety minutes by an AI-written plan was never revisited
+   in eight drafts, and no experiment was designed that could have overturned it.
+2. During that contest a "forecast, storage, rolling correction" framework of the same kind
+   was on sale within three hours. A framework an assistant proposes by default is the one
+   thousands of teams receive, and COMAP compares every paper with every other paper on the
+   same problem. What sets a paper apart is a finding specific to this problem, and that
+   starts from someone understanding what the problem turns on.
+3. `expected` is what makes a result informative. A result that differs from it is a finding
+   or a bug, and either way the paper gets a sentence it would not otherwise have ("we
+   expected X; the model gives Y, because ..."). The showcased papers were written this way;
+   ours stated results and never argued.
+
+Later, each sentence in `turns_on` opens that task's section and its paragraph of the
+Summary Sheet.
+
+**Explaining back.** Before a model goes into the paper, the person explains it without
+notes, in a few sentences: what goes in, what comes out, why this and not something simpler.
+A model that cannot be explained is replaced by one that can. COMAP's judges call adopting a
+complicated component one cannot explain "the classic red herring of the contest".
+
+**Readers during the contest are teammates only.** The rules forbid help from anyone outside
+the team once the problem is posted, so the fresh reader the post-mortem asks for (someone
+who reads the Summary and the first three pages on day one and says where they got lost) has
+to be a teammate who has not been writing. Before the contest, practice papers can be read
+by anyone.
+
 ## Three lanes, not three people
 
 Work splits into three lanes. A three-person team maps one person per lane; a solo entrant

@@ -30,7 +30,15 @@ When asked to run an MCM/ICM project end-to-end, follow this order unless the us
    official rules always win over `references/modeling_methods.md` (last checked there
    2026-09-28 against the posted 2027 instructions).
 1. Inspect the repository, problem statement, available data, prior notes, and workflow config.
-2. Produce or update a pre-execution plan with modeling route, data route, figure/table route, paper route, validation route, and commit batches.
+   **Then build the requirement table with the person** (`reports/requirements.csv`): one row
+   per requirement of the statement, in its own words, including any letter or memo. The
+   columns `turns_on` and `expected` belong to the person and come before any modeling route:
+   one plain sentence on what the requirement turns on, and what they expect the answer to
+   look like. **Do not write these two columns yourself and do not propose a route until they
+   exist**; ask for them. In CUMCM 2026 an AI-written plan fixed the framework ninety minutes
+   into the contest, eight drafts polished it, and the paper never said what its key question
+   turned on. See `references/competition_operations.md`, "The first hour belongs to a person".
+2. Produce or update a pre-execution plan with modeling route, data route, figure/table route, paper route, validation route, and commit batches. Offer two or three routes that really differ, the simplest among them, and let the baseline numbers choose (step 5), not the plan.
 3. Build a data-needs document before acquiring external data.
 4. Acquire or create accepted data/parameter sources with roles clearly separated: official problem data, true dataset, documentation source, parameter source, validation source, and scenario assumption.
 5. Implement model code and focused tests before writing the paper.

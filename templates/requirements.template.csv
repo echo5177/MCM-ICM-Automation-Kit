@@ -1,0 +1,2 @@
+req_id,requirement,kind,turns_on,expected,answer,section,evidence,status
+R1,"[the first task, in the problem's own words]",model,"[one plain sentence, written by a person before any model: what this task turns on]","[what you expect the answer to look like, written before modeling]",,,,open

@@ -90,12 +90,19 @@ that follows. Close with one limitation.]
 \rhead{Page \thepage\ }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Keep everything before the first task short: in 107 O papers the first model section
+% starts on page 4 at the median and page 9 at the latest (mcm_format_checker warns past 7).
 \section{Introduction}
-\subsection{Problem Background and Restatement}
-[Restate the problem tied to the specific tasks the contest asks for.]
+\subsection{Problem Background}
+[Two or three sentences of context. Not the statement's first paragraph again.]
 
-\subsection{Our Approach}
-[One paragraph overview + the concept/workflow figure below.]
+\subsection{Restatement of the Problem}
+[Each requirement in your own words, in the problem's order, numbered as in
+reports/requirements.csv. Include the letter or memo if the problem asks for one.]
+
+\subsection{Our Work}
+[For each requirement: one plain sentence on what it turns on, and the answer reached.
+Then the workflow figure below.]
 
 % Concept figure: register it in figures/concept_src/<name>.json and add the file to
 % diagram_sources in workflow_config.json so the diagram-quality gate inspects it.
@@ -111,32 +118,49 @@ that follows. Close with one limitation.]
 % \end{figure}
 
 \section{Assumptions and Justifications}
-[Assumptions with consequences, not boilerplate. Each: assumption -> why -> effect.]
+[Only the assumptions the model would change without. Each: assumption, why it is
+reasonable, where it is used. Do not assume away the hard part of the problem.]
 
 \section{Notation}
-[A notation table only if it saves the reader time.]
+[Symbols with units. Define each symbol again where it first appears.]
 
-\section{Model Development}
-\subsection{Data and Parameter Provenance}
-[Where each number comes from: cited source or data-derived. Be honest.]
+% One section per requirement, each complete in itself. A judge looking for the answer to
+% Task 2 should not need Task 1's section or a separate "Results" chapter. Copy this block
+% for every requirement in reports/requirements.csv.
+\section{Task 1: [what it answers]}
+\subsection{What the Task Turns On}
+[The `turns\_on' sentence from the requirement table: the trade-off or the quantity that
+decides the answer. Then why the model below suits it.]
 
-\subsection{Derivation}
-[Governing equations with every symbol defined; the solution method; algorithm.]
+\subsection{Data and Parameters}
+[Where each number comes from: a cited source, the problem's data, or a stated
+assumption (reports/param\_ledger.csv).]
 
-\section{Results}
-[Headline numbers prominent and traceable to key\_results.csv. Figures/tables carry
-the argument. Each figure earns its place.]
+\subsection{Model}
+[Start from the simplest model that produces a number. Add a component only where the
+model ladder (reports/model\_ladder.csv) shows that it wins, and print that comparison.]
 
-\section{Validation and Sensitivity}
-[Validation or sanity checks against data or a baseline; sensitivity + uncertainty with
-consequences. Report honest residuals.]
+\subsection{Results}
+[The answer first, with its number and unit, traceable to key\_results.csv. Then the
+figure or table that carries it, then what it means for the decision.]
 
-\section{Discussion}
-\subsection{Strengths and Weaknesses}
-\subsection{Recommendations}
+\subsection{Check}
+[Against the baseline, against held-out data, or against a relation you know.]
+
+\section{Sensitivity Analysis}
+[Vary the assumptions you made, one at a time, over a range you can defend. Show the
+response in a figure. End each part with a consequence, not with ``the model is robust''.]
+
+\section{Strengths and Weaknesses}
+[Two or three of each, specific to this model. State each limitation once, here.]
+
+\section{Recommendations}
+[Decisions, not topics: the action, the model threshold that triggers it, the quantified
+effect. If the problem asks for a letter or memo, give it its own section instead:
+bottom-line results for its reader, no equations, signed ``Team \#'' and the control number.]
 
 \section{Conclusion}
-[Tie results back to the tasks.]
+[The answer to each requirement, in one sentence each.]
 
 % References auto-generate the section; make it show in the ToC.
 \addcontentsline{toc}{section}{References}
