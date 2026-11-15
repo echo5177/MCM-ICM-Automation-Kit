@@ -41,7 +41,10 @@ When asked to run an MCM/ICM project end-to-end, follow this order unless the us
 2. Produce or update a pre-execution plan with modeling route, data route, figure/table route, paper route, validation route, and commit batches. Offer two or three routes that really differ, the simplest among them, and let the baseline numbers choose (step 5), not the plan.
 3. Build a data-needs document before acquiring external data.
 4. Acquire or create accepted data/parameter sources with roles clearly separated: official problem data, true dataset, documentation source, parameter source, validation source, and scenario assumption.
-5. Implement model code and focused tests before writing the paper.
+5. Implement model code and focused tests before writing the paper. Start with the naive
+   baseline for every requirement and write it to `reports/model_ladder.csv` as rung 0; add a
+   component only as a new rung, keep it only if it wins, and also run the model with its
+   main component removed (`references/competition_operations.md`, "The model ladder").
 6. Generate planned figures, tables, key results, manifests, and visual source files. When a
    teammate hands over a flowchart they drew (expect it; ask early), import it with
    `import_flowchart.py` and place it as an ordinary portrait figure, never on a landscape page
@@ -136,6 +139,25 @@ bugs, data leakage, integer feasibility, conserved quantities, double-counting i
 evaluation models, etc.), to remember that sensitivity analysis is mandatory, and to
 match MCM/ICM 2026 norms (25-page rule excluding the AI report, scoring dimensions,
 visualization expectations).
+
+## Ledgers The Gate Reads
+
+Four small tables carry what a judge cannot see in the code and what a person has to decide.
+Keep them as the work happens; a ledger reconstructed at the end records what is remembered.
+
+| File | Who writes it | What the gate does with it |
+| --- | --- | --- |
+| `reports/requirements.csv` | the person writes `turns_on` and `expected` first; the rest fills in as answers arrive | every requirement answered, located, on the Summary Sheet; sections that answer nothing (`requirement_checker`) |
+| `reports/model_ladder.csv` | the pipeline | a naive baseline per modeling requirement; the kept model is not beaten by a simpler one (`model_ladder`) |
+| `reports/param_ledger.csv` | whoever puts a number into the code | unit, origin and an existing source for every given parameter (`param_ledger`) |
+| `reports/ai_use_log.csv` | whoever uses the tool, this agent included | the printed Report on Use of AI names every logged tool (`ai_use_checker`) |
+
+Your own first entry in the AI use log is yourself: product, model, and what you are doing.
+Add an entry when the purpose changes (code, experiments, drafting, review, translation).
+
+During the contest window the rules in `references/competition_operations.md`, "Contest-window
+rules", bind your searches: no page where this year's problem is discussed, no one else's
+solution, data and methods from their primary sources only.
 
 ## Quality Gates
 

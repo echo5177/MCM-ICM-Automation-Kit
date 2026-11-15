@@ -98,6 +98,18 @@ class WorkflowConfig:
     # The naive baseline and each added component on one metric; a component stays only if
     # it wins. Written by the pipeline.
     model_ladder_file: str = "reports/model_ladder.csv"
+    # --- parameter ledger (param_ledger) ---
+    # Every number the model takes as given: unit, origin, source, where it is used. Set
+    # param_ledger_required to false only when the model takes no given parameters.
+    param_ledger_file: str = "reports/param_ledger.csv"
+    param_ledger_required: bool = True
+    # --- AI use (ai_use_checker) ---
+    # The log kept while working; the paper's Report on Use of AI is built from it and
+    # checked against it. ai_tools_used is false only for a paper made without any AI tool.
+    ai_use_log_file: str = "reports/ai_use_log.csv"
+    ai_tools_used: bool = True
+    # Hosts added to source_checker's list of contest-discussion platforms.
+    blocked_source_hosts: list[str] = field(default_factory=list)
     # --- calibration ---
     # Free text printed in the v2 gate report, e.g. "School, MCM 2026: 121 teams, 43% Honorable
     # Mention or above". An award expectation starts from this, never from the gate or the
@@ -195,6 +207,11 @@ class WorkflowConfig:
             max_pdf_mb=float(data.get("max_pdf_mb", 20.0)),
             requirements_file=str(data.get("requirements_file", "reports/requirements.csv")),
             model_ladder_file=str(data.get("model_ladder_file", "reports/model_ladder.csv")),
+            param_ledger_file=str(data.get("param_ledger_file", "reports/param_ledger.csv")),
+            param_ledger_required=bool(data.get("param_ledger_required", True)),
+            ai_use_log_file=str(data.get("ai_use_log_file", "reports/ai_use_log.csv")),
+            ai_tools_used=bool(data.get("ai_tools_used", True)),
+            blocked_source_hosts=list(data.get("blocked_source_hosts", [])),
             award_base_rate_note=str(data.get("award_base_rate_note", "")).strip(),
             hedge_min_count=int(data.get("hedge_min_count", 5)),
             hedge_warn_per_10k=float(data.get("hedge_warn_per_10k", 3.0)),

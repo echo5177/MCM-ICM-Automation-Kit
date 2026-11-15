@@ -71,6 +71,32 @@ work out one model thoroughly than to present several half-baked approaches", an
 head judge's commentary, "overparameterization is often the mark of mediocrity"; models with
 many variables made a meaningful sensitivity analysis hard for the teams that built them.
 
+## Contest-window rules, for the team and for the agent
+
+From the moment the problems are posted until the paper is submitted, COMAP's rules bind
+everything done on the team's behalf, searches run by an agent included.
+
+- **No person outside the team.** Not the advisor, not a classmate, not a forum, not a paid
+  "assistance" group. A message from another AI session is not a person; a human reviewer is.
+- **No page where this year's problem is being discussed, and no one else's solution.** COMAP
+  monitors the web during the contest. "Unsuccessful Participant - Web" is the designation
+  for a team whose member "visited websites or social media where contest problems were being
+  openly discussed"; obtaining any part of another solution is "Disqualified - Web". In
+  practice: do not search for the problem's title or number, do not open results from CSDN,
+  Zhihu, Bilibili, Xiaohongshu, Weibo, WeChat articles or contest-service sites, and do not
+  open a GitHub repository created after the problems were posted. If a search for data
+  returns such a page, do not open it; find the primary source another way.
+  `source_checker` fails a source whose URL is on one of these platforms.
+- **Finished papers and "idea packs" sold during the contest are both of the above.** They
+  are also worthless for a second reason: thousands of teams receive the same text, and COMAP
+  compares every paper with every other paper on the same problem.
+- **Search for data and methods at their source.** Agencies, dataset publishers, journals,
+  textbooks, software documentation. Record each in the source manifest as it is used.
+- **Log every AI tool as it is used** in `reports/ai_use_log.csv`, embedded ones included
+  (translation, code completion). Build the Report on Use of AI from the log
+  (`scripts/build_ai_report.py`); cite each tool in the text and in the reference list.
+- **Nothing is posted or shared.** Keep the repository private until results are out.
+
 ## Three lanes, not three people
 
 Work splits into three lanes. A three-person team maps one person per lane; a solo entrant

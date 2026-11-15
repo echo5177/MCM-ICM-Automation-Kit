@@ -1,0 +1,2 @@
+symbol,meaning,value,unit,origin,source,used_in,sensitivity,note
+[R_0],[what the symbol means],,[unit or - if dimensionless],[statement / dataset / literature / calibrated / assumed],[page or quote / source_id / citation key],[figure table or section it feeds],[for an assumed value: where it is varied],

@@ -9,6 +9,7 @@ import time
 import traceback
 from typing import Callable
 
+from .ai_use_checker import write_ai_use_report
 from .config import KIT_ROOT, WorkflowConfig, load_config, resolve_project_path
 from .data_auditor import write_data_audit_outputs
 from .diagram_checker import write_diagram_qa_report
@@ -19,6 +20,7 @@ from .mcm_format_checker import write_mcm_format_report
 from .model_ladder_checker import write_model_ladder_report
 from .paper_hygiene_checker import write_paper_hygiene_report
 from .paper_qa import write_paper_qa_report
+from .param_ledger import write_param_ledger_report
 from .reporting import write_markdown_report
 from .requirement_checker import write_requirement_report
 from .result_checker import write_result_check_report
@@ -208,6 +210,13 @@ def run_workflow(
     )
     nodes.append(
         run_callable_node(
+            "param_ledger",
+            lambda: write_param_ledger_report(root, config),
+            run_dir,
+        )
+    )
+    nodes.append(
+        run_callable_node(
             "result_checker",
             lambda: write_result_check_report(root, config),
             run_dir,
@@ -273,6 +282,13 @@ def run_workflow(
         run_callable_node(
             "submission_checker",
             lambda: write_submission_report(root, config),
+            run_dir,
+        )
+    )
+    nodes.append(
+        run_callable_node(
+            "ai_use_checker",
+            lambda: write_ai_use_report(root, config),
             run_dir,
         )
     )

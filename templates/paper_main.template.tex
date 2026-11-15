@@ -172,6 +172,11 @@ bottom-line results for its reader, no equations, signed ``Team \#'' and the con
 \clearpage
 \addcontentsline{toc}{section}{Report on the Use of AI}
 \section*{Report on the Use of AI}
-[Disclose AI tools and how they were used, per the current COMAP rules.]
+% Keep reports/ai_use_log.csv while working, then run scripts/build_ai_report.py: it writes
+% paper/ai_report.tex from the log, and ai_use_checker checks this page against the same log.
+% COMAP: name every tool (embedded ones too: translation, copilots), its version and purpose;
+% cite the tools in the text and list them in the references.
+\IfFileExists{ai_report.tex}{\input{ai_report.tex}}{[Run scripts/build\_ai\_report.py to
+build this report from reports/ai\_use\_log.csv.]}
 
 \end{document}

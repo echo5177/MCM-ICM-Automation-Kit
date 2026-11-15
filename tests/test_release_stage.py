@@ -89,7 +89,7 @@ class _Node:
 
 NODES = ["source_checker", "source_role_checker", "data_auditor", "result_checker",
          "experiment_audit", "diagram_checker", "diagram_quality_checker", "paper_qa",
-         "mcm_format_checker", "requirement_checker", "model_ladder", "paper_hygiene_checker", "submission_checker", "visual_qa_packet", "judge_review_gate",
+         "mcm_format_checker", "requirement_checker", "model_ladder", "param_ledger", "paper_hygiene_checker", "submission_checker", "ai_use_checker", "visual_qa_packet", "judge_review_gate",
          "v1_gate"]
 
 

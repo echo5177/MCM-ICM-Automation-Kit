@@ -42,6 +42,27 @@ VALID_SOURCE_TYPES = {"official_problem", "external", "derived", "synthetic", "m
 VALID_URL_SCHEMES = {"http", "https", "file", "local"}
 NEEDS_PLACEHOLDERS = ("TODO", "TBD", "[fill", "<fill")
 
+# Platforms where the current contest's problems are discussed and solutions are traded.
+# COMAP monitors them during the contest: "Unsuccessful Participant - Web: a team member (or
+# members) visited websites or social media where contest problems were being openly
+# discussed", and "Disqualified - Web" for obtaining any part of anyone else's solution.
+# During CUMCM 2026 an idea post appeared 54 minutes after the problems and a finished paper
+# was on sale after 4 hours 15 minutes, on these same platforms. None of them is a citable
+# primary source either: the data on such a page came from somewhere, and that is the source.
+CONTEST_DISCUSSION_HOSTS = (
+    "csdn.net", "zhihu.com", "bilibili.com", "xiaohongshu.com", "weibo.com", "tieba.baidu.com",
+    "mp.weixin.qq.com", "douyin.com", "saikr.com", "chegg.com", "coursehero.com",
+)
+
+
+def discussion_host(url: str, extra_hosts: tuple[str, ...] = ()) -> str:
+    """The blocked platform a URL belongs to, or an empty string."""
+    host = (urlparse(url).netloc or "").lower().split(":")[0]
+    for blocked in CONTEST_DISCUSSION_HOSTS + tuple(h.lower() for h in extra_hosts):
+        if host == blocked or host.endswith("." + blocked):
+            return blocked
+    return ""
+
 
 @dataclass(frozen=True)
 class SourceCheckResult:
@@ -187,6 +208,16 @@ def run_source_checks(
             url = row.get("url", "").strip()
             if url and not _valid_url(url):
                 messages.append(CheckMessage("warn", f"{label} has nonstandard URL: {url}"))
+            blocked = discussion_host(url, tuple(config.blocked_source_hosts)) if url else ""
+            if blocked:
+                messages.append(CheckMessage(
+                    "fail",
+                    f"{label} comes from {blocked}, a platform where contest problems are "
+                    f"discussed and solutions are traded. COMAP designates a team Unsuccessful "
+                    f"when a member visits sites where the problems are being discussed, and "
+                    f"disqualifies for obtaining any part of another solution. Go to the primary "
+                    f"source the page took its data from, and cite that.",
+                ))
 
             access_date = row.get("access_date", "").strip()
             if access_date and not _valid_access_date(access_date):

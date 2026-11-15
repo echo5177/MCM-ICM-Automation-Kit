@@ -16,6 +16,12 @@ conda env create -f environment.yml    # or reuse the shared 'mcm' env
 Load the Skill `mcm-icm-competition-paper` (copied under this repo's `skill/`) so the
 agent follows the paper standards while writing.
 
+## 0b. Contest-window rules
+
+Read `skill/references/competition_operations.md`, "Contest-window rules", before the problems
+are posted: no person outside the team, no page where this year's problem is discussed, no
+purchased material, nothing shared. They bind the agent's searches as well as yours.
+
 ## 1. Human inputs (you provide; the agent cannot invent these)
 
 - [ ] **Problem statement.** Save the official PDF/text under `data/raw/` and restate the
@@ -43,6 +49,11 @@ agent follows the paper standards while writing.
 - [ ] Implement the modeling pipeline in `src/` and wire it into `scripts/run_all.py` so it
       regenerates every figure/table and writes `reports/key_results.csv` (every number the
       paper cites) and `reports/figure_manifest.csv`.
+- [ ] **Parameter ledger.** Enter every number the model takes as given in
+      `reports/param_ledger.csv` as it enters the code: value, unit, origin, source, where it is
+      used. An assumed value needs a sensitivity test that varies it.
+- [ ] **AI use log.** Add a row to `reports/ai_use_log.csv` each time a tool is used for a new
+      purpose (translation and code completion count). Do not reconstruct it at the end.
 - [ ] **Baseline first, for every requirement.** Have the pipeline write
       `reports/model_ladder.csv`: rung 0 is the naive baseline, each rung above adds one
       component, one metric throughout. A component stays only if it wins, and the paper
@@ -81,6 +92,8 @@ agent follows the paper standards while writing.
 
 ## 4. Release
 
+- [ ] `python scripts/build_ai_report.py --project-root .` so the Report on Use of AI is built
+      from the log; cite each tool in the text and list it in the references.
 - [ ] Set `release_stage: final` in the config and build the submission PDF.
 - [ ] Judge review on that PDF, with its `PAPER_SHA256` written into
       `reports/workflow/judge_review.md` (the gate prints the current hash). Any rebuild voids it.

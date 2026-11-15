@@ -11,7 +11,7 @@ the conventions; it does not replace modeling judgment or a human's final eye.
 
 | Layer | What it is | What it guarantees |
 | --- | --- | --- |
-| **Kit** (`MCM_Workflow_Automation_Kit/`) | Deterministic v2-gate, 18 nodes | A floor: no *known* defect (thin paper, lowered thresholds, sparse diagram, fake data, missing sections, unrendered PDF, no judge sign-off) can pass quietly. |
+| **Kit** (`MCM_Workflow_Automation_Kit/`) | Deterministic v2-gate, 20 nodes | A floor: no *known* defect (thin paper, lowered thresholds, sparse diagram, fake data, missing sections, unrendered PDF, no judge sign-off) can pass quietly. |
 | **Skill** (`skill/`) | The `mcm-icm-competition-paper` Skill: paper/figure/data standards, judge rubric | The brain: conventions and judgment the agent follows while writing. |
 | **Agent visual QA + human eye** | Contact-sheet review + a real person | The ceiling: aesthetics, prose, and whether the modeling is actually right. |
 
@@ -27,7 +27,7 @@ MCM-ICM-Automation-Kit/
 │   ├── run_workflow.py                 #   entry point: --mode check | full
 │   ├── import_flowchart.py             #   import a teammate's PPTX/PDF/SVG flowchart as a cropped vector PDF
 │   ├── workflow_config.json            #   GENERIC starter config (per-problem copy)
-│   ├── mcm_workflow_kit/               #   the 18 nodes + orchestrator
+│   ├── mcm_workflow_kit/               #   the 20 nodes + orchestrator
 │   ├── nodes/  docs/  scripts/         #   node docs + create_release_packet.py
 ├── templates/
 │   ├── MCM-ICM_Summary.tex             # official COMAP summary template
@@ -38,7 +38,8 @@ MCM-ICM-Automation-Kit/
 │   └── gitignore.template
 ├── scripts/
 │   ├── new_problem.py                  # scaffold a whole new problem repo
-│   └── sync_kit.py                     # update the Kit in an existing problem repo
+│   ├── sync_kit.py                     # update the Kit in an existing problem repo
+│   └── build_ai_report.py              # build the Report on Use of AI from reports/ai_use_log.csv
 ├── checklists/
 │   └── NEW_PROBLEM_CHECKLIST.md        # human inputs + build + verify + release run-sheet
 ├── skill/                              # copy of the mcm-icm-competition-paper Skill
@@ -71,15 +72,20 @@ python scripts/sync_kit.py --target ../Simulation_2026MCM-ICM_ProbA --dry-run
 python scripts/sync_kit.py --target ../Simulation_2026MCM-ICM_ProbA
 ```
 
-## The v2 gate (18 nodes)
+## The v2 gate (20 nodes)
 
 `run_workflow.py` runs these in order; any `fail` fails the run. `--mode full` runs your
 `scripts/run_all.py` first.
 
-1. **source_checker** — source manifest schema, metadata, local files, SHA-256 hashes.
+1. **source_checker** — source manifest schema, metadata, local files, SHA-256 hashes. FAILS on a
+   source taken from a platform where contest problems are discussed (CSDN, Zhihu, ...).
 2. **source_role_checker** — fails when an external "dataset" is actually a prose card
    (`.md`) rather than real data.
 3. **data_auditor** — profiles the raw CSVs (rows, missing, duplicates, summaries).
+   **param_ledger** (runs next) — reads `reports/param_ledger.csv`: every number the model
+   takes as given, with its unit, origin (statement, dataset, literature, calibrated, assumed)
+   and source. FAILS at `final` on a missing unit or a source that does not exist; warns on an
+   assumed value that no sensitivity test varies.
 4. **result_checker** — every number the paper cites must trace to `key_results.csv`;
    figures/tables in the manifest must exist; no placeholder strings. Reads the paper with
    its `\input` files expanded.
@@ -114,6 +120,9 @@ python scripts/sync_kit.py --target ../Simulation_2026MCM-ICM_ProbA
     1111111 at final); no names, school or e-mail; font at least 12pt; the Report on Use of
     AI after the references, with its real page count; the upload named `<control>.pdf`,
     under 20 MB (the instructions say 25, COMAP's tips say 20; the Kit takes the smaller).
+    **ai_use_checker** (runs next) — checks the paper's Report on Use of AI against
+    `reports/ai_use_log.csv`, the log kept while working (`scripts/build_ai_report.py` builds the
+    report from it). A logged tool missing from the report FAILS at `final`.
 12. **visual_qa_packet** — renders PDF pages so they can be eyeballed.
 13. **judge_review_gate** — parses `reports/workflow/judge_review.md`; needs every
     category score >= 4, `RELEASE: APPROVED`, and `PAPER_SHA256` equal to the current PDF

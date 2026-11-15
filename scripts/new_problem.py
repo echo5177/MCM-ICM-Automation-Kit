@@ -108,6 +108,17 @@ def scaffold(target: Path, problem_letter: str | None, force: bool, year: int | 
         TEMPLATE_ROOT / "templates" / "model_ladder.template.csv",
         target / "reports" / "model_ladder.csv",
     )
+    # 6d) Parameter ledger: every number the model takes as given, with unit and origin.
+    shutil.copy2(
+        TEMPLATE_ROOT / "templates" / "param_ledger.template.csv",
+        target / "reports" / "param_ledger.csv",
+    )
+    # 6e) AI use log: one entry per tool and purpose, kept while working.
+    shutil.copy2(
+        TEMPLATE_ROOT / "templates" / "ai_use_log.template.csv",
+        target / "reports" / "ai_use_log.csv",
+    )
+    shutil.copy2(TEMPLATE_ROOT / "scripts" / "build_ai_report.py", target / "scripts" / "build_ai_report.py")
 
     # 7) Standard .gitignore + environment.yml + checklist.
     shutil.copy2(TEMPLATE_ROOT / "templates" / "gitignore.template", target / ".gitignore")
