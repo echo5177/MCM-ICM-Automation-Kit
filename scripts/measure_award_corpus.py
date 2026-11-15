@@ -36,6 +36,26 @@ from mcm_workflow_kit.paper_hygiene_checker import (  # noqa: E402
     TEAM_FACING as KIT_TEAM_FACING,
     title_of,
 )
+from mcm_workflow_kit.paper_structure import first_model_entry, toc_entries  # noqa: E402
+
+# Diagnostics, not Kit rules. The CUMCM 2026 post-mortem found five countable features that
+# set its paper apart from all 17 award papers: no contrast words, the fewest words that
+# interpret a result, the most semicolons, the most self-limiting sentences, and a first
+# question that began on page 11. These are the English counterparts, measured here so our
+# own papers can be read against the corpus. None is a gate: a count like "but per 10k
+# words" is satisfied mechanically the day it becomes a threshold.
+CONTRAST = re.compile(
+    r"\b(?:but|however|whereas|although|though|yet|nevertheless|nonetheless|instead|in contrast|"
+    r"on the other hand|on the contrary|despite|surprisingly|unexpectedly|contrary to|rather than)\b",
+    re.I,
+)
+REASONING = re.compile(
+    r"\b(?:because|therefore|thus|hence|consequently|as a result|the reason|explains? why|"
+    r"(?:this|which|that) (?:means|suggests|indicates|implies|shows|explains)|"
+    r"we (?:find|found|observe|observed|conclude|infer|expect|expected|hypothesi[sz]e|conjecture)|"
+    r"(?:indicat|suggest|impl|reveal|show)(?:s|es|ies|ed|ing)? that)\b",
+    re.I,
+)
 
 WORD_RE = re.compile(r"[A-Za-z][A-Za-z'-]*")
 ACRONYM_RE = re.compile(r"(?<![A-Za-z])[A-Z][A-Za-z0-9-]*[A-Z][A-Za-z0-9-]*(?![A-Za-z])")
@@ -135,7 +155,20 @@ def measure(pdf: Path) -> dict | None:
     landscape = sum(1 for (w, h), r in zip(sizes, rots or ["0"] * len(sizes))
                     if (float(w) > float(h)) != (int(r) in (90, 270)))
     title = title_of(first)
+    first_model = first_model_entry(toc_entries(pdf))
+    numbered = {"fig": set(), "tab": set()}
+    for page in pages[:refs_at]:
+        for line in page.splitlines():
+            cap = CAPTION.match(line)
+            if cap:
+                numbered["fig" if cap.group(1).lower().startswith("fig") else "tab"].add(int(cap.group(2)))
     return {
+        "first_model_page": first_model.page if first_model else None,
+        "figures": len(numbered["fig"]),
+        "tables": len(numbered["tab"]),
+        "contrast_rate": 1e4 * len(CONTRAST.findall(flat)) / n_words,
+        "reasoning_rate": 1e4 * len(REASONING.findall(flat)) / n_words,
+        "semicolon_rate": 1e4 * flat.count(";") / n_words,
         "pages": len(pages),
         "counted": refs_at,
         "words": n_words,
@@ -203,6 +236,11 @@ def main() -> int:
 
     all_caps = [c for r in rows for c in r["captions"]]
     ratio = [r["strength_items"] / r["weakness_items"] for r in rows if r["strength_items"] and r["weakness_items"]]
+    # The 25-page limit dates from 2021. Files over 40 pages are a year's papers bound together.
+    capped = [r for r in rows if r["year"] >= 2021 and r["pages"] <= 40]
+    total_pages = [float(r["pages"]) for r in capped]
+    first_model = [float(r["first_model_page"]) for r in rows if r["first_model_page"]]
+    fig_density = [r["figures"] / r["counted"] for r in rows if r["figures"] and r["pages"] <= 40]
     lines = [
         "# MCM/ICM award corpus measurements",
         "",
@@ -213,6 +251,15 @@ def main() -> int:
         "| Feature | Distribution across papers |",
         "| --- | --- |",
         f"| Counted pages (to References) | {dist(col('counted'))} |",
+        f"| Total PDF pages, 2021+ single papers (n={len(capped)}) | {dist(total_pages)}; "
+        f"under 22: {sum(1 for p in total_pages if p < 22)}, exactly 25: {sum(1 for p in total_pages if p == 25)} |",
+        f"| Page the first model section starts on (ToC readable in {len(first_model)}) | {dist(first_model)}; "
+        f"P95 {percentile(first_model, .95):.0f}; after page 7: {sum(1 for p in first_model if p > 7)} |",
+        f"| Numbered figures per counted page (captions found in {len(fig_density)}) | {dist(fig_density)}; "
+        f"P10 {percentile(fig_density, .10):.2f}; under 0.60: {sum(1 for d in fig_density if d < 0.60)} |",
+        f"| Contrast words per 10k (but, however, whereas, ...) | {dist(col('contrast_rate'))} |",
+        f"| Reasoning words per 10k (because, therefore, this suggests, ...) | {dist(col('reasoning_rate'))} |",
+        f"| Semicolons per 10k words | {dist(col('semicolon_rate'))} |",
         f"| Words per body page, median | {dist(col('median_words_page'))} |",
         f"| Words per body page, P75 | {dist(col('p75_words_page'))} |",
         f"| Summary words (before Keywords) | {dist(col('summary_words'))} |",
@@ -258,21 +305,31 @@ def main() -> int:
         lines.extend(["", "## Our papers, measured the same way", "",
                       "| Paper | Counted pp | Words/pp (med) | Words/pp (P75) | Summary words | Numbers | Hedges/10k | Title |",
                       "| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |"])
+        compared = []
         for extra in args.compare:
             rec = measure(Path(extra))
             if rec is None:
                 lines.append(f"| {extra} | (no usable text layer) |")
                 continue
+            name = Path(extra).parent.parent.name if Path(extra).name == "main.pdf" else Path(extra).stem
+            compared.append((name, rec))
             lines.append(
-                f"| {Path(extra).parent.parent.name} | {rec['counted']} | {rec['median_words_page']:.0f} | "
+                f"| {name} | {rec['counted']} | {rec['median_words_page']:.0f} | "
                 f"{rec['p75_words_page']:.0f} | {rec['summary_words']} | {rec['summary_numbers']} | "
                 f"{rec['hedge_rate']:.2f} | {rec['title'][:60]} |")
+        lines.extend(["", "| Paper | Total pp | First model page | Figures/pp | Contrast/10k | Reasoning/10k | Semicolons/10k |",
+                      "| --- | ---: | ---: | ---: | ---: | ---: | ---: |"])
+        for name, rec in compared:
+            lines.append(
+                f"| {name} | {rec['pages']} | {rec['first_model_page'] or 'n/a'} | "
+                f"{rec['figures'] / max(1, rec['counted']):.2f} | {rec['contrast_rate']:.1f} | "
+                f"{rec['reasoning_rate']:.1f} | {rec['semicolon_rate']:.1f} |")
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    print("\n".join(lines[:40]))
+    print("\n".join(lines[:48]))
     if args.compare:
-        print("\n".join(lines[-(len(args.compare) + 4):]))
+        print("\n".join(lines[-(2 * len(args.compare) + 8):]))
     print(f"\nwritten {out}")
     return 0
 

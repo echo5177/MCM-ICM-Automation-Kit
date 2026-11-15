@@ -77,8 +77,8 @@ agent follows the paper standards while writing.
 - [ ] `submission_checker` clean: one control number on the Summary Sheet and every page
       header, no names, school or e-mail (PDF properties included), the AI report after the
       references, at most 25 counted pages. Set `submission_pdf` to the file you will upload,
-      named `<control number>.pdf` and under 25 MB.
-- [ ] Whole gate green (`v2_gate` says CONTEST-READY) AND a human has eyeballed the PDF.
+      named `<control number>.pdf` and under 20 MB (the instructions say 25, COMAP's tips say 20).
+- [ ] Whole gate green (`v2_gate` says NO KNOWN DEFECTS, which is not a forecast of the award) AND a human has read the PDF.
 - [ ] `python MCM_Workflow_Automation_Kit/scripts/create_release_packet.py --project-root .`
 - [ ] Commit. Keep the repo Private until after the contest.
 

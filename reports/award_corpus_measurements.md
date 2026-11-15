@@ -6,35 +6,41 @@
 | Feature | Distribution across papers |
 | --- | --- |
 | Counted pages (to References) | min 17.00 · P25 21.00 · median 23.00 · P75 24.00 · P90 25.00 · max 43.00 |
-| Words per body page, median | min 191.00 · P25 258.00 · median 298.00 · P75 341.00 · P90 380.50 · max 483.50 |
-| Words per body page, P75 | min 233.00 · P25 324.00 · median 366.00 · P75 409.00 · P90 460.00 · max 902.00 |
-| Summary words (before Keywords) | min 11.00 · P25 419.00 · median 475.00 · P75 531.00 · P90 592.00 · max 794.00 |
+| Total PDF pages, 2021+ single papers (n=70) | min 22.00 · P25 25.00 · median 25.00 · P75 25.00 · P90 25.00 · max 26.00; under 22: 0, exactly 25: 51 |
+| Page the first model section starts on (ToC readable in 107) | min 1.00 · P25 4.00 · median 4.00 · P75 5.00 · P90 6.00 · max 9.00; P95 7; after page 7: 4 |
+| Numbered figures per counted page (captions found in 113) | min 0.08 · P25 0.42 · median 0.58 · P75 0.70 · P90 0.83 · max 1.00; P10 0.29; under 0.60: 59 |
+| Contrast words per 10k (but, however, whereas, ...) | min 2.55 · P25 15.06 · median 23.11 · P75 32.97 · P90 41.95 · max 63.00 |
+| Reasoning words per 10k (because, therefore, this suggests, ...) | min 7.06 · P25 34.57 · median 42.91 · P75 51.66 · P90 63.21 · max 90.31 |
+| Semicolons per 10k words | min 0.00 · P25 3.80 · median 10.62 · P75 25.13 · P90 45.02 · max 229.56 |
+| Words per body page, median | min 191.00 · P25 259.50 · median 295.00 · P75 341.00 · P90 378.00 · max 485.00 |
+| Words per body page, P75 | min 237.00 · P25 325.00 · median 361.00 · P75 409.00 · P90 450.00 · max 560.00 |
+| Summary words (before Keywords) | min 10.00 · P25 424.00 · median 479.00 · P75 531.00 · P90 592.00 · max 794.00 |
 | Distinct acronyms in summary | min 0.00 · P25 1.00 · median 3.00 · P75 6.00 · P90 8.00 · max 16.00 |
 | Numbers in summary | min 2.00 · P25 8.00 · median 14.00 · P75 21.00 · P90 27.00 · max 47.00 |
-| Keywords line on page 1 | 118/147 |
-| Title words (title found in 94) | min 3.00 · P25 6.00 · median 8.00 · P75 12.00 · P90 13.00 · max 47.00 |
-| Title with colon / with dash | 35 / 1 |
-| Hedges per 10k words | min 0.00 · P25 0.00 · median 0.00 · P75 1.00 · P90 1.72 · max 6.12 |
-| Papers with 0 hedges | 110/147 |
-| Caption words (all captions, n=2277) | min 0.00 · P25 4.00 · median 7.00 · P75 15.00 · P90 46.00 · max 106.00 |
-| Captions with 2+ sentences | 344 of 2277 |
-| Captions over 40 / 60 words | 295 / 48 of 2277; P95 55 |
-| Summaries with fewer than 3 numbers | 4/147 |
+| Keywords line on page 1 | 113/147 |
+| Title words (title found in 89) | min 3.00 · P25 6.00 · median 9.00 · P75 12.00 · P90 16.00 · max 47.00 |
+| Title with colon / with dash | 34 / 1 |
+| Hedges per 10k words | min 0.00 · P25 0.00 · median 0.00 · P75 1.02 · P90 1.78 · max 6.16 |
+| Papers with 0 hedges | 109/147 |
+| Caption words (all captions, n=2206) | min 1.00 · P25 5.00 · median 8.00 · P75 26.00 · P90 70.00 · max 295.00 |
+| Captions with 2+ sentences | 462 of 2206 |
+| Captions over 40 / 60 words | 428 / 284 of 2206; P95 96 |
+| Summaries with fewer than 3 numbers | 5/147 |
 | Summary acronyms never used in the body | 55/147 papers: [('2025_C_O/2500759.pdf', ['Difference-in-Differences', 'SHapley', 'Short-Term']), ('2025_C_O/2501869.pdf', ['Hurdle-Tobit']), ('原始文件/2018年/A/A76082.pdf', ['IEEE']), ('原始文件/2018年/A/A77845.pdf', ['MovingShip-Receiving-Signal']), ('原始文件/2018年/A/A88255.pdf', ['HF']), ('原始文件/2018年/C/C78577.pdf', ['MAUA']), ('原始文件/2018年/C/C80560.pdf', ['MDS']), ('原始文件/2018年/C/C82150.pdf', ['EM-TOPSISPROMETHEE'])] |
 | Papers with 5+ hedges and > 3 per 10k words | 0/147 |
-| Titles over 16 words (extraction-checked below) | ['(Your team’s summary should be included as the ﬁrst page of your electronic submission.) Type a summary of your results on this page. Do not include the name of your school, advisor, or team members on this page. Teamwork Analysis of Huskies Based on Passing Networks', 'Disaster for Island Country but Games of Big Power: Find new home for EDPs and their culture', 'Is There Space for More? A Spatiotemporal Partial Differential Equations Model for Plant Growth During Drought Cycles', 'Turn off the lights, Turn on the stars! “On the earth, even in the darkest night, the light never wholly abandons his rule.“ ——— Jules Verne, Journey to the Center of the Earth.'] |
+| Titles over 16 words (extraction-checked below) | ['For ofﬁce use only F1 F2 F3 F4 MHPM and MSRSM: Simulation and Modeling of Multi-hop HF Radio Propagation', 'For ofﬁce use only F1 F2 F3 F4 Language Population Projection and Location Optimizaion Model Based on Inhomogeneous Transition Matrix and Simulated Annealing Algorithm', 'For ofﬁce use only F1 F2 F3 F4 A Setting System of Interstate Energy Cooperation Goals Based on Data Insight', 'For ofﬁce use only F1 F2 F3 F4 A Probabilistic Model of the Relationships between Countries and Climate Change', 'For ofﬁce use only F1 F2 F3 F4 Long May They Reign: How Majestic Dragons Can Survive In The New Realm'] |
 | Title with a dash | ['Turn off the lights, Turn on the stars! “On the earth, even in the darkest night, the light never wholly abandons his rule.“ ——— Jules Verne, Journey to the Center of the Earth.'] |
-| Strengths/weaknesses item ratio (n=8) | min 0.22 · P25 1.00 · median 1.00 · P75 3.00 · P90 4.12 · max 4.67 |
-| Papers with strength list >= 2x weakness list | 3/8 |
+| Strengths/weaknesses item ratio (n=7) | min 0.50 · P25 1.00 · median 1.00 · P75 1.50 · P90 3.00 · max 5.17 |
+| Papers with strength list >= 2x weakness list | 2/7 |
 | Team-facing / tool traces | 0 papers: [] |
-| Millisecond runtimes | 0 papers |
+| Millisecond runtimes | 1 papers |
 | Script file names (.py/.m/.R) | 1 papers: [['usegbdt.py']] |
-| snake_case tokens per paper | min 0.00 · P25 0.00 · median 0.00 · P75 1.00 · P90 5.00 · max 122.00 |
+| snake_case tokens per paper | min 0.00 · P25 0.00 · median 0.00 · P75 1.00 · P90 5.00 · max 119.00 |
 | Solver-parameter strings | 1 papers |
-| Repeated words ('the the') per paper | min 0.00 · P25 1.00 · median 1.00 · P75 3.00 · P90 7.00 · max 19.00 |
+| Repeated words ('the the') per paper | min 0.00 · P25 1.00 · median 1.00 · P75 3.00 · P90 6.00 · max 51.00 |
 | Landscape pages | 0 papers |
-| Control number in page header (share of body pages) | min 0.00 · P25 0.78 · median 0.96 · P75 1.00 · P90 1.00 · max 1.00 |
-| 'Justification' mentions per paper | min 0.00 · P25 0.00 · median 0.00 · P75 0.00 · P90 4.00 · max 27.00 |
+| Control number in page header (share of body pages) | min 0.00 · P25 0.82 · median 0.96 · P75 1.00 · P90 1.00 · max 1.00 |
+| 'Justification' mentions per paper | min 0.00 · P25 0.00 · median 0.00 · P75 0.00 · P90 2.00 · max 9.00 |
 | AI report section | 2/147 |
 
 ## Per paper
@@ -42,156 +48,163 @@
 | Paper | Year | Prob | Counted pp | Words/pp (med) | Summary words | Acronyms | Hedges/10k | Title |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | 原始文件/2018年/A/A76082.pdf | 2018 | A | 24 | 219 | 460 | 3 | 0.00 | HF Radio Propagation under Different Terrains |
-| 原始文件/2018年/A/A76271.pdf | 2018 | A | 23 | 338 | 485 | 3 | 0.00 |  |
-| 原始文件/2018年/A/A77845.pdf | 2018 | A | 21 | 232 | 367 | 4 | 0.00 | MHPM and MSRSM: Simulation and Modeling of Multi-hop HF Radi |
-| 原始文件/2018年/A/A86103.pdf | 2018 | A | 22 | 214 | 434 | 3 | 0.00 | Simulation Analysis of Multi-hop HF Radio |
+| 原始文件/2018年/A/A76271.pdf | 2018 | A | 23 | 343 | 484 | 3 | 0.00 |  |
+| 原始文件/2018年/A/A77845.pdf | 2018 | A | 21 | 236 | 375 | 4 | 0.00 | For ofﬁce use only F1 F2 F3 F4 MHPM and MSRSM: Simulation an |
+| 原始文件/2018年/A/A86103.pdf | 2018 | A | 22 | 217 | 449 | 3 | 0.00 | For ofﬁce use only F1 F2 F3 F4 Simulation Analysis of Multi- |
 | 原始文件/2018年/A/A88255.pdf | 2018 | A | 20 | 246 | 560 | 5 | 0.00 |  |
-| 原始文件/2018年/B/B73410.pdf | 2018 | B | 23 | 288 | 286 | 0 | 3.56 | Language Population Projection and Location Optimizaion Mode |
+| 原始文件/2018年/B/B73410.pdf | 2018 | B | 23 | 300 | 292 | 0 | 3.51 | For ofﬁce use only F1 F2 F3 F4 Language Population Projectio |
 | 原始文件/2018年/B/B74316.pdf | 2018 | B | 38 | 191 | 794 | 3 | 0.00 |  |
-| 原始文件/2018年/B/B77238.pdf | 2018 | B | 23 | 288 | 339 | 1 | 0.00 |  |
+| 原始文件/2018年/B/B77238.pdf | 2018 | B | 23 | 288 | 339 | 1 | 0.00 | For office use only T1 ________________ T2 ________________  |
 | 原始文件/2018年/B/B79002.pdf | 2018 | B | 29 | 234 | 479 | 2 | 1.46 |  |
-| 原始文件/2018年/B/B91566.pdf | 2018 | B | 21 | 307 | 369 | 0 | 0.00 | Forecasting the Language Distribution |
-| 原始文件/2018年/C/C73767.pdf | 2018 | C | 22 | 217 | 400 | 6 | 0.00 | A Setting System of Interstate Energy Cooperation Goals Base |
+| 原始文件/2018年/B/B91566.pdf | 2018 | B | 21 | 306 | 381 | 0 | 0.00 | For ofﬁce use only F1 F2 F3 F4 Forecasting the Language Dist |
+| 原始文件/2018年/C/C73767.pdf | 2018 | C | 22 | 214 | 411 | 6 | 0.00 | For ofﬁce use only F1 F2 F3 F4 A Setting System of Interstat |
 | 原始文件/2018年/C/C78577.pdf | 2018 | C | 21 | 213 | 436 | 8 | 0.00 | Sustainable Energy Assessment |
-| 原始文件/2018年/C/C80560.pdf | 2018 | C | 21 | 212 | 447 | 6 | 0.00 |  |
+| 原始文件/2018年/C/C80560.pdf | 2018 | C | 21 | 215 | 455 | 6 | 0.00 | For ofﬁce use only T1 T2 T3 T4 |
 | 原始文件/2018年/C/C82150.pdf | 2018 | C | 22 | 274 | 296 | 2 | 0.00 |  |
-| 原始文件/2018年/D/D73156.pdf | 2018 | D | 28 | 310 | 508 | 1 | 0.00 |  |
-| 原始文件/2018年/D/D78826.pdf | 2018 | D | 19 | 294 | 460 | 0 | 0.00 | A Design of Elecomb |
-| 原始文件/2018年/D/D80386.pdf | 2018 | D | 23 | 237 | 567 | 0 | 0.00 |  |
-| 原始文件/2018年/D/D81402.pdf | 2018 | D | 21 | 234 | 604 | 3 | 0.00 |  |
-| 原始文件/2018年/D/D82504.pdf | 2018 | D | 21 | 256 | 480 | 1 | 0.00 |  |
-| 原始文件/2018年/D/D82794.pdf | 2018 | D | 24 | 270 | 394 | 3 | 0.00 | How to achieve the full adoption of all-electric vehicles |
-| 原始文件/2018年/E/E72968.pdf | 2018 | E | 23 | 318 | 390 | 2 | 0.00 | SPEC: A Climate-based Fragility Model |
-| 原始文件/2018年/E/E73119.pdf | 2018 | E | 20 | 217 | 452 | 8 | 0.00 |  |
-| 原始文件/2018年/E/E74971.pdf | 2018 | E | 22 | 277 | 466 | 7 | 0.00 | Climate counts! Less Fragility & better Countries |
-| 原始文件/2018年/E/E78511.pdf | 2018 | E | 22 | 394 | 475 | 1 | 0.00 |  |
-| 原始文件/2018年/E/E88902.pdf | 2018 | E | 21 | 378 | 652 | 12 | 0.00 | A Probabilistic Model of the Relationships between Countries |
-| 原始文件/2018年/E/E89499.pdf | 2018 | E | 21 | 239 | 395 | 3 | 0.00 |  |
-| 原始文件/2018年/E/E93840.pdf | 2018 | E | 22 | 278 | 226 | 0 | 0.00 |  |
-| 原始文件/2018年/F/F83744.pdf | 2018 | F | 25 | 484 | 494 | 2 | 0.00 |  |
-| 原始文件/2018年/F/F87280.pdf | 2018 | F | 31 | 202 | 323 | 3 | 0.00 |  |
+| 原始文件/2018年/D/D73156.pdf | 2018 | D | 28 | 308 | 508 | 1 | 0.00 |  |
+| 原始文件/2018年/D/D78826.pdf | 2018 | D | 19 | 294 | 460 | 0 | 0.00 |  |
+| 原始文件/2018年/D/D80386.pdf | 2018 | D | 23 | 236 | 567 | 0 | 0.00 |  |
+| 原始文件/2018年/D/D81402.pdf | 2018 | D | 21 | 236 | 604 | 3 | 0.00 |  |
+| 原始文件/2018年/D/D82504.pdf | 2018 | D | 21 | 260 | 494 | 1 | 0.00 |  |
+| 原始文件/2018年/D/D82794.pdf | 2018 | D | 24 | 275 | 400 | 3 | 0.00 | How to achieve the full adoption of all-electric vehicles |
+| 原始文件/2018年/E/E72968.pdf | 2018 | E | 23 | 322 | 393 | 2 | 0.00 | For ofﬁce use only F1 F2 F3 F4 SPEC: A Climate-based Fragili |
+| 原始文件/2018年/E/E73119.pdf | 2018 | E | 20 | 217 | 458 | 8 | 0.00 |  |
+| 原始文件/2018年/E/E74971.pdf | 2018 | E | 22 | 277 | 467 | 7 | 0.00 | Climate counts! Less Fragility & better Countries |
+| 原始文件/2018年/E/E78511.pdf | 2018 | E | 22 | 394 | 485 | 1 | 0.00 |  |
+| 原始文件/2018年/E/E88902.pdf | 2018 | E | 21 | 376 | 661 | 12 | 0.00 | For ofﬁce use only F1 F2 F3 F4 A Probabilistic Model of the  |
+| 原始文件/2018年/E/E89499.pdf | 2018 | E | 21 | 238 | 395 | 3 | 0.00 |  |
+| 原始文件/2018年/E/E93840.pdf | 2018 | E | 22 | 282 | 227 | 0 | 0.00 |  |
+| 原始文件/2018年/F/F83744.pdf | 2018 | F | 25 | 485 | 494 | 2 | 0.00 |  |
+| 原始文件/2018年/F/F87280.pdf | 2018 | F | 31 | 201 | 323 | 3 | 0.00 |  |
 | 原始文件/2018年/F/F88508.pdf | 2018 | F | 21 | 343 | 642 | 5 | 0.00 |  |
-| 原始文件/2018年/F/F93036.pdf | 2018 | F | 25 | 327 | 423 | 8 | 0.00 | PIPE: Estimate the Value of Private Information |
-| 原始文件/2019年/1908286.pdf | 2019 | ? | 20 | 292 | 455 | 7 | 0.00 |  |
-| 原始文件/2019年/1910246.pdf | 2019 | ? | 24 | 274 | 450 | 1 | 0.00 | Long May They Reign: How Majestic Dragons Can Survive In The |
-| 原始文件/2019年/1919022.pdf | 2019 | ? | 24 | 285 | 389 | 0 | 0.00 | Dragons and Ecosystem: 1 + n Meta-population Model |
-| 原始文件/2019年/1924588.pdf | 2019 | ? | 25 | 253 | 387 | 8 | 1.52 | Multi-Directional Comprehensive Disaster Response System Bas |
-| 原始文件/2019年/2019年美赛优秀论文--Dragon and Ecology.pdf | 2019 | ? | 23 | 330 | 446 | 1 | 0.00 | Dragon and Ecology |
-| 原始文件/2019年/Although George R.R. Martin’s series A Song of Ice and Fire falls under the cat.pdf | 2019 | ? | 23 | 444 | 504 | 2 | 0.00 |  |
-| 原始文件/2020年/2020A/2001334.pdf | 2020 | A | 22 | 226 | 640 | 3 | 0.00 |  |
-| 原始文件/2020年/2020A/2002354.pdf | 2020 | A | 25 | 304 | 515 | 1 | 0.00 | Fish Migration Prediction and Fishery Suggestions under Mari |
-| 原始文件/2020年/2020A/2003298.pdf | 2020 | A | 22 | 298 | 572 | 1 | 0.00 |  |
-| 原始文件/2020年/2020A/2003485.pdf | 2020 | A | 21 | 329 | 625 | 2 | 0.00 |  |
-| 原始文件/2020年/2020A/2004833.pdf | 2020 | A | 34 | 241 | 492 | 0 | 0.00 |  |
+| 原始文件/2018年/F/F93036.pdf | 2018 | F | 25 | 330 | 427 | 8 | 0.00 | For ofﬁce use only F1 F2 F3 F4 PIPE: Estimate the Value of P |
+| 原始文件/2019年/1908286.pdf | 2019 | ? | 20 | 290 | 463 | 7 | 0.00 |  |
+| 原始文件/2019年/1910246.pdf | 2019 | ? | 24 | 277 | 452 | 1 | 0.00 | For ofﬁce use only F1 F2 F3 F4 Long May They Reign: How Maje |
+| 原始文件/2019年/1919022.pdf | 2019 | ? | 24 | 287 | 393 | 0 | 0.00 | Dragons and Ecosystem: 1 + n Meta-population Model |
+| 原始文件/2019年/1924588.pdf | 2019 | ? | 25 | 251 | 387 | 8 | 1.54 | Multi-Directional Comprehensive Disaster Response System Bas |
+| 原始文件/2019年/2019年美赛优秀论文--Dragon and Ecology.pdf | 2019 | ? | 23 | 330 | 446 | 1 | 0.00 | For office use only F1 F2 F3 F4 Dragon and Ecology |
+| 原始文件/2019年/Although George R.R. Martin’s series A Song of Ice and Fire falls under the cat.pdf | 2019 | ? | 23 | 459 | 510 | 2 | 0.00 |  |
+| 原始文件/2020年/2020A/2001334.pdf | 2020 | A | 22 | 220 | 640 | 3 | 0.00 |  |
+| 原始文件/2020年/2020A/2002354.pdf | 2020 | A | 25 | 303 | 514 | 0 | 0.00 |  |
+| 原始文件/2020年/2020A/2003298.pdf | 2020 | A | 22 | 302 | 572 | 1 | 0.00 |  |
+| 原始文件/2020年/2020A/2003485.pdf | 2020 | A | 21 | 328 | 625 | 2 | 0.00 |  |
+| 原始文件/2020年/2020A/2004833.pdf | 2020 | A | 34 | 226 | 492 | 0 | 0.00 |  |
 | 原始文件/2020年/2020A/2007799.pdf | 2020 | A | 22 | 306 | 501 | 4 | 1.39 | Under Global Warming: Small Scottish Fishing Companies Busin |
-| 原始文件/2020年/2020A/2017785.pdf | 2020 | A | 22 | 360 | 619 | 1 | 1.22 |  |
-| 原始文件/2020年/2020B/2007698.pdf | 2020 | B | 21 | 322 | 484 | 0 | 0.00 | A Simulation Based Assessment of Sandcastle Foundation |
-| 原始文件/2020年/2020B/2010821.pdf | 2020 | B | 22 | 291 | 422 | 3 | 6.12 | How to build a durable sandcastle foundation? |
-| 原始文件/2020年/2020B/2011873.pdf | 2020 | B | 23 | 204 | 376 | 2 | 0.00 |  |
-| 原始文件/2020年/2020B/2019696.pdf | 2020 | B | 24 | 250 | 510 | 0 | 0.00 | Optimal 3D Sandcastle Shape under Erosion |
-| 原始文件/2020年/2020C/2002116.pdf | 2020 | C | 24 | 395 | 406 | 3 | 0.00 | Riddle of Sphinx: Cracking the Secret of Amazon’s Ratings an |
-| 原始文件/2020年/2020C/2003717.pdf | 2020 | C | 24 | 273 | 694 | 2 | 1.36 |  |
-| 原始文件/2020年/2020C/2004647.pdf | 2020 | C | 24 | 402 | 416 | 1 | 1.07 | Good Morning Sunshine: A Rating and Review Based Analysis |
-| 原始文件/2020年/2020C/2009116.pdf | 2020 | C | 24 | 399 | 480 | 2 | 1.00 | Market data tracking measurement based on sentiment analysis |
-| 原始文件/2020年/2020C/2010638.pdf | 2020 | C | 43 | 240 | 461 | 2 | 0.00 | Sales Strategy Recommendation Based on Commodity Data Mining |
-| 原始文件/2020年/2020D/2002526.pdf | 2020 | D | 18 | 335 | 512 | 1 | 0.00 | Improving Team Performance During a Football Match |
-| 原始文件/2020年/2020D/2003723.pdf | 2020 | D | 25 | 297 | 496 | 1 | 0.00 |  |
-| 原始文件/2020年/2020D/2006782.pdf | 2020 | D | 22 | 305 | 465 | 2 | 0.00 | Teaming Wisdom Coming from Soccer Field |
-| 原始文件/2020年/2020D/2013140.pdf | 2020 | D | 21 | 365 | 678 | 6 | 0.00 | Make Your Team Stronger: Analysis on Network and Team Perfor |
+| 原始文件/2020年/2020A/2017785.pdf | 2020 | A | 22 | 374 | 626 | 0 | 1.22 |  |
+| 原始文件/2020年/2020B/2007698.pdf | 2020 | B | 21 | 298 | 487 | 0 | 0.00 | A Simulation Based Assessment of Sandcastle Foundation |
+| 原始文件/2020年/2020B/2010821.pdf | 2020 | B | 22 | 289 | 421 | 2 | 6.16 | How to build a durable sandcastle foundation? |
+| 原始文件/2020年/2020B/2011873.pdf | 2020 | B | 23 | 202 | 376 | 2 | 0.00 |  |
+| 原始文件/2020年/2020B/2019696.pdf | 2020 | B | 24 | 249 | 510 | 0 | 0.00 | Optimal 3D Sandcastle Shape under Erosion |
+| 原始文件/2020年/2020C/2002116.pdf | 2020 | C | 24 | 357 | 410 | 3 | 0.00 | Riddle of Sphinx: Cracking the Secret of Amazon’s Ratings an |
+| 原始文件/2020年/2020C/2003717.pdf | 2020 | C | 24 | 272 | 694 | 2 | 1.37 |  |
+| 原始文件/2020年/2020C/2004647.pdf | 2020 | C | 24 | 393 | 416 | 1 | 1.12 | Good Morning Sunshine: A Rating and Review Based Analysis |
+| 原始文件/2020年/2020C/2009116.pdf | 2020 | C | 24 | 398 | 480 | 2 | 1.00 |  |
+| 原始文件/2020年/2020C/2010638.pdf | 2020 | C | 43 | 237 | 461 | 2 | 0.00 | Sales Strategy Recommendation Based on Commodity Data Mining |
+| 原始文件/2020年/2020D/2002526.pdf | 2020 | D | 18 | 334 | 512 | 1 | 0.00 |  |
+| 原始文件/2020年/2020D/2003723.pdf | 2020 | D | 25 | 296 | 496 | 1 | 0.00 |  |
+| 原始文件/2020年/2020D/2006782.pdf | 2020 | D | 22 | 292 | 465 | 2 | 0.00 | Teaming Wisdom Coming from Soccer Field |
+| 原始文件/2020年/2020D/2013140.pdf | 2020 | D | 21 | 364 | 665 | 6 | 0.00 | Make Your Team Stronger: Analysis on Network and Team Perfor |
 | 原始文件/2020年/2020D/2013245.pdf | 2020 | D | 17 | 230 | 382 | 0 | 0.00 |  |
-| 原始文件/2020年/2020D/2015044.pdf | 2020 | D | 21 | 207 | 349 | 0 | 0.00 | (Your team’s summary should be included as the ﬁrst page of  |
-| 原始文件/2020年/2020D/2022868.pdf | 2020 | D | 22 | 408 | 11 | 1 | 1.19 |  |
-| 原始文件/2020年/2020E/2008521.pdf | 2020 | E | 26 | 268 | 392 | 6 | 0.00 |  |
-| 原始文件/2020年/2020E/2010035.pdf | 2020 | E | 25 | 206 | 399 | 4 | 1.84 | An Integrated Production-Waste-Harm Model Based on Combinati |
-| 原始文件/2020年/2020E/2016287.pdf | 2020 | E | 24 | 348 | 492 | 6 | 1.07 | Global Disposable Plastic Waste Crisis |
-| 原始文件/2020年/2020E/2017963.pdf | 2020 | E | 19 | 380 | 516 | 7 | 0.00 |  |
-| 原始文件/2020年/2020E/2021103.pdf | 2020 | E | 23 | 398 | 455 | 1 | 0.00 |  |
-| 原始文件/2020年/2020F/2005623.pdf | 2020 | F | 21 | 278 | 415 | 8 | 0.00 | The Wandering Homeland |
-| 原始文件/2020年/2020F/2006291.pdf | 2020 | F | 23 | 316 | 539 | 6 | 1.37 | NOT ME,US! |
-| 原始文件/2020年/2020F/2009139.pdf | 2020 | F | 22 | 371 | 454 | 1 | 0.00 | Disaster for Island Country but Games of Big Power: Find new |
-| 原始文件/2020年/2020F/2013233.pdf | 2020 | F | 21 | 462 | 701 | 5 | 2.16 |  |
-| 原始文件/2020年/2020F/2013733.pdf | 2020 | F | 24 | 272 | 305 | 2 | 0.00 | Comprehensive policy models developed for EDPs |
-| 原始文件/2020年/2020F/2013772.pdf | 2020 | F | 20 | 301 | 503 | 15 | 0.00 | Models for EDPs Relocation and Relative Policies |
-| 原始文件/2021年/2021A/A  2100454.pdf | 2021 | A | 22 | 256 | 487 | 1 | 0.00 | GAME: A Seer on Fungi Living Strategies and Biodiversity Bas |
+| 原始文件/2020年/2020D/2015044.pdf | 2020 | D | 21 | 192 | 349 | 0 | 0.00 | (Your team’s summary should be included as the ﬁrst page of  |
+| 原始文件/2020年/2020D/2022868.pdf | 2020 | D | 22 | 405 | 10 | 0 | 1.21 |  |
+| 原始文件/2020年/2020E/2008521.pdf | 2020 | E | 26 | 267 | 392 | 6 | 0.00 |  |
+| 原始文件/2020年/2020E/2010035.pdf | 2020 | E | 25 | 205 | 399 | 4 | 1.86 | An Integrated Production-Waste-Harm Model Based on Combinati |
+| 原始文件/2020年/2020E/2016287.pdf | 2020 | E | 24 | 347 | 492 | 6 | 1.10 | Global Disposable Plastic Waste Crisis |
+| 原始文件/2020年/2020E/2017963.pdf | 2020 | E | 19 | 378 | 519 | 6 | 0.00 |  |
+| 原始文件/2020年/2020E/2021103.pdf | 2020 | E | 23 | 392 | 454 | 0 | 0.00 |  |
+| 原始文件/2020年/2020F/2005623.pdf | 2020 | F | 21 | 256 | 416 | 8 | 0.00 | The Wandering Homeland |
+| 原始文件/2020年/2020F/2006291.pdf | 2020 | F | 23 | 310 | 538 | 5 | 1.38 | NOT ME,US! |
+| 原始文件/2020年/2020F/2009139.pdf | 2020 | F | 22 | 355 | 459 | 1 | 0.00 | Disaster for Island Country but Games of Big Power: Find new |
+| 原始文件/2020年/2020F/2013233.pdf | 2020 | F | 21 | 440 | 700 | 4 | 2.26 |  |
+| 原始文件/2020年/2020F/2013733.pdf | 2020 | F | 24 | 269 | 305 | 2 | 0.00 | Comprehensive policy models developed for EDPs |
+| 原始文件/2020年/2020F/2013772.pdf | 2020 | F | 20 | 274 | 511 | 14 | 0.00 | Models for EDPs Relocation and Relative Policies |
+| 原始文件/2021年/2021A/A  2100454.pdf | 2021 | A | 22 | 261 | 490 | 1 | 0.00 | GAME: A Seer on Fungi Living Strategies and Biodiversity Bas |
 | 原始文件/2021年/2021A/A  2101951.pdf | 2021 | A | 21 | 322 | 560 | 1 | 1.44 |  |
-| 原始文件/2021年/2021A/A  2103782.pdf | 2021 | A | 21 | 312 | 474 | 0 | 1.52 | Tiny Fungi: The Defender of Carbon Cycle Balance |
+| 原始文件/2021年/2021A/A  2103782.pdf | 2021 | A | 21 | 311 | 474 | 0 | 1.52 | Tiny Fungi: The Defender of Carbon Cycle Balance |
 | 原始文件/2021年/2021A/A  2110178.pdf | 2021 | A | 23 | 289 | 449 | 9 | 0.00 | Fungi that Change the Earth |
-| 原始文件/2021年/2021A/A  2120808.pdf | 2021 | A | 23 | 279 | 464 | 0 | 0.00 | Cleaner of the Earth: Fungi |
+| 原始文件/2021年/2021A/A  2120808.pdf | 2021 | A | 23 | 280 | 464 | 0 | 0.00 | Cleaner of the Earth: Fungi |
 | 原始文件/2021年/2021B/B   2102199.pdf | 2021 | B | 23 | 294 | 592 | 7 | 0.00 |  |
 | 原始文件/2021年/2021B/B   2104673.pdf | 2021 | B | 19 | 232 | 407 | 3 | 0.00 | ‘Rapid Bushfire Response’ UAV System |
-| 原始文件/2021年/2021B/B   2105363.pdf | 2021 | B | 24 | 319 | 578 | 3 | 0.00 | Rapid Bushfire Response for Emergency Response |
+| 原始文件/2021年/2021B/B   2105363.pdf | 2021 | B | 24 | 321 | 584 | 3 | 0.00 | Rapid Bushﬁre Response for Emergency Response |
 | 原始文件/2021年/2021B/B   2116496.pdf | 2021 | B | 25 | 258 | 598 | 10 | 0.00 |  |
 | 原始文件/2021年/2021B/B   2127300.pdf | 2021 | B | 25 | 241 | 436 | 4 | 0.00 | Rapid Bushfire Response System |
 | 原始文件/2021年/2021C/C  2101166.pdf | 2021 | C | 21 | 358 | 516 | 2 | 0.00 | Fight for Washington State: Can Artiﬁcial Intelligence Beat  |
-| 原始文件/2021年/2021C/C  2101587.pdf | 2021 | C | 21 | 262 | 410 | 2 | 0.00 | Fighting the Horde: a Comprehensive Model for Monitoring and |
+| 原始文件/2021年/2021C/C  2101587.pdf | 2021 | C | 21 | 266 | 414 | 2 | 0.00 | Fighting the Horde: a Comprehensive Model for Monitoring and |
 | 原始文件/2021年/2021C/C  2107815.pdf | 2021 | C | 25 | 384 | 667 | 4 | 1.02 |  |
-| 原始文件/2021年/2021C/C  2107870.pdf | 2021 | C | 24 | 343 | 595 | 7 | 0.00 |  |
-| 原始文件/2021年/2021C/C  2109298.pdf | 2021 | C | 24 | 343 | 651 | 8 | 0.00 |  |
-| 原始文件/2021年/2021C/C  2123823.pdf | 2021 | C | 24 | 368 | 482 | 3 | 0.00 | Trace the Buzz: A Comprehensive Study on the Reports About H |
-| 原始文件/2021年/2021D/D  2100112.pdf | 2021 | D | 22 | 238 | 495 | 1 | 1.72 | Music Influence and Evolution Analysis Based on Networks |
-| 原始文件/2021年/2021D/D  2100242.pdf | 2021 | D | 21 | 314 | 465 | 1 | 0.00 | Music Never Gets Old: Study On The Development And Evolution |
+| 原始文件/2021年/2021C/C  2107870.pdf | 2021 | C | 24 | 352 | 606 | 7 | 0.00 |  |
+| 原始文件/2021年/2021C/C  2109298.pdf | 2021 | C | 24 | 345 | 663 | 8 | 0.00 |  |
+| 原始文件/2021年/2021C/C  2123823.pdf | 2021 | C | 24 | 370 | 482 | 3 | 0.00 | Trace the Buzz: A Comprehensive Study on the Reports About H |
+| 原始文件/2021年/2021D/D  2100112.pdf | 2021 | D | 22 | 246 | 509 | 1 | 1.67 | Music Inﬂuence and Evolution Analysis Based on Networks |
+| 原始文件/2021年/2021D/D  2100242.pdf | 2021 | D | 21 | 320 | 482 | 1 | 1.49 | Music Never Gets Old: Study On The Development And Evolution |
 | 原始文件/2021年/2021D/D  2101855.pdf | 2021 | D | 21 | 308 | 369 | 3 | 0.00 | Measure of Inﬂuence and Similarity in Dynamic Networks of Mu |
-| 原始文件/2021年/2021D/D  2106028.pdf | 2021 | D | 24 | 353 | 374 | 0 | 1.27 | Mining the Influence of Music Based on Social Network Analys |
-| 原始文件/2021年/2021D/D  2107091.pdf | 2021 | D | 23 | 372 | 570 | 7 | 0.00 | How Does Musical Inﬂuence Lead to Musical Revolution? |
-| 原始文件/2021年/2021D/D  2121604.pdf | 2021 | D | 21 | 326 | 462 | 1 | 0.00 | An Exploration of Music Evolution Based on Influencer Networ |
-| 原始文件/2021年/2021D/D  2124497.pdf | 2021 | D | 22 | 330 | 397 | 3 | 4.37 | How to analyze the music objectively? |
-| 原始文件/2021年/2021D/D  2124668.pdf | 2021 | D | 21 | 458 | 419 | 2 | 0.00 |  |
-| 原始文件/2021年/2021F/F  2102185.pdf | 2021 | F | 19 | 334 | 397 | 0 | 0.00 |  |
+| 原始文件/2021年/2021D/D  2106028.pdf | 2021 | D | 24 | 360 | 384 | 0 | 1.24 | Mining the Inﬂuence of Music Based on Social Network Analysi |
+| 原始文件/2021年/2021D/D  2107091.pdf | 2021 | D | 23 | 370 | 569 | 7 | 0.00 | How Does Musical Inﬂuence Lead to Musical Revolution? |
+| 原始文件/2021年/2021D/D  2121604.pdf | 2021 | D | 21 | 334 | 478 | 1 | 0.00 | An Exploration of Music Evolution Based on Inﬂuencer Network |
+| 原始文件/2021年/2021D/D  2124497.pdf | 2021 | D | 22 | 339 | 410 | 3 | 2.84 | How to analyze the music objectively? |
+| 原始文件/2021年/2021D/D  2124668.pdf | 2021 | D | 21 | 474 | 426 | 1 | 0.00 |  |
+| 原始文件/2021年/2021F/F  2102185.pdf | 2021 | F | 19 | 338 | 403 | 0 | 0.00 |  |
 | 原始文件/2021年/2021F/F  2103649.pdf | 2021 | F | 23 | 380 | 526 | 3 | 0.00 | Health Status and Treatment Plan: A Physical Examination Rep |
-| 原始文件/2021年/2021F/F  2106074.pdf | 2021 | F | 25 | 336 | 591 | 5 | 0.00 | Do a "physical examination" for the country's higher educati |
+| 原始文件/2021年/2021F/F  2106074.pdf | 2021 | F | 25 | 336 | 591 | 5 | 0.00 |  |
 | 原始文件/2021年/2021F/F  2109443.pdf | 2021 | F | 24 | 338 | 515 | 12 | 0.00 |  |
 | 原始文件/2021年/2021F/F  2122374.pdf | 2021 | F | 26 | 288 | 426 | 7 | 3.58 |  |
 | 原始文件/2021年/2021F/F  2123945.pdf | 2021 | F | 23 | 322 | 436 | 9 | 0.00 | Health Assessment of Higher Education System in Three-dimens |
-| 原始文件/2022年/A.pdf | 2022 | A | 24 | 274 | 449 | 1 | 1.53 | Game Theory in Cycling |
-| 原始文件/2022年/B.pdf | 2022 | B | 21 | 333 | 606 | 2 | 0.00 |  |
-| 原始文件/2022年/C.pdf | 2022 | C | 20 | 310 | 498 | 7 | 3.15 | The Queen of Strategy: The Road to Counterattack With $1,000 |
-| 原始文件/2022年/D.pdf | 2022 | D | 21 | 314 | 488 | 0 | 1.48 | Towards the Evaluation and Analysis of the D&A System from a |
-| 原始文件/2022年/E.pdf | 2022 | E | 23 | 344 | 561 | 1 | 0.00 | Better Strategy: Carbon Sequestration by Forests Logging |
-| 原始文件/2022年/F.pdf | 2022 | F | 24 | 314 | 488 | 1 | 2.57 | Will Asteroid Mining Affect Global Equity? Mathematical Mode |
+| 原始文件/2022年/A.pdf | 2022 | A | 24 | 269 | 449 | 1 | 1.54 | Game Theory in Cycling |
+| 原始文件/2022年/B.pdf | 2022 | B | 27 | 295 | 606 | 2 | 0.00 |  |
+| 原始文件/2022年/C.pdf | 2022 | C | 20 | 310 | 498 | 7 | 3.14 | The Queen of Strategy: The Road to Counterattack With $1,000 |
+| 原始文件/2022年/D.pdf | 2022 | D | 21 | 312 | 494 | 0 | 1.49 | Towards the Evaluation and Analysis of the D&A System from a |
+| 原始文件/2022年/E.pdf | 2022 | E | 23 | 338 | 561 | 1 | 0.00 | Better Strategy: Carbon Sequestration by Forests Logging |
+| 原始文件/2022年/F.pdf | 2022 | F | 24 | 318 | 501 | 1 | 2.53 | Will Asteroid Mining Aﬀect Global Equity? Mathematical Model |
 | 原始文件/2023年/A/2300336.pdf | 2023 | A | 24 | 214 | 400 | 2 | 1.78 | Community Succession Simulation: Surviving Drought |
 | 原始文件/2023年/A/2300661.pdf | 2023 | A | 21 | 224 | 493 | 2 | 0.00 | The Comprehensive Prediction Model for Drought-Striken Plant |
 | 原始文件/2023年/A/2303950.pdf | 2023 | A | 24 | 287 | 494 | 4 | 1.44 | A Methodology to Simulate Drought-Stricken Plant Communities |
 | 原始文件/2023年/A/2309229.pdf | 2023 | A | 24 | 365 | 574 | 3 | 0.00 | The Warriors against Drought: Plant Communities |
-| 原始文件/2023年/A/2316994.pdf | 2023 | A | 23 | 264 | 451 | 5 | 0.00 | Dry or Die? Drought-Stricken Plant Communities Can Survive! |
+| 原始文件/2023年/A/2316994.pdf | 2023 | A | 23 | 265 | 451 | 5 | 0.00 | Dry or Die? Drought-Stricken Plant Communities Can Survive! |
 | 原始文件/2023年/A/2321860.pdf | 2023 | A | 22 | 283 | 426 | 2 | 0.00 | Drought Tolerance of a Plant Community under Multi-species I |
 | 原始文件/2023年/A/2322687.pdf | 2023 | A | 24 | 280 | 571 | 1 | 0.00 | Is There Space for More? A Spatiotemporal Partial Differenti |
 | 原始文件/2023年/B/2300136.pdf | 2023 | B | 25 | 311 | 585 | 2 | 0.00 |  |
-| 原始文件/2023年/B/2315379.pdf | 2023 | B | 25 | 296 | 584 | 2 | 0.00 | Build a common paradise for humans and wildlife in the Maasa |
+| 原始文件/2023年/B/2315379.pdf | 2023 | B | 25 | 295 | 584 | 2 | 0.00 |  |
 | 原始文件/2023年/B/2318300.pdf | 2023 | B | 24 | 367 | 518 | 4 | 0.00 |  |
-| 原始文件/2023年/C/2300348.pdf | 2023 | C | 23 | 254 | 468 | 8 | 1.69 | Revitalizing a Classic Game: Uncovering the Secrets of Wordl |
-| 原始文件/2023年/C/2301192.pdf | 2023 | C | 22 | 231 | 470 | 3 | 0.00 | Crack the Wordle Puzzle: Word Attribute Analysis Approaches |
+| 原始文件/2023年/C/2300348.pdf | 2023 | C | 23 | 254 | 468 | 8 | 1.70 | Revitalizing a Classic Game: Uncovering the Secrets of Wordl |
+| 原始文件/2023年/C/2301192.pdf | 2023 | C | 22 | 226 | 470 | 3 | 0.00 | Crack the Wordle Puzzle: Word Attribute Analysis Approaches |
 | 原始文件/2023年/C/2307166.pdf | 2023 | C | 24 | 252 | 541 | 4 | 0.00 |  |
-| 原始文件/2023年/C/2307946.pdf | 2023 | C | 25 | 282 | 414 | 6 | 2.90 | Words Behind Wordle: Puzzle Game Analysis Using Machine Lear |
+| 原始文件/2023年/C/2307946.pdf | 2023 | C | 25 | 282 | 414 | 6 | 2.91 | Words Behind Wordle: Puzzle Game Analysis Using Machine Lear |
 | 原始文件/2023年/C/2309397.pdf | 2023 | C | 24 | 341 | 453 | 16 | 0.00 |  |
-| 原始文件/2023年/C/2310767.pdf | 2023 | C | 23 | 316 | 491 | 11 | 0.00 | Uncover the Puzzle of Words : Evidence from Wordle |
-| 原始文件/2023年/C/2311035.pdf | 2023 | C | 22 | 207 | 389 | 8 | 0.00 | Winners in Wordle |
-| 原始文件/2023年/C/2311717.pdf | 2023 | C | 23 | 383 | 531 | 5 | 3.57 | Riddle of Wordle: Mining the Secret of Number Scores & Solut |
+| 原始文件/2023年/C/2310767.pdf | 2023 | C | 23 | 315 | 491 | 11 | 0.00 | Uncover the Puzzle of Words : Evidence from Wordle |
+| 原始文件/2023年/C/2311035.pdf | 2023 | C | 22 | 213 | 397 | 8 | 0.00 | Winners in Wordle |
+| 原始文件/2023年/C/2311717.pdf | 2023 | C | 23 | 386 | 531 | 5 | 3.56 | Riddle of Wordle: Mining the Secret of Number Scores & Solut |
 | 原始文件/2023年/C/2314151.pdf | 2023 | C | 24 | 306 | 466 | 2 | 1.44 | Breaking the Wordle |
 | 原始文件/2023年/C/2318036.pdf | 2023 | C | 22 | 308 | 552 | 4 | 0.00 | Exploring Wordle: Insights into Puzzle Solving and Tweet Sha |
 | 原始文件/2023年/C/2318982.pdf | 2023 | C | 24 | 300 | 537 | 4 | 0.00 | Wordle: One Letter Makes a Difference |
 | 原始文件/2023年/C/2322645.pdf | 2023 | C | 19 | 396 | 408 | 2 | 0.00 |  |
-| 原始文件/2023年/D/2300229.pdf | 2023 | D | 23 | 261 | 430 | 3 | 1.63 | Methods of Measuring Priority via Graph Models: Who Is the T |
-| 原始文件/2023年/D/2303967.pdf | 2023 | D | 23 | 240 | 465 | 6 | 0.00 | DIGNP: Dynamic Indicator-Goal Network for Prioritization |
+| 原始文件/2023年/D/2300229.pdf | 2023 | D | 23 | 261 | 429 | 3 | 1.63 |  |
+| 原始文件/2023年/D/2303967.pdf | 2023 | D | 23 | 237 | 465 | 6 | 0.00 | DIGNP: Dynamic Indicator-Goal Network for Prioritization |
 | 原始文件/2023年/D/2304962.pdf | 2023 | D | 24 | 277 | 477 | 12 | 2.97 | Connecting the Dots: Unpacking the Network Systems of SDGs |
 | 原始文件/2023年/E/2301428.pdf | 2023 | E | 23 | 240 | 470 | 6 | 0.00 | Recast Mystletainn to Fight the Artificial God of Light |
-| 原始文件/2023年/E/2305598.pdf | 2023 | E | 23 | 348 | 359 | 7 | 2.62 | Turn out the Lights, Turn up the Stars |
+| 原始文件/2023年/E/2305598.pdf | 2023 | E | 23 | 349 | 359 | 7 | 2.62 | Turn out the Lights, Turn up the Stars |
 | 原始文件/2023年/E/2307336.pdf | 2023 | E | 23 | 281 | 429 | 2 | 0.00 | Protect the Night, Control the Light! |
 | 原始文件/2023年/E/2308000.pdf | 2023 | E | 23 | 292 | 508 | 7 | 0.00 | The brighter the light, the deeper the shadows |
 | 原始文件/2023年/E/2312411.pdf | 2023 | E | 23 | 358 | 551 | 3 | 0.00 |  |
-| 原始文件/2023年/E/2314354.pdf | 2023 | E | 23 | 406 | 496 | 1 | 0.00 | Local Light Pollution Analysis: A Multi-layer Evaluation Mod |
+| 原始文件/2023年/E/2314354.pdf | 2023 | E | 23 | 410 | 496 | 1 | 0.00 | Local Light Pollution Analysis: A Multi-layer Evaluation Mod |
 | 原始文件/2023年/E/2314817.pdf | 2023 | E | 24 | 266 | 523 | 13 | 0.00 | Turn off the lights, Turn on the stars! “On the earth, even  |
 | 原始文件/2023年/E/2320131.pdf | 2023 | E | 23 | 270 | 481 | 5 | 4.69 |  |
 | 原始文件/2023年/F/2305794.pdf | 2023 | F | 23 | 294 | 510 | 3 | 0.00 | Beyond GDP: Green GDP Revolution Leading the Way to a Sustai |
 | 原始文件/2023年/F/2311258.pdf | 2023 | F | 24 | 335 | 461 | 4 | 0.00 | "Green" GDP,Green planet |
-| 原始文件/2023年/F/2311517.pdf | 2023 | F | 24 | 377 | 543 | 8 | 2.36 |  |
+| 原始文件/2023年/F/2311517.pdf | 2023 | F | 24 | 377 | 543 | 8 | 2.35 |  |
 | 原始文件/2023年/F/2315018.pdf | 2023 | F | 23 | 353 | 531 | 9 | 0.00 | Green GDP: Unraveling the Diverse Challenges and Opportuniti |
 | 2025_C_O/2500759.pdf | 2025 | C | 24 | 285 | 331 | 10 | 0.00 | Olympic Multi-dimensional Predictive Integrator |
-| 2025_C_O/2501869.pdf | 2025 | C | 23 | 340 | 533 | 5 | 1.06 | Medal Prediction Based on Tobit and Hurdle Models and Great  |
-| 2025_C_O/2503389.pdf | 2025 | C | 24 | 389 | 417 | 6 | 0.00 | Olympic Medal Prediction Model Based on Regression and Machi |
+| 2025_C_O/2501869.pdf | 2025 | C | 23 | 328 | 549 | 6 | 2.69 | Medal Prediction Based on Tobit and Hurdle Models and Great  |
+| 2025_C_O/2503389.pdf | 2025 | C | 24 | 393 | 424 | 5 | 0.00 | Olympic Medal Prediction Model Based on Regression and Machi |
 
 ## Our papers, measured the same way
 
 | Paper | Counted pp | Words/pp (med) | Words/pp (P75) | Summary words | Numbers | Hedges/10k | Title |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Simulation_2026MCM-ICM_ProbA | 23 | 229 | 299 | 422 | 25 | 0.00 |  |
-| Simulation_2026MCM-ICM_ProbC | 24 | 298 | 361 | 483 | 13 | 1.42 | Data With the Stars: Inferring Hidden Fan Support Under Voti |
+| Simulation_2026MCM-ICM_ProbA | 23 | 227 | 292 | 422 | 25 | 0.00 | A Continuous-Time Equivalent-Circuit Model of Smartphone Bat |
+| Simulation_2026MCM-ICM_ProbC | 24 | 299 | 361 | 483 | 13 | 1.42 | Data With the Stars: Inferring Hidden Fan Support Under Voti |
+| 加摘要、假设、改目录 (2)_merged | 33 | 312 | 359 | 285 | 6 | 0.00 | A Continuous-Time Power-Driven Model for Smartphone Battery  |
+
+| Paper | Total pp | First model page | Figures/pp | Contrast/10k | Reasoning/10k | Semicolons/10k |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Simulation_2026MCM-ICM_ProbA | 26 | 3 | 0.61 | 51.0 | 40.4 | 94.9 |
+| Simulation_2026MCM-ICM_ProbC | 26 | 4 | 0.71 | 69.5 | 73.7 | 17.0 |
+| 加摘要、假设、改目录 (2)_merged | 33 | 5 | 0.00 | 27.6 | 25.5 | 60.6 |

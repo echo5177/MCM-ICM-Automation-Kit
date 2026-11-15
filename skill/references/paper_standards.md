@@ -22,11 +22,13 @@ Minimum checks:
   `summary.tex`, or `MCM-ICM_Summary.docx`), BUILD ON IT. Reuse its Summary Sheet header
   (the three-column "Problem Chosen / 2026 MCM/ICM Summary Sheet / Team Control Number"
   block) and its preamble; do not hand-roll a substitute summary page.
-- A substantial problem warrants a paper that fills most of the page allowance: target
-  roughly 20-25 pages of solution. A 12-15 page paper is a red flag of under-development,
-  not concision. Do NOT treat a "below target pages" warning as acceptable; deepen the
-  paper with real substance (derivations, data treatment, validation, discussion, a
-  quality-control/reproducibility section) until it is genuinely full.
+- O papers under the 25-page rule run 22 to 26 pages in total, most of them exactly 25. A
+  12-15 page paper is under-developed, not concise. COMAP sets no minimum length, so the
+  point is not the count: a short paper has usually answered some requirement thinly. Find
+  that requirement and develop its answer (its data treatment, its validation, its
+  sensitivity). Pages spent on something the problem did not ask for are not depth; the
+  CUMCM 2026 entry gave body pages to three analyses no question requested while its key
+  question got three.
 - If the problem asks for a letter, memorandum, one-page article, or similar artifact,
   it is a **graded deliverable, not page filler**. Write it as its own clearly labelled
   section, addressed to the stated audience, carrying the model's actual numbers. O papers
@@ -74,6 +76,9 @@ Minimum checks:
 
 | Feature | O papers | What it means |
 | --- | --- | --- |
+| Total pages (2021+, the 25-page rule) | 22 to 26; 51 of 70 exactly 25; none under 22 | fill the allowance by developing the thinnest answer, never by new topics |
+| First model section starts on | page 4 at the median, 6 at P90, 9 at the latest (107 papers) | keep restatement, assumptions and notation short |
+| Numbered figures per page | median 0.58, P25 0.42, P10 0.29 (113 papers) | a figure per result that needs one; none that is extraneous |
 | Title | median 8 words, P90 13; 35 of 94 use a colon; 1 of 94 has a dash, and it is an epigraph | name method and object; no dashed double titles |
 | Summary Sheet | median 475 words, 14 numbers (only 4/147 under 3); keywords line in 80% | numbers on the page, not only methods |
 | Acronyms in the summary | median 3, a quarter at 0-1 | use a model's standard name and acronym where it helps; not required |
@@ -90,26 +95,55 @@ solver took 14 ms", `method="highs"` and script names warn.
 
 ## Summary Sheet
 
-The Summary Sheet should answer, in one page:
+Write it last, and write it answer-first. COMAP's instructions say winning papers are often
+distinguished by the summary. The judges' own advice ("20 Years of Good Advice", The UMAP
+Journal) is specific: the summary must contain results and never say "read inside for
+results"; it should not be overly technical, because "a long list of techniques can obscure
+your results"; it gives the bottom line and the recommendation, not a chronological account
+of what was done. A triage judge gives the whole paper 10 to 15 minutes, and a paper that is
+otherwise strong can be eliminated in the early rounds on a weak summary.
 
-- What problem was solved?
-- What is the model family and why is it appropriate?
-- What data or parameters support it?
-- What are the main quantitative results?
-- What decisions or recommendations follow?
-- What are the key limitations?
+For each requirement of the problem, in the order the problem lists them:
 
-Avoid generic prose. Use topic sentences and numbers. A judge should be able to understand the solution's value from this page alone.
+1. one plain sentence on what the requirement turns on: the trade-off, the quantity that
+   decides the answer, or the ratio or penalty the statement gives and how it enters the
+   decision;
+2. the answer, with its number and unit;
+3. the method in a clause, by its standard name.
 
-O-paper conventions worth copying (see `award_patterns.md`):
+Then the recommendation that follows from the answers, and one limitation, stated once.
 
-- Give the approach a **name** (e.g. "Olympic Multi-dimensional Predictive Integrator") and
-  put it above the Summary heading. It signals a designed system, not a pile of methods.
-- Structure the summary as a narrative through the sub-problems ("First ... Subsequently ...
-  Finally ..."), each step naming its method **and its numeric result**.
-- Put hard numbers in the summary itself, not just method names.
-- State at most one limitation, once. Disclaimers belong in the evaluation section.
-- End with a **Keywords** line.
+Step 1 comes from the CUMCM 2026 post-mortem. That paper's abstract named seven methods and
+never said what its second question turned on (how much to over-buy when a unit short costs
+five times a unit over). Both showcased papers said it in one sentence and gave the resulting
+quantile. A reader finished our abstract knowing which tools were used and not whether the
+authors had seen the problem. The same sentence opens each task's section in the body.
+
+O-paper conventions worth keeping (see `award_patterns.md`):
+
+- A narrative through the requirements ("First ... Then ... Finally ..."), each step ending
+  in a number.
+- Hard numbers on the page: O summaries carry a median of 14.
+- A **name** for the approach is common and optional. It helps when the paper is one designed
+  system; it does not replace the answers.
+- At most one limitation, once. Disclaimers belong in the evaluation section.
+- A **Keywords** line at the end, with at least one word for the object studied, not only
+  method names.
+
+## One section per task, each complete
+
+Organise the body by the problem's requirements, and keep everything a judge needs for one
+requirement inside that requirement's section: what it turns on, the data or parameters and
+where they come from, the model, the result, the check. "Make it clear where in the paper the
+answers are" is the judges' wording, and papers missing several required elements are
+eliminated quickly.
+
+In the CUMCM 2026 entry the evidence for the question that carried seven of the thirteen
+marking points sat in four different chapters, and the first question began on page 11 after
+ten pages of restatement, assumptions, notation, preprocessing and a shared framework. In 107
+O papers the first model section starts on page 4 at the median, page 6 at P90 and page 9 at
+the latest; `mcm_format_checker` warns past page 7. Keep the framing short, and put a shared
+framework inside the first task that uses it.
 
 ## Content Depth
 

@@ -96,15 +96,15 @@ NODES = ["source_checker", "source_role_checker", "data_auditor", "result_checke
 def test_draft_v2_gate_lists_blockers_but_never_reports_ready(tmp_path: Path) -> None:
     nodes = [_Node(n, "fail" if n == "judge_review_gate" else "pass") for n in NODES]
     result = run_v2_gate(tmp_path, config(release_stage="draft"), nodes)
-    assert result.contest_ready is False and result.stage == "draft"
+    assert result.no_known_defects is False and result.stage == "draft"
     assert result.status == "warn"
     assert any("(blocks at final)" in m.message and "judge_review_gate" in m.message
                for m in result.messages)
     clean = run_v2_gate(tmp_path, config(release_stage="draft"), [_Node(n, "pass") for n in NODES])
-    assert clean.contest_ready is False
+    assert clean.no_known_defects is False
 
 
 def test_final_v2_gate_still_blocks(tmp_path: Path) -> None:
     nodes = [_Node(n, "fail" if n == "judge_review_gate" else "pass") for n in NODES]
     result = run_v2_gate(tmp_path, config(), nodes)
-    assert result.status == "fail" and result.contest_ready is False
+    assert result.status == "fail" and result.no_known_defects is False

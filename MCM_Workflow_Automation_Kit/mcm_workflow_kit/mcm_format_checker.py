@@ -15,6 +15,7 @@ import re
 
 from .config import WorkflowConfig, resolve_project_path
 from .paper_qa import run_pdfinfo
+from .paper_structure import first_model_entry, toc_entries
 from .reporting import CheckMessage, status_from_messages, write_markdown_report
 from .tex_source import read_tex_expanded
 
@@ -316,11 +317,12 @@ def check_figure_density(
     pages: int,
     config: WorkflowConfig,
 ) -> list[CheckMessage]:
-    """Warn when the paper is visually thinner than O-award papers.
+    """Warn when the paper has fewer figures than nine in ten O papers.
 
-    Counts figure *environments* in the source, while the O-paper band was measured
-    from rendered *images*. A float holding subfigures counts once here, so this
-    slightly under-counts relative to the band; treat the floor as a lower bound.
+    Counts figure *environments*, the same thing as numbered figures. Measured on 113 O
+    papers (2018+): median 0.58 per counted page, P25 0.42, P10 0.29. The earlier line of
+    0.60 came from six papers counted by embedded images, which runs higher (subfigures,
+    logos); by numbered figures 59 of the 113 fall under it.
     """
     counted = pages - config.ai_report_pages
     if counted <= 0:
@@ -331,14 +333,37 @@ def check_figure_density(
         return [
             CheckMessage(
                 "warn",
-                f"Figure density {density:.2f}/page ({figures} figures over {counted} "
-                f"counted pages) is below the O-paper floor "
-                f"{config.min_figures_per_page:.2f}. Every sampled O paper ran "
-                f"0.60-1.27 images per page with 48-68% of pages visual; add "
-                f"evidence-carrying figures (not decoration).",
+                f"{figures} figures over {counted} counted pages ({density:.2f} per page); nine in "
+                f"ten O papers have more than {config.min_figures_per_page:.2f} (median 0.58). "
+                f"Check whether a result is stated only in words that a figure would show. Do "
+                f"not add a figure to raise the count: judges ask for no figure that is "
+                f"extraneous to the model or the analysis.",
             )
         ]
     return []
+
+
+def check_first_model_page(pdf_path: Path, config: WorkflowConfig) -> list[CheckMessage]:
+    """Warn when the first model starts later than in 95% of O papers.
+
+    A triage judge reads for 10 to 15 minutes. Measured on 107 O papers whose table of
+    contents could be read: the first section that is not introduction, restatement,
+    assumptions, notation or data preparation starts on page 4 (median), page 6 at P90,
+    page 7 at P95, page 9 at the latest. The CUMCM 2026 entry reached its first question on
+    page 11 of 30.
+    """
+    entry = first_model_entry(toc_entries(pdf_path))
+    if entry is None or entry.page <= config.max_first_model_page:
+        return []
+    return [
+        CheckMessage(
+            "warn",
+            f"The first model section ('{entry.title}') starts on page {entry.page}. O papers: "
+            f"page 4 at the median, 7 at P95, 9 at the latest (107 papers). Shorten the "
+            f"restatement, assumptions and notation, or move a shared framework into the first "
+            f"task, so that an answer appears within the pages a triage judge reads.",
+        )
+    ]
 
 
 def run_mcm_format_checks(
@@ -388,9 +413,11 @@ def run_mcm_format_checks(
                 messages.append(
                     CheckMessage(
                         "fail",
-                        f"{counted} counted pages, below the serious-depth floor "
-                        f"{config.min_serious_pages}. A substantial problem warrants using the "
-                        f"{limit}-page allowance; deepen the content (do not lower this floor).",
+                        f"{counted} counted pages, below the floor {config.min_serious_pages}. "
+                        f"Under the {limit}-page rule no O paper in the corpus has fewer than 22 "
+                        f"pages (70 papers, 2021+; 51 of them exactly 25). A paper this short "
+                        f"usually answers some requirement thinly: find it in the requirement "
+                        f"table and develop that answer. Do not pad, and do not lower the floor.",
                     )
                 )
             elif counted < config.page_target:
@@ -398,9 +425,11 @@ def run_mcm_format_checks(
                     CheckMessage(
                         "warn",
                         f"{counted} counted pages (AI report excluded), below target "
-                        f"{config.page_target}; use more of the {limit}-page allowance.",
+                        f"{config.page_target}. 51 of 70 O papers use exactly {limit}; spend the "
+                        f"remaining pages on the requirement answered most thinly, not on new topics.",
                     )
                 )
+        messages.extend(check_first_model_page(pdf_path, config))
 
     if tex_text is not None and pages is not None:
         messages.extend(check_figure_density(tex_text, pages, config))

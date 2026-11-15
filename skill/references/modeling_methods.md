@@ -179,7 +179,7 @@ the current plan is not a check.
   - **Every page carries the team control number and the page number at the top.**
   - No names of students, advisor or institution anywhere; the control number is the only
     identifying information.
-  - One Adobe PDF, **named `<control number>.pdf`**, under **25 MB**. Do not send programs,
+  - One Adobe PDF, **named `<control number>.pdf`**, under **25 MB** (COMAP's "Procedures and Tips" says 20 MB; the Kit checks 20). Do not send programs,
     software, databases or other files; they are not used in judging.
   - `submission_checker` enforces the mechanical parts of this list.
 - The **Summary Sheet** is a standalone page with very high judge weight: method

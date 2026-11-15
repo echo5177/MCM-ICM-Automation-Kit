@@ -101,13 +101,14 @@ python scripts/sync_kit.py --target ../Simulation_2026MCM-ICM_ProbA
     Sheet's control number equals the one in every page header (and is not the template's
     1111111 at final); no names, school or e-mail; font at least 12pt; the Report on Use of
     AI after the references, with its real page count; the upload named `<control>.pdf`,
-    under 25 MB.
+    under 20 MB (the instructions say 25, COMAP's tips say 20; the Kit takes the smaller).
 12. **visual_qa_packet** — renders PDF pages so they can be eyeballed.
 13. **judge_review_gate** — parses `reports/workflow/judge_review.md`; needs every
     category score >= 4, `RELEASE: APPROVED`, and `PAPER_SHA256` equal to the current PDF
     (at `release_stage: final`; a draft only warns).
 14. **v1_gate** — node-status roll-up + known-warning classification.
-15. **v2_gate** — explicit contest-readiness verdict over the quality nodes (a draft gets
+15. **v2_gate** — the verdict over the quality nodes: NO KNOWN DEFECTS or DEFECTS FOUND, with the
+    base rate you recorded. It is not a forecast of the award (a draft gets
     the list of blockers, not a verdict).
 16. **review_trajectory** — records each judge-review round and warns if a revision lowered
     the average score; never changes a verdict.
@@ -116,8 +117,10 @@ python scripts/sync_kit.py --target ../Simulation_2026MCM-ICM_ProbA
 
 These are the failures from the first ProbA pass, now turned into teeth or starter defaults:
 
-- **Use the full page allowance.** A 12–15 page paper is under-development, not concision.
-  Target ~20–25 counted pages of substance.
+- **Use the page allowance on the answers.** Under the 25-page rule no O paper in the corpus has
+  fewer than 22 pages and most have exactly 25. A short paper has answered something thinly;
+  develop that answer rather than adding topics the problem did not ask for.
+  The first model section should start by about page 7 (O papers: page 4 at the median).
 - **The AI Use Report does NOT count toward 25.** The config subtracts `ai_report_pages`
   before checking the contest limit. Put the report AFTER references.
 - **Build on the official template.** The starter paper reuses the COMAP Summary Sheet

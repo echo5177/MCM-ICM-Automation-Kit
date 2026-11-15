@@ -71,8 +71,9 @@ study); and **a freeze does not freeze a strong signal** (see audit 1).
 ## Award Skeleton (see `award_patterns.md`)
 
 - Does the paper carry the skeleton every sampled O paper had: Restatement, Our Work/contributions, Assumptions and Justification, Notation, a dedicated Sensitivity Analysis, and Strengths and Weaknesses?
-- Is figure density in the O-paper band (roughly 0.6-1.3 per page; below ~0.45 is visually thin)?
-- Does the Summary Sheet name the approach, carry hard numbers, admit one limitation, and end with Keywords?
+- Does every result that needs a figure have one, and is every figure tied to a requirement or a claim? (O papers: median 0.58 numbered figures per page, P10 0.29. A count is not a goal.)
+- Does the Summary Sheet say, for each requirement, what it turns on and what the answer is, with numbers, before it names methods? Does it admit one limitation and end with Keywords?
+- Does the first model section start by about page 7 (O papers: page 4 at the median, 9 at the latest)?
 
 ## Modeling Quality
 

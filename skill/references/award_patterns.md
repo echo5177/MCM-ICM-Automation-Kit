@@ -57,14 +57,16 @@ Wording varies; the *function* does not. In order:
 
 ## Figure density
 
-O papers run **0.60–1.27 images per page**, with **48–68% of pages carrying at least one
-figure**. Roughly half to two-thirds of pages are visual.
+The six papers above embed **0.60–1.27 images per page**, with **48–68% of pages carrying at
+least one figure**. Embedded images run higher than numbered figures (subfigures and logos
+each count).
 
-The Kit enforces **0.60 figures per page** as a floor — the observed minimum, not a soft
-target. A paper below it is visually thinner than every O paper we measured and should add
-evidence-carrying figures (not decoration). Counting caveat: the Kit counts figure
-*environments* in the source while the band above was measured from rendered *images*, so a
-float holding subfigures counts once; treat the floor as a lower bound.
+By **numbered figures**, which is what the Kit counts, 113 O papers measure a median of 0.58
+per counted page, P25 0.42 and P10 0.29. The Kit used to warn below 0.60 and called it the
+observed floor; on the wider corpus 59 of the 113 fall under it. It now warns below 0.30, and
+the warning asks whether a result is stated only in words, never for more figures: the
+judges' advice is to include no figure, table or graph that is extraneous to the model or
+the analysis.
 
 ## Summary Sheet anatomy
 
@@ -73,8 +75,9 @@ Observed in the O papers:
 - Official three-column header (Problem Chosen / Year MCM/ICM Summary Sheet / Team
   Control Number), then a centered **Summary** heading.
 - Often a **named framework or model title** above the summary — e.g. "Olympic
-  Multi-dimensional Predictive Integrator". Naming the approach signals a designed
-  system rather than a pile of methods.
+  Multi-dimensional Predictive Integrator". Common, optional, and no substitute for the
+  answers: the judges warn that a long list of techniques obscures the results
+  (`paper_standards.md`, "Summary Sheet").
 - A narrative arc through the sub-problems: "First, we ... Subsequently, we ... Finally,
   we ...", each step naming its method **and its numeric result**.
 - Hard numbers in the summary itself (e.g. "84.7% and 68.4%", "MAPE 6.53%", "95%

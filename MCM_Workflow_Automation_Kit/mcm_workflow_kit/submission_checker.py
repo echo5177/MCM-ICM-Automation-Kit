@@ -16,7 +16,8 @@ rules) that can be checked mechanically:
 - "Papers must be typed in English, with a readable font of at least 12-point type."
 - The Report on Use of AI goes "following the end of your report" and does not count toward
   the 25 pages.
-- The PDF is named after the control number ("0000000.pdf") and "must be less than 25MB".
+- The PDF is named after the control number ("0000000.pdf") and "must be less than 25MB"
+  (the "Procedures and Tips" article says 20MB; `max_pdf_mb` defaults to the smaller).
 
 Calibrated on 112 O papers (2020+, `scripts/measure_award_corpus.py`): the Summary Sheet's
 number appears on a median 100% of body pages (P10 94%); exactly one paper's summary number
@@ -326,7 +327,7 @@ def render_submission_markdown(result: SubmissionResult) -> list[str]:
         "",
         "## Before uploading (COMAP)",
         "",
-        "- One PDF, named `<control number>.pdf`, under 25 MB; no code or data files attached.",
+        "- One PDF, named `<control number>.pdf`, under 20 MB (instructions: 25; tips: 20); no code or data files attached.",
         "- Control number and page number at the top of every page; no names, advisor or school.",
         "- Report on Use of AI after the references; it does not count toward the 25 pages.",
     ])

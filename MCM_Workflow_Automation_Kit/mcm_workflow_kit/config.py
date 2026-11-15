@@ -39,7 +39,8 @@ class WorkflowConfig:
     # --- v2 gate: contest-quality thresholds ---
     contest_page_limit: int = 25
     min_page_target: int = 20
-    min_serious_pages: int = 20  # every sampled O paper used the full page allowance
+    # Total pages under the 25-page rule, 70 O papers (2021+): min 22, 51 exactly 25.
+    min_serious_pages: int = 20
     ai_report_pages: int = 0  # pages of AI Use Report, excluded from the contest page count
     judge_review_file: str = "reports/workflow/judge_review.md"
     judge_history_file: str = "reports/workflow/judge_review_history.jsonl"
@@ -63,16 +64,19 @@ class WorkflowConfig:
         default_factory=lambda: ["figures/**/*.svg", "figures/**/*.json"]
     )
     template_pollution_terms: list[str] = field(default_factory=list)
-    # --- award patterns (measured from O-award papers; see award_patterns.md) ---
-    # 0.60 is the *observed floor* across the sampled O papers, not a soft target:
-    # a paper below it is visually thinner than every O paper we measured.
-    min_figures_per_page: float = 0.60
+    # --- award patterns (measured on the O corpus; reports/award_corpus_measurements.md) ---
+    # Numbered figures per counted page, 113 O papers: median 0.58, P25 0.42, P10 0.29.
+    # The earlier 0.60 "floor" came from six papers counted by embedded images; by numbered
+    # figures, which is what the gate counts, 59 of 113 O papers fall under it.
+    min_figures_per_page: float = 0.30
+    # Page the first model section starts on, 107 O papers: median 4, P90 6, P95 7, max 9.
+    max_first_model_page: int = 7
     # --- draft vs final ---
     # The judge review is bound to the SHA-256 of the compiled PDF, so every rebuild voids
     # it. Most drafts never become the submission; redoing the review on each one buys
     # nothing (the CUMCM 2026 run rebuilt eight versions and redid its sign-offs on all
     # of them). `draft`: a missing, stale or unapproved review only warns and v2 gives no
-    # contest-ready verdict. `final`: all of it is enforced. Anything other than "draft"
+    # verdict. `final`: all of it is enforced. Anything other than "draft"
     # counts as final, and the default is final so an old config stays strict.
     release_stage: str = "final"
     # --- submission integrity (submission_checker) ---
@@ -81,9 +85,15 @@ class WorkflowConfig:
     team_control_number: str = ""
     # Student, advisor and school names. None may appear anywhere in the PDF or its properties.
     anonymity_terms: list[str] = field(default_factory=list)
-    # The file you will upload, named <control number>.pdf. COMAP: under 25 MB.
+    # The file you will upload, named <control number>.pdf. The 2027 instructions say under
+    # 25 MB; COMAP's "Procedures and Tips" (V20240912) says under 20 MB. Take the smaller.
     submission_pdf: str = ""
-    max_pdf_mb: float = 25.0
+    max_pdf_mb: float = 20.0
+    # --- calibration ---
+    # Free text printed in the v2 gate report, e.g. "School, MCM 2026: 121 teams, 43% Honorable
+    # Mention or above". An award expectation starts from this, never from the gate or the
+    # internal review score.
+    award_base_rate_note: str = ""
     # --- paper hygiene (paper_hygiene_checker); lines from reports/award_corpus_measurements.md ---
     # Defensive disclaimers: O papers 110/147 use none, max 6.1 per 10k words, 0/147 reach
     # 5 hits at over 3 per 10k. Titles: median 8 words, P90 13. Words per body page (median
@@ -167,12 +177,14 @@ class WorkflowConfig:
                 )
             ),
             template_pollution_terms=list(data.get("template_pollution_terms", [])),
-            min_figures_per_page=float(data.get("min_figures_per_page", 0.60)),
+            min_figures_per_page=float(data.get("min_figures_per_page", 0.30)),
+            max_first_model_page=int(data.get("max_first_model_page", 7)),
             release_stage=str(data.get("release_stage", "final")).strip().lower(),
             team_control_number=str(data.get("team_control_number", "")).strip(),
             anonymity_terms=list(data.get("anonymity_terms", [])),
             submission_pdf=str(data.get("submission_pdf", "")),
-            max_pdf_mb=float(data.get("max_pdf_mb", 25.0)),
+            max_pdf_mb=float(data.get("max_pdf_mb", 20.0)),
+            award_base_rate_note=str(data.get("award_base_rate_note", "")).strip(),
             hedge_min_count=int(data.get("hedge_min_count", 5)),
             hedge_warn_per_10k=float(data.get("hedge_warn_per_10k", 3.0)),
             title_max_words=int(data.get("title_max_words", 20)),

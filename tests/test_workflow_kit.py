@@ -633,20 +633,19 @@ def test_figure_density_ok_at_o_paper_level():
     assert check_figure_density(tex, 26, make_config(ai_report_pages=1)) == []
 
 
-def test_figure_density_warns_just_below_o_floor():
-    # 14 figures over 25 counted pages = 0.56/page: passable, but thinner than
-    # every O paper measured. The floor is deliberately set to catch this.
+def test_figure_density_at_the_o_median_does_not_warn():
+    # 14 figures over 25 counted pages = 0.56/page, the median of 113 O papers. The old
+    # line of 0.60 (six papers, counted by embedded images) warned here and on 59 of the 113.
     tex = r"\begin{figure}x\end{figure}" * 14
-    messages = check_figure_density(tex, 26, make_config(ai_report_pages=1))
-    assert "warn" in _levels(messages)
-    assert "0.56/page" in messages[0].message
+    assert check_figure_density(tex, 26, make_config(ai_report_pages=1)) == []
 
 
-def test_figure_density_warns_when_visually_thin():
-    tex = r"\begin{figure}x\end{figure}" * 5  # 5/25 = 0.20/page
+def test_figure_density_warns_below_nine_in_ten_o_papers():
+    tex = r"\begin{figure}x\end{figure}" * 5  # 5/25 = 0.20/page, under the P10 of 0.29
     messages = check_figure_density(tex, 26, make_config(ai_report_pages=1))
     assert "warn" in _levels(messages)
-    assert "0.20/page" in messages[0].message
+    assert "0.20 per page" in messages[0].message
+    assert "extraneous" in messages[0].message  # never an instruction to pad
 
 
 # ---- source_role_checker ----
@@ -997,10 +996,10 @@ def _all_nodes(status_map):
 def test_v2_gate_blocks_on_quality_fail(tmp_path):
     result = run_v2_gate(tmp_path, make_config(), _all_nodes({"diagram_quality_checker": "fail"}))
     assert result.status == "fail"
-    assert result.contest_ready is False
+    assert result.no_known_defects is False
 
 
 def test_v2_gate_passes_when_all_pass(tmp_path):
     result = run_v2_gate(tmp_path, make_config(), _all_nodes({}))
     assert result.status == "pass"
-    assert result.contest_ready is True
+    assert result.no_known_defects is True

@@ -41,7 +41,7 @@ When asked to run an MCM/ICM project end-to-end, follow this order unless the us
 7. Render and visually inspect the first pages of the PDF and every critical figure.
 8. Run deterministic workflow checks. Keep `release_stage: draft` in `workflow_config.json` while
    drafting: the judge review is bound to the PDF's SHA-256 and every rebuild voids it, so a
-   draft only warns about a missing or stale review and v2 gives no contest-ready verdict.
+   draft only warns about a missing or stale review and v2 gives no verdict.
 9. Run a multi-role judge-style review using the rubric in `references/judge_rubric.md`: at minimum a **verifier** pass that re-derives the key numbers and applies the `references/modeling_methods.md` anti-error checklist (see `nodes/paper_reviewer/prompt_verifier.md`), a **construct-validity** pass that checks each quantity actually measures what it claims (`references/model_semantic_audit.md`, `nodes/paper_reviewer/prompt_construct_validity.md`), plus a harsh-judge pass on the modeling story. Write the scores to `reports/workflow/judge_review.md`.
    **From the first draft, also run an alignment review** (`references/judge_rubric.md`, "Two kinds of
    review"): write a reference-solution hypothesis per question before reading the paper, then check the
