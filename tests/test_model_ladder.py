@@ -106,3 +106,17 @@ def test_baseline_absent_from_the_paper_warns(tmp_path):
 def test_two_kept_rungs_are_rejected(tmp_path):
     setup(tmp_path, SUBMITTED.replace("1390.62,no,no,", "1390.62,no,yes,"))
     assert "2 rung(s) marked kept" in texts(run_model_ladder_checks(tmp_path, config()), "fail")
+
+
+def test_template_row_alone_is_not_a_ladder(tmp_path):
+    # The scaffold: a template ladder and a template requirement table. Not a pass.
+    setup(tmp_path, "[R1],0,[naive baseline],[one metric],,no,no,\n", requirements=None)
+    result = run_model_ladder_checks(tmp_path, config())
+    assert result.status == "fail" and "no rung yet" in texts(result)
+
+
+def test_no_modeling_requirement_needs_no_ladder(tmp_path):
+    only_memo = ("req_id,requirement,kind,turns_on,expected,answer,section,evidence,status\n"
+                 'R5,"Write a memo",deliverable,,,"Memo",7,,answered\n')
+    setup(tmp_path, "[R1],0,[naive baseline],[one metric],,no,no,\n", requirements=only_memo)
+    assert run_model_ladder_checks(tmp_path, config()).status == "pass"

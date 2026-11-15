@@ -167,9 +167,11 @@ def run_model_ladder_checks(project_root: str | Path, config: WorkflowConfig) ->
     ladder_path = resolve_project_path(root, config.model_ladder_file)
     table = resolve_project_path(root, config.requirements_file)
     model_reqs: list[str] = []
+    requirements_known = False
     if table.is_file():
         rows, missing_columns = read_requirements(table)
         if not missing_columns:
+            requirements_known = bool(rows)
             model_reqs = [r.req_id for r in rows if r.kind == "model" and r.req_id]
 
     if not ladder_path.is_file():
@@ -190,6 +192,15 @@ def run_model_ladder_checks(project_root: str | Path, config: WorkflowConfig) ->
     groups: dict[str, list[Rung]] = {}
     for rung in rungs:
         groups.setdefault(rung.req_id, []).append(rung)
+    if not groups and not bad:
+        if requirements_known and not model_reqs:
+            return ModelLadderResult([CheckMessage(
+                "pass", "The requirement table has no modeling requirement, so no ladder is needed.")])
+        if not model_reqs:
+            # Only the template row, and no requirement table to say what needs a baseline.
+            return ModelLadderResult([_stage(
+                config, f"{config.model_ladder_file} has no rung yet (only the template row). Enter "
+                        f"the naive baseline for each modeling requirement as rung 0.")])
     for req_id in model_reqs:
         if req_id not in groups:
             messages.append(_stage(config, f"{req_id} is a modeling requirement with no rung on the ladder."))
