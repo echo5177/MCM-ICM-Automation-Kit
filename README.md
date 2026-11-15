@@ -11,7 +11,7 @@ the conventions; it does not replace modeling judgment or a human's final eye.
 
 | Layer | What it is | What it guarantees |
 | --- | --- | --- |
-| **Kit** (`MCM_Workflow_Automation_Kit/`) | Deterministic v2-gate, 17 nodes | A floor: no *known* defect (thin paper, lowered thresholds, sparse diagram, fake data, missing sections, unrendered PDF, no judge sign-off) can pass quietly. |
+| **Kit** (`MCM_Workflow_Automation_Kit/`) | Deterministic v2-gate, 18 nodes | A floor: no *known* defect (thin paper, lowered thresholds, sparse diagram, fake data, missing sections, unrendered PDF, no judge sign-off) can pass quietly. |
 | **Skill** (`skill/`) | The `mcm-icm-competition-paper` Skill: paper/figure/data standards, judge rubric | The brain: conventions and judgment the agent follows while writing. |
 | **Agent visual QA + human eye** | Contact-sheet review + a real person | The ceiling: aesthetics, prose, and whether the modeling is actually right. |
 
@@ -27,7 +27,7 @@ MCM-ICM-Automation-Kit/
 │   ├── run_workflow.py                 #   entry point: --mode check | full
 │   ├── import_flowchart.py             #   import a teammate's PPTX/PDF/SVG flowchart as a cropped vector PDF
 │   ├── workflow_config.json            #   GENERIC starter config (per-problem copy)
-│   ├── mcm_workflow_kit/               #   the 17 nodes + orchestrator
+│   ├── mcm_workflow_kit/               #   the 18 nodes + orchestrator
 │   ├── nodes/  docs/  scripts/         #   node docs + create_release_packet.py
 ├── templates/
 │   ├── MCM-ICM_Summary.tex             # official COMAP summary template
@@ -71,7 +71,7 @@ python scripts/sync_kit.py --target ../Simulation_2026MCM-ICM_ProbA --dry-run
 python scripts/sync_kit.py --target ../Simulation_2026MCM-ICM_ProbA
 ```
 
-## The v2 gate (17 nodes)
+## The v2 gate (18 nodes)
 
 `run_workflow.py` runs these in order; any `fail` fails the run. `--mode full` runs your
 `scripts/run_all.py` first.
@@ -84,6 +84,9 @@ python scripts/sync_kit.py --target ../Simulation_2026MCM-ICM_ProbA
    figures/tables in the manifest must exist; no placeholder strings. Reads the paper with
    its `\input` files expanded.
 5. **experiment_audit** — parameter sweeps, random seeds, and template text left in figures.
+   **model_ladder** (runs next) — reads `reports/model_ladder.csv`: the naive baseline and each
+   added component on one metric. FAILS at `final` when a modeling requirement has no baseline,
+   or when the model the paper keeps loses to a simpler rung with no reason recorded.
 6. **diagram_checker** — concept figure's PNG/SVG/JSON exist and are large enough.
 7. **diagram_quality_checker** — inspects the figure's structured JSON *content* so a
    sparse boxes-and-arrows diagram cannot pass (>= 8 nodes, >= 3 stages, >= 60% content).

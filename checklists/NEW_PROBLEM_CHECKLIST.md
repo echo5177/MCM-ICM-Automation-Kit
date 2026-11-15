@@ -43,6 +43,10 @@ agent follows the paper standards while writing.
 - [ ] Implement the modeling pipeline in `src/` and wire it into `scripts/run_all.py` so it
       regenerates every figure/table and writes `reports/key_results.csv` (every number the
       paper cites) and `reports/figure_manifest.csv`.
+- [ ] **Baseline first, for every requirement.** Have the pipeline write
+      `reports/model_ladder.csv`: rung 0 is the naive baseline, each rung above adds one
+      component, one metric throughout. A component stays only if it wins, and the paper
+      prints the comparison. Also run the model with its main component taken out.
 - [ ] Author the concept/workflow figure as structured JSON under `figures/concept_src/`,
       render it to `figures/concept/`, and register it in `diagram_sources` in the config.
       The diagram-quality gate rejects a sparse "boxes-and-arrows" figure (needs >= 8 nodes,

@@ -1,0 +1,2 @@
+req_id,rung,model,metric,value,higher_is_better,kept,note
+[R1],0,[naive baseline: a grouped mean / a linear fit / the rule a person would use],[one metric],,no,no,

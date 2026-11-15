@@ -128,6 +128,12 @@ the current plan is not a check.
    identity from the table itself (P = V·I, a mass balance, a total). The 2026 MCM A entry's
    main results table printed average currents two to seven times smaller than its own power
    column implies at a 3.7 V cell voltage, and judges catch this kind of error on sight.
+9. **Take the main component out.** For each requirement, run the model without its most
+   elaborate part and record both on the model ladder (`reports/model_ladder.csv`,
+   `competition_operations.md`). CUMCM 2026 ran 20 ablations and a sensitivity sweep, and
+   none of them could have overturned the framework: they compared information sets and
+   re-solve intervals, never "with the controller" against "without". Without it the answer
+   was 5% better.
 
 ## Validation and sensitivity (mandatory in a contest paper)
 

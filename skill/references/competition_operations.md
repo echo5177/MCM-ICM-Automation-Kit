@@ -44,6 +44,33 @@ who reads the Summary and the first three pages on day one and says where they g
 to be a teammate who has not been writing. Before the contest, practice papers can be read
 by anyone.
 
+## The model ladder
+
+For every modeling requirement the pipeline writes `reports/model_ladder.csv`: rung 0 is the
+naive baseline (a grouped mean, a linear fit, the rule a person would use), and each rung
+above it adds one component, all scored on one metric, out of sample where that applies.
+**A component stays only if it wins**, and the paper prints the comparison, because judges
+do not see the code. `model_ladder` fails when the rung the paper keeps loses to a simpler
+one and no reason is recorded.
+
+Build it in this order:
+
+1. Rung 0 for every requirement before any requirement gets a second rung. A paper with a
+   number for each requirement is an Honorable Mention candidate; a paper with one requirement
+   polished and another empty is not.
+2. Add a component, rerun, record the rung. If it does not win, it goes in the table as a
+   rung that was tried, and the paper may say so in a sentence.
+3. Remove components too. The check that mattered in CUMCM 2026 was never run: taking the
+   controller out. Removing it cut the annual cost from 1467.57 to 1390.62 (ten thousand
+   yuan), and replacing the plan with a quantile rule brought it to 1371.60, level with the
+   showcased papers. The order of removal matters when components interact, so record what
+   was removed from what.
+
+The judges' wording: "Start with a simple model and then refine it", "it is far better to
+work out one model thoroughly than to present several half-baked approaches", and, from a
+head judge's commentary, "overparameterization is often the mark of mediocrity"; models with
+many variables made a meaningful sensitivity analysis hard for the teams that built them.
+
 ## Three lanes, not three people
 
 Work splits into three lanes. A three-person team maps one person per lane; a solo entrant
@@ -89,7 +116,7 @@ window:
 | --- | --- |
 | ~10% | problem chosen; every sub-problem written as input / output / decision variable / objective / constraint |
 | ~20% | data in hand and audited; assumptions drafted; figure storyboard sketched |
-| ~35% | a deliberately crude **baseline** that runs end to end and produces a number |
+| ~35% | a deliberately crude **baseline** for *every* requirement, end to end, each producing a number (rung 0 of the model ladder) |
 | ~50% | the real model runs; first real figures exist |
 | ~65% | complete draft of the body, placeholders marked |
 | ~80% | validation, sensitivity, and uncertainty complete; results frozen |

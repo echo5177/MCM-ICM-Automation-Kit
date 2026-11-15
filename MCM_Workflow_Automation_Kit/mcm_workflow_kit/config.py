@@ -94,6 +94,10 @@ class WorkflowConfig:
     # section that holds it. COMAP's award levels are defined by how completely and how
     # clearly the requirements are addressed.
     requirements_file: str = "reports/requirements.csv"
+    # --- model ladder (model_ladder_checker) ---
+    # The naive baseline and each added component on one metric; a component stays only if
+    # it wins. Written by the pipeline.
+    model_ladder_file: str = "reports/model_ladder.csv"
     # --- calibration ---
     # Free text printed in the v2 gate report, e.g. "School, MCM 2026: 121 teams, 43% Honorable
     # Mention or above". An award expectation starts from this, never from the gate or the
@@ -190,6 +194,7 @@ class WorkflowConfig:
             submission_pdf=str(data.get("submission_pdf", "")),
             max_pdf_mb=float(data.get("max_pdf_mb", 20.0)),
             requirements_file=str(data.get("requirements_file", "reports/requirements.csv")),
+            model_ladder_file=str(data.get("model_ladder_file", "reports/model_ladder.csv")),
             award_base_rate_note=str(data.get("award_base_rate_note", "")).strip(),
             hedge_min_count=int(data.get("hedge_min_count", 5)),
             hedge_warn_per_10k=float(data.get("hedge_warn_per_10k", 3.0)),

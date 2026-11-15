@@ -103,6 +103,11 @@ def scaffold(target: Path, problem_letter: str | None, force: bool, year: int | 
         TEMPLATE_ROOT / "templates" / "requirements.template.csv",
         target / "reports" / "requirements.csv",
     )
+    # 6c) Model ladder: the naive baseline and each added component, on one metric.
+    shutil.copy2(
+        TEMPLATE_ROOT / "templates" / "model_ladder.template.csv",
+        target / "reports" / "model_ladder.csv",
+    )
 
     # 7) Standard .gitignore + environment.yml + checklist.
     shutil.copy2(TEMPLATE_ROOT / "templates" / "gitignore.template", target / ".gitignore")

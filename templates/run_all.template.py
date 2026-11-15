@@ -7,6 +7,9 @@ Replace the body with your real modeling pipeline. The contract the Kit expects:
   * write reports/key_results.csv      (columns: metric,value  -- numbers the paper cites)
   * write reports/figure_manifest.csv  (columns: figure_id,path,source_script,paper_location)
   * regenerate every figure in figures/generated/ and every table in tables/
+  * write reports/model_ladder.csv     (columns: req_id,rung,model,metric,value,
+                                        higher_is_better,kept,note -- rung 0 is the naive
+                                        baseline; a component stays only if it wins)
 
 Keeping every cited number in key_results.csv lets result_checker prove the paper's
 headline numbers actually trace back to computed outputs.

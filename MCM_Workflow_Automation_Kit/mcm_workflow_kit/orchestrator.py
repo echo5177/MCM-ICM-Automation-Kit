@@ -16,6 +16,7 @@ from .diagram_quality_checker import write_diagram_quality_report
 from .experiment_audit import write_experiment_audit_report
 from .judge_review_gate import write_judge_review_gate_report
 from .mcm_format_checker import write_mcm_format_report
+from .model_ladder_checker import write_model_ladder_report
 from .paper_hygiene_checker import write_paper_hygiene_report
 from .paper_qa import write_paper_qa_report
 from .reporting import write_markdown_report
@@ -216,6 +217,13 @@ def run_workflow(
         run_callable_node(
             "experiment_audit",
             lambda: write_experiment_audit_report(root, config),
+            run_dir,
+        )
+    )
+    nodes.append(
+        run_callable_node(
+            "model_ladder",
+            lambda: write_model_ladder_report(root, config),
             run_dir,
         )
     )
