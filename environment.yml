@@ -14,6 +14,7 @@ dependencies:
   - pip:
       - cvxpy
       - lifelines
+      - pypdf  # import_flowchart.py: crop, clear document properties, measure text size
       - pytest
       - scikit-learn
       - seaborn
